@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 1 of 6 (Foundation)
-Plan: 2 of 4
+Plan: 3 of 4
 Status: In progress
-Last activity: 2026-03-02 - Completed 01-02-PLAN.md
-Progress: ██░░░░░░░░░░░░░░░░░░ 11% (2/19 plans)
+Last activity: 2026-03-02 - Completed 01-03-PLAN.md
+Progress: ███░░░░░░░░░░░░░░░░░ 16% (3/19 plans)
 
 ## Current Phase
 
-Phase 1: Foundation — In Progress (2/4 plans complete)
+Phase 1: Foundation — In Progress (3/4 plans complete)
 
 ## Project Reference
 
@@ -22,7 +22,7 @@ Current focus: Phase 1 foundation and config/CLI scaffolding.
 
 | Phase | Name | Status | Progress |
 |-------|------|--------|----------|
-| 1 | Foundation | ◐ In Progress | 50% |
+| 1 | Foundation | ◐ In Progress | 75% |
 | 2 | Core Pipeline | ○ Pending | 0% |
 | 3 | Output Quality | ○ Pending | 0% |
 | 4 | Overlay System | ○ Pending | 0% |
@@ -43,10 +43,12 @@ Current focus: Phase 1 foundation and config/CLI scaffolding.
 | 01-01 | Declare `"packageManager": "pnpm@10.28.2"` in root `package.json`. | Required for Turborepo to resolve workspace graph during `pnpm build`. |
 | 01-02 | Accept optional `$schema` in config input but strip it from validated runtime config output. | Preserves IDE schema metadata support without leaking tooling-only metadata into execution config. |
 | 01-02 | Use `ConfigValidationError` with structured `{ path, message }` issues. | Provides clear, actionable diagnostics for upcoming CLI `validate` command output. |
+| 01-03 | Use evermeet zip builds for darwin and BtbN latest tar.xz builds for linux targets. | Latest BtbN release no longer publishes macOS artifacts, so mixed-source routing is required for platform support. |
+| 01-03 | Validate downloaded ffmpeg with direct `ffmpeg -version` execution. | Executability checks alone are insufficient; command execution confirms binary health before caching. |
 
 ## Blockers/Concerns Carried Forward
 
-- None from `01-02-SUMMARY.md`.
+- None from `01-03-SUMMARY.md`.
 
 ## Key Risks
 
@@ -59,6 +61,6 @@ Current focus: Phase 1 foundation and config/CLI scaffolding.
 
 ## Session Continuity
 
-Last session: 2026-03-02T22:45:00Z
-Stopped at: Completed 01-02-PLAN.md
-Resume file: .planning/phases/01-foundation/01-03-PLAN.md
+Last session: 2026-03-02T22:54:47Z
+Stopped at: Completed 01-03-PLAN.md
+Resume file: .planning/phases/01-foundation/01-04-PLAN.md
