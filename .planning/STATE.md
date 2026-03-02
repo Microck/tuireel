@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 1 of 6 (Foundation)
-Plan: 1 of 4
+Plan: 2 of 4
 Status: In progress
-Last activity: 2026-03-02 - Completed 01-01-PLAN.md
-Progress: █░░░░░░░░░░░░░░░░░░ 5% (1/19 plans)
+Last activity: 2026-03-02 - Completed 01-02-PLAN.md
+Progress: ██░░░░░░░░░░░░░░░░░░ 11% (2/19 plans)
 
 ## Current Phase
 
-Phase 1: Foundation — In Progress (1/4 plans complete)
+Phase 1: Foundation — In Progress (2/4 plans complete)
 
 ## Project Reference
 
@@ -22,7 +22,7 @@ Current focus: Phase 1 foundation and config/CLI scaffolding.
 
 | Phase | Name | Status | Progress |
 |-------|------|--------|----------|
-| 1 | Foundation | ◐ In Progress | 25% |
+| 1 | Foundation | ◐ In Progress | 50% |
 | 2 | Core Pipeline | ○ Pending | 0% |
 | 3 | Output Quality | ○ Pending | 0% |
 | 4 | Overlay System | ○ Pending | 0% |
@@ -41,10 +41,12 @@ Current focus: Phase 1 foundation and config/CLI scaffolding.
 |-------|----------|-----------|
 | 01-01 | Use `tsup` builds for both workspace packages (`@tuireel/core` dual-format, `tuireel` ESM + shebang). | Keeps package build scripts consistent while emitting typed dist artifacts for both packages. |
 | 01-01 | Declare `"packageManager": "pnpm@10.28.2"` in root `package.json`. | Required for Turborepo to resolve workspace graph during `pnpm build`. |
+| 01-02 | Accept optional `$schema` in config input but strip it from validated runtime config output. | Preserves IDE schema metadata support without leaking tooling-only metadata into execution config. |
+| 01-02 | Use `ConfigValidationError` with structured `{ path, message }` issues. | Provides clear, actionable diagnostics for upcoming CLI `validate` command output. |
 
 ## Blockers/Concerns Carried Forward
 
-- None from `01-01-SUMMARY.md`.
+- None from `01-02-SUMMARY.md`.
 
 ## Key Risks
 
@@ -57,6 +59,6 @@ Current focus: Phase 1 foundation and config/CLI scaffolding.
 
 ## Session Continuity
 
-Last session: 2026-03-02T22:33:50Z
-Stopped at: Completed 01-01-PLAN.md
-Resume file: .planning/phases/01-foundation/01-02-PLAN.md
+Last session: 2026-03-02T22:45:00Z
+Stopped at: Completed 01-02-PLAN.md
+Resume file: .planning/phases/01-foundation/01-03-PLAN.md
