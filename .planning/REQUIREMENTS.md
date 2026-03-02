@@ -102,49 +102,49 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| REC-01 | — | Pending |
-| REC-02 | — | Pending |
-| REC-03 | — | Pending |
-| REC-04 | — | Pending |
-| REC-05 | — | Pending |
-| REC-06 | — | Pending |
-| REC-07 | — | Pending |
-| REC-08 | — | Pending |
-| STEP-01 | — | Pending |
-| STEP-02 | — | Pending |
-| STEP-03 | — | Pending |
-| STEP-04 | — | Pending |
-| STEP-05 | — | Pending |
-| STEP-06 | — | Pending |
-| STEP-07 | — | Pending |
-| STEP-08 | — | Pending |
-| STEP-09 | — | Pending |
-| OVR-01 | — | Pending |
-| OVR-02 | — | Pending |
-| OVR-03 | — | Pending |
-| OVR-04 | — | Pending |
-| THM-01 | — | Pending |
-| THM-02 | — | Pending |
-| SND-01 | — | Pending |
-| SND-02 | — | Pending |
-| CLI-01 | — | Pending |
-| CLI-02 | — | Pending |
-| CLI-03 | — | Pending |
-| CLI-04 | — | Pending |
-| CLI-05 | — | Pending |
-| CLI-06 | — | Pending |
-| CLI-07 | — | Pending |
-| CLI-08 | — | Pending |
-| CLI-09 | — | Pending |
-| CLI-10 | — | Pending |
-| INF-01 | — | Pending |
-| INF-02 | — | Pending |
+| REC-01 | Phase 2 | Pending |
+| REC-02 | Phase 2 | Pending |
+| REC-03 | Phase 2 | Pending |
+| REC-04 | Phase 3 | Pending |
+| REC-05 | Phase 3 | Pending |
+| REC-06 | Phase 2 | Pending |
+| REC-07 | Phase 2 | Pending |
+| REC-08 | Phase 1 | Pending |
+| STEP-01 | Phase 2 | Pending |
+| STEP-02 | Phase 2 | Pending |
+| STEP-03 | Phase 2 | Pending |
+| STEP-04 | Phase 2 | Pending |
+| STEP-05 | Phase 6 | Pending |
+| STEP-06 | Phase 6 | Pending |
+| STEP-07 | Phase 6 | Pending |
+| STEP-08 | Phase 6 | Pending |
+| STEP-09 | Phase 6 | Pending |
+| OVR-01 | Phase 4 | Pending |
+| OVR-02 | Phase 4 | Pending |
+| OVR-03 | Phase 4 | Pending |
+| OVR-04 | Phase 4 | Pending |
+| THM-01 | Phase 3 | Pending |
+| THM-02 | Phase 3 | Pending |
+| SND-01 | Phase 5 | Pending |
+| SND-02 | Phase 5 | Pending |
+| CLI-01 | Phase 1 | Pending |
+| CLI-02 | Phase 1 | Pending |
+| CLI-03 | Phase 2 | Pending |
+| CLI-04 | Phase 6 | Pending |
+| CLI-05 | Phase 1 | Pending |
+| CLI-06 | Phase 1 | Pending |
+| CLI-07 | Phase 4 | Pending |
+| CLI-08 | Phase 6 | Pending |
+| CLI-09 | Phase 6 | Pending |
+| CLI-10 | Phase 6 | Pending |
+| INF-01 | Phase 6 | Pending |
+| INF-02 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 37 total
-- Mapped to phases: 0
-- Unmapped: 37
+- Mapped to phases: 37
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2025-07-26*
-*Last updated: 2025-07-26 after initial definition*
+*Last updated: 2025-07-26 after roadmap creation*
