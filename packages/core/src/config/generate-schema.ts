@@ -1,12 +1,11 @@
-import { zodToJsonSchema } from "zod-to-json-schema";
+import { z } from "zod";
 
 import { configSchema } from "./schema.js";
 
 export function generateJsonSchema(): Record<string, unknown> {
-  const schema = zodToJsonSchema(configSchema as never, {
-    name: "TuireelConfig",
-    target: "jsonSchema7",
-    $refStrategy: "none",
+  const schema = z.toJSONSchema(configSchema, {
+    target: "draft-07",
+    io: "input",
   }) as Record<string, unknown>;
 
   if (!schema.$schema) {
