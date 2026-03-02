@@ -104,10 +104,80 @@ describe("config parser", () => {
     expect(config.rows).toBe(24);
   });
 
-  it("generates JSON Schema including draft declaration", () => {
-    const jsonSchema = generateJsonSchema() as { $schema?: string };
+  it("generates JSON Schema with config fields and step variants", () => {
+    const jsonSchema = generateJsonSchema() as {
+      $schema?: string;
+      type?: string;
+      properties?: Record<string, unknown>;
+      required?: unknown;
+    };
 
     expect(jsonSchema).toBeTypeOf("object");
     expect(jsonSchema.$schema).toContain("json-schema.org/draft");
+    expect(jsonSchema.type).toBe("object");
+    expect(jsonSchema.properties).toEqual(
+      expect.objectContaining({
+        output: expect.any(Object),
+        fps: expect.any(Object),
+        cols: expect.any(Object),
+        rows: expect.any(Object),
+        steps: expect.any(Object),
+      }),
+    );
+
+    expect(Array.isArray(jsonSchema.required)).toBe(true);
+    expect(jsonSchema.required).toContain("steps");
+
+    const properties = jsonSchema.properties as Record<string, unknown>;
+    const stepsSchema = properties.steps as {
+      items?: {
+        oneOf?: Array<Record<string, unknown>>;
+      };
+    };
+
+    expect(stepsSchema.items).toBeDefined();
+    expect(Array.isArray(stepsSchema.items?.oneOf)).toBe(true);
+
+    const variants = stepsSchema.items?.oneOf ?? [];
+
+    expect(variants).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            type: expect.objectContaining({ const: "launch" }),
+            command: expect.any(Object),
+          }),
+          required: expect.arrayContaining(["type", "command"]),
+        }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            type: expect.objectContaining({ const: "type" }),
+            text: expect.any(Object),
+          }),
+          required: expect.arrayContaining(["type", "text"]),
+        }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            type: expect.objectContaining({ const: "press" }),
+            key: expect.any(Object),
+          }),
+          required: expect.arrayContaining(["type", "key"]),
+        }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            type: expect.objectContaining({ const: "wait" }),
+            pattern: expect.any(Object),
+          }),
+          required: expect.arrayContaining(["type", "pattern"]),
+        }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            type: expect.objectContaining({ const: "pause" }),
+            duration: expect.any(Object),
+          }),
+          required: expect.arrayContaining(["type", "duration"]),
+        }),
+      ]),
+    );
   });
 });
