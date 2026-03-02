@@ -96,9 +96,11 @@ Plans:
 2. User can mix in a custom audio track (background music) that plays alongside or instead of sound effects
 3. Sound-free output remains the default — enabling sound is opt-in and does not affect users who don't configure it
 
-### Plans (estimated)
-- Plan 5.1: Sound effect system — Bundled sound assets, sound event extraction from InteractionTimeline, per-event audio placement
-- Plan 5.2: Audio mixing — ffmpeg audio track composition, custom audio track support, volume control, sync with video duration
+### Plans: 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Sound effects engine (assets, extraction, ffmpeg audio builder, config schema, tests)
+- [ ] 05-02-PLAN.md — Custom audio track mixing + compositor/CLI integration
 
 ---
 
