@@ -19,11 +19,13 @@
 4. On first invocation, ffmpeg is downloaded to `~/.tuireel/` and subsequent runs reuse the cached binary
 5. The monorepo builds cleanly: `@tuireel/core` exports a public API, `tuireel` CLI binary resolves commands
 
-### Plans (estimated)
-- Plan 1.1: Monorepo scaffold — pnpm workspaces, Turborepo, `@tuireel/core` + `tuireel` packages, TypeScript config, bin entrypoint
-- Plan 1.2: Config schema & parser — Zod schema, JSONC parsing, JSON Schema generation, `$schema` reference in output
-- Plan 1.3: CLI skeleton — Commander.js setup with `init`, `validate`, `record`, `preview`, `composite` subcommands (stubs for unimplemented)
-- Plan 1.4: ffmpeg auto-download — Download ffmpeg binary to `~/.tuireel/`, platform detection, verify binary, cache check
+### Plans: 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Monorepo scaffold (pnpm + Turborepo + both packages)
+- [ ] 01-02-PLAN.md — Config schema, JSONC parser, JSON Schema generation (TDD)
+- [ ] 01-03-PLAN.md — ffmpeg auto-download with platform detection and caching
+- [ ] 01-04-PLAN.md — CLI commands: init, validate, and stub commands
 
 ---
 
