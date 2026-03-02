@@ -2,28 +2,28 @@
 
 ## Current Position
 
-Phase: 1 of 6 (Foundation)
-Plan: 5 of 5
-Status: Phase complete
-Last activity: 2026-03-02 - Completed 01-05-PLAN.md (schema parity gap closure)
-Progress: █████░░░░░░░░░░░░░░░ 25% (5/20 plans)
+Phase: 2 of 6 (Core Pipeline)
+Plan: 1 of 2
+Status: In progress
+Last activity: 2026-03-02 - Completed 02-01-PLAN.md (session wrapper + step executor)
+Progress: ██████░░░░░░░░░░░░░░ 30% (6/20 plans)
 
 ## Current Phase
 
-Phase 1: Foundation — Complete (5/5 plans complete)
+Phase 2: Core Pipeline — In progress (1/2 plans complete)
 
 ## Project Reference
 
 See: `.planning/PROJECT.md` (updated 2025-07-26)
 Core value: TUI tool authors can produce polished demo videos from a declarative script.
-Current focus: Transition to Phase 2 core pipeline execution.
+Current focus: Completing Phase 2 recording pipeline foundation and MP4 loop.
 
 ## Phase Progress
 
 | Phase | Name | Status | Progress |
 |-------|------|--------|----------|
 | 1 | Foundation | ● Complete | 100% |
-| 2 | Core Pipeline | ○ Pending | 0% |
+| 2 | Core Pipeline | ◐ In progress | 50% |
 | 3 | Output Quality | ○ Pending | 0% |
 | 4 | Overlay System | ○ Pending | 0% |
 | 5 | Sound | ○ Pending | 0% |
@@ -49,6 +49,9 @@ Current focus: Transition to Phase 2 core pipeline execution.
 | 01-04 | Convert JSONC parse offsets to line/column in CLI output. | Gives actionable validation diagnostics while preserving core config error contracts. |
 | 01-05 | Use `z.toJSONSchema(configSchema, { target: "draft-07", io: "input" })` for schema generation. | Produces non-empty schema with defaults + required `steps`, matching config authoring contract for IDE autocomplete. |
 | 01-05 | Assert schema parity in both core and CLI init integration tests. | Prevents drift between generated schema output and persisted `~/.tuireel/schema.json` artifact. |
+| 02-01 | Keep launch orchestration in `createSession()` and treat `launch` execution as validation/no-op in dispatcher. | Prevents double process spawn while retaining schema-compatible launch steps in the execution pipeline. |
+| 02-01 | Use `writeRaw` + jittered `charDelay` typing instead of tuistory `session.type()`. | Meets human-like typing cadence requirements rather than fixed 1ms per-character input. |
+| 02-01 | Export `Step` as an alias of schema-derived `TuireelStep` in step executor. | Keeps executor dispatch types synchronized with config contract definitions. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -65,6 +68,6 @@ Current focus: Transition to Phase 2 core pipeline execution.
 
 ## Session Continuity
 
-Last session: 2026-03-02T23:30:22Z
-Stopped at: Completed 01-05-PLAN.md (Phase 1 complete)
-Resume file: .planning/phases/02-core-pipeline/02-01-PLAN.md
+Last session: 2026-03-02T23:44:58Z
+Stopped at: Completed 02-01-PLAN.md (session wrapper + dispatch loop)
+Resume file: .planning/phases/02-core-pipeline/02-02-PLAN.md
