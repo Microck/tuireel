@@ -22,7 +22,6 @@
   "models": {
     "planning": [
       "gitlab/duo-chat-opus-4-6",
-      "github-copilot/claude-opus-4.6",
       "openai/gpt-5.2"
     ],
     "coding": [
@@ -36,7 +35,6 @@
     ],
     "verification": [
       "gitlab/duo-chat-opus-4-6",
-      "github-copilot/claude-opus-4.6",
       "openai/gpt-5.2"
     ]
   },
