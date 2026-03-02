@@ -40,10 +40,11 @@ Plans:
 3. User can configure frame rate and terminal viewport (cols/rows) in the config and the output reflects those settings
 4. The recording pipeline handles tuistory idle detection correctly — no missing frames during fast TUI updates
 
-### Plans (estimated)
-- Plan 2.1: tuistory integration — Session management, PTY launch, step-to-API mapping, idle detection
-- Plan 2.2: Step executor — Step dispatch loop for `type`, `press`, `wait`, `pause`; human-like timing; error handling
-- Plan 2.3: Frame capture & MP4 encoding — Screenshot loop at target FPS, JPEG conversion, image2pipe to ffmpeg, frame timing normalization, MP4 output
+**Plans:** 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Session wrapper + step executor (tuistory integration, 5 step types, human-like typing)
+- [ ] 02-02-PLAN.md — Frame capture + ffmpeg encoding + CLI wiring (screenshot loop, image2pipe, `tuireel record`)
 
 ---
 
