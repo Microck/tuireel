@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 1 of 6 (Foundation)
-Plan: 3 of 4
-Status: In progress
-Last activity: 2026-03-02 - Completed 01-03-PLAN.md
-Progress: ███░░░░░░░░░░░░░░░░░ 16% (3/19 plans)
+Plan: 4 of 4
+Status: Phase complete
+Last activity: 2026-03-02 - Completed 01-04-PLAN.md
+Progress: ████░░░░░░░░░░░░░░░░ 21% (4/19 plans)
 
 ## Current Phase
 
-Phase 1: Foundation — In Progress (3/4 plans complete)
+Phase 1: Foundation — Complete (4/4 plans complete)
 
 ## Project Reference
 
@@ -22,7 +22,7 @@ Current focus: Phase 1 foundation and config/CLI scaffolding.
 
 | Phase | Name | Status | Progress |
 |-------|------|--------|----------|
-| 1 | Foundation | ◐ In Progress | 75% |
+| 1 | Foundation | ● Complete | 100% |
 | 2 | Core Pipeline | ○ Pending | 0% |
 | 3 | Output Quality | ○ Pending | 0% |
 | 4 | Overlay System | ○ Pending | 0% |
@@ -45,10 +45,12 @@ Current focus: Phase 1 foundation and config/CLI scaffolding.
 | 01-02 | Use `ConfigValidationError` with structured `{ path, message }` issues. | Provides clear, actionable diagnostics for upcoming CLI `validate` command output. |
 | 01-03 | Use evermeet zip builds for darwin and BtbN latest tar.xz builds for linux targets. | Latest BtbN release no longer publishes macOS artifacts, so mixed-source routing is required for platform support. |
 | 01-03 | Validate downloaded ffmpeg with direct `ffmpeg -version` execution. | Executability checks alone are insufficient; command execution confirms binary health before caching. |
+| 01-04 | Use `parseAsync` with exported `createProgram()`/`runCli()` in CLI entrypoint. | Ensures async command actions are awaited and keeps command wiring testable. |
+| 01-04 | Convert JSONC parse offsets to line/column in CLI output. | Gives actionable validation diagnostics while preserving core config error contracts. |
 
 ## Blockers/Concerns Carried Forward
 
-- None from `01-03-SUMMARY.md`.
+- None from `01-04-SUMMARY.md`.
 
 ## Key Risks
 
@@ -61,6 +63,6 @@ Current focus: Phase 1 foundation and config/CLI scaffolding.
 
 ## Session Continuity
 
-Last session: 2026-03-02T22:54:47Z
-Stopped at: Completed 01-03-PLAN.md
-Resume file: .planning/phases/01-foundation/01-04-PLAN.md
+Last session: 2026-03-02T23:07:26Z
+Stopped at: Completed 01-04-PLAN.md
+Resume file: .planning/phases/02-core-pipeline/02-01-PLAN.md
