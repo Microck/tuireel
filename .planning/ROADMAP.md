@@ -78,11 +78,13 @@ Plans:
 3. Running `tuireel composite` on a previously saved InteractionTimeline produces new output without re-recording
 4. Changing overlay settings and re-running `tuireel composite` applies the changes to the existing recording
 
-### Plans (estimated)
-- Plan 4.1: InteractionTimeline — Data structure for per-frame cursor position, keystroke state, sound events; serialize to/from disk
-- Plan 4.2: Cursor overlay — Sharp-based cursor renderer, Fitts's law Bézier easing, micro-jitter, cursor appearance config
-- Plan 4.3: Keystroke HUD overlay — Sharp-based key badge renderer, fade animation, layout/positioning, style config
-- Plan 4.4: Two-pass compositor — Orchestrate overlay rendering, ffmpeg overlay filter, `composite` CLI command wiring
+### Plans: 4 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — InteractionTimeline data structure + serialization (TDD)
+- [ ] 04-02-PLAN.md — Cursor overlay: Bezier path computation + Sharp renderer
+- [ ] 04-03-PLAN.md — Keystroke HUD overlay: key badge renderer
+- [ ] 04-04-PLAN.md — Two-pass compositor engine + `tuireel composite` CLI command
 
 ---
 
