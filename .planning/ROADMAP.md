@@ -116,12 +116,14 @@ Plans:
 4. Shared step includes (`$include`) resolve correctly and the same step sequence can be reused across videos
 5. The package is installable and runnable via both `npx tuireel` and `bunx tuireel`
 
-### Plans (estimated)
-- Plan 6.1: Advanced steps — Implement `scroll`, `click`, `screenshot`, `resize`, and `set-env` step types
-- Plan 6.2: Preview mode — Execute steps in visible terminal via tuistory, skip capture/encoding, `preview` CLI command
-- Plan 6.3: Watch mode — File watcher (chokidar) on config, debounced re-trigger of record pipeline
-- Plan 6.4: Multi-video & includes — Config resolver for `videos[]` array, `$include` directive, shared step sequences
-- Plan 6.5: Distribution — npm package config, bin entrypoint, `npx`/`bunx` compatibility testing, README
+**Plans:** 5 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Advanced step types (scroll, click, screenshot, resize, set-env)
+- [ ] 06-02-PLAN.md — Preview mode (execute steps without recording)
+- [ ] 06-03-PLAN.md — Multi-video configs + $include directive
+- [ ] 06-04-PLAN.md — Watch mode (chokidar file watcher, debounced re-record)
+- [ ] 06-05-PLAN.md — npm/Bun distribution packaging
 
 ---
 
