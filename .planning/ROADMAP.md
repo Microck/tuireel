@@ -56,10 +56,11 @@
 3. User can set `theme: "catppuccin"` in config and the output uses Catppuccin colors, or define a full custom theme object
 4. Themed output has correct colors, font rendering, and padding — visual parity with tuistory's standalone screenshot rendering
 
-### Plans (estimated)
-- Plan 3.1: WebM encoding — VP9/VP8 ffmpeg profile, quality presets, format selection in config
-- Plan 3.2: GIF encoding — Two-pass palettegen, fps cap, size optimization, quality presets
-- Plan 3.3: Terminal theming — Built-in theme registry (8 themes), custom theme schema, theme resolution, pass theme config to tuistory screenshots
+**Plans:** 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — WebM VP9 + GIF two-pass palettegen encoding
+- [ ] 03-02-PLAN.md — Terminal theming (8 built-in + custom themes)
 
 ---
 
