@@ -3,20 +3,20 @@
 ## Current Position
 
 Phase: 1 of 6 (Foundation)
-Plan: 4 of 4
+Plan: 5 of 5
 Status: Phase complete
-Last activity: 2026-03-02 - Completed 01-04-PLAN.md
-Progress: ████░░░░░░░░░░░░░░░░ 21% (4/19 plans)
+Last activity: 2026-03-02 - Completed 01-05-PLAN.md (schema parity gap closure)
+Progress: █████░░░░░░░░░░░░░░░ 25% (5/20 plans)
 
 ## Current Phase
 
-Phase 1: Foundation — Complete (4/4 plans complete)
+Phase 1: Foundation — Complete (5/5 plans complete)
 
 ## Project Reference
 
 See: `.planning/PROJECT.md` (updated 2025-07-26)
 Core value: TUI tool authors can produce polished demo videos from a declarative script.
-Current focus: Phase 1 foundation and config/CLI scaffolding.
+Current focus: Transition to Phase 2 core pipeline execution.
 
 ## Phase Progress
 
@@ -47,10 +47,12 @@ Current focus: Phase 1 foundation and config/CLI scaffolding.
 | 01-03 | Validate downloaded ffmpeg with direct `ffmpeg -version` execution. | Executability checks alone are insufficient; command execution confirms binary health before caching. |
 | 01-04 | Use `parseAsync` with exported `createProgram()`/`runCli()` in CLI entrypoint. | Ensures async command actions are awaited and keeps command wiring testable. |
 | 01-04 | Convert JSONC parse offsets to line/column in CLI output. | Gives actionable validation diagnostics while preserving core config error contracts. |
+| 01-05 | Use `z.toJSONSchema(configSchema, { target: "draft-07", io: "input" })` for schema generation. | Produces non-empty schema with defaults + required `steps`, matching config authoring contract for IDE autocomplete. |
+| 01-05 | Assert schema parity in both core and CLI init integration tests. | Prevents drift between generated schema output and persisted `~/.tuireel/schema.json` artifact. |
 
 ## Blockers/Concerns Carried Forward
 
-- None from `01-04-SUMMARY.md`.
+- None.
 
 ## Key Risks
 
@@ -63,6 +65,6 @@ Current focus: Phase 1 foundation and config/CLI scaffolding.
 
 ## Session Continuity
 
-Last session: 2026-03-02T23:07:26Z
-Stopped at: Completed 01-04-PLAN.md
+Last session: 2026-03-02T23:30:22Z
+Stopped at: Completed 01-05-PLAN.md (Phase 1 complete)
 Resume file: .planning/phases/02-core-pipeline/02-01-PLAN.md
