@@ -16,7 +16,8 @@ interface InitOptions {
 }
 
 function resolveSchemaPath(): string {
-  return resolve(homedir(), SCHEMA_DIRECTORY, SCHEMA_FILENAME);
+  const schemaDirectoryPath = process.env.TUIREEL_HOME ?? resolve(homedir(), SCHEMA_DIRECTORY);
+  return resolve(schemaDirectoryPath, SCHEMA_FILENAME);
 }
 
 async function exists(filePath: string): Promise<boolean> {

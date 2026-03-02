@@ -10,6 +10,20 @@ const COLOR_RED = "\u001b[31m";
 
 const PARSE_ERROR_PATTERN = /^JSONC parse error: (.+) at offset (\d+)$/;
 
+interface ValidateCommandOutput {
+  log: (message: string) => void;
+  error: (message: string) => void;
+}
+
+const defaultOutput: ValidateCommandOutput = {
+  log: (message) => {
+    console.log(message);
+  },
+  error: (message) => {
+    console.error(message);
+  },
+};
+
 function formatSuccessLine(message: string): string {
   return `${COLOR_GREEN}✓${COLOR_RESET} ${message}`;
 }
@@ -51,7 +65,10 @@ function getLineAndColumn(source: string, offset: number): { line: number; colum
   return { line, column };
 }
 
-export function registerValidateCommand(program: Command): void {
+export function registerValidateCommand(
+  program: Command,
+  output: ValidateCommandOutput = defaultOutput,
+): void {
   program
     .command("validate")
     .description("Validate a tuireel config file")
@@ -59,7 +76,7 @@ export function registerValidateCommand(program: Command): void {
     .action(async (configPath: string) => {
       try {
         await loadConfig(configPath);
-        console.log(formatSuccessLine(`Config is valid: ${configPath}`));
+        output.log(formatSuccessLine(`Config is valid: ${configPath}`));
       } catch (error) {
         if (error instanceof ConfigValidationError) {
           let rawConfig = "";
@@ -75,14 +92,14 @@ export function registerValidateCommand(program: Command): void {
               : error.issues;
 
           for (const issue of issues) {
-            console.error(formatErrorLine(`${issue.path}: ${issue.message}`));
+            output.error(formatErrorLine(`${issue.path}: ${issue.message}`));
           }
           process.exitCode = 1;
           return;
         }
 
         const message = error instanceof Error ? error.message : String(error);
-        console.error(formatErrorLine(message));
+        output.error(formatErrorLine(message));
         process.exitCode = 1;
       }
     });
