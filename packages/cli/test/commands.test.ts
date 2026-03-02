@@ -62,6 +62,69 @@ describe("cli commands", () => {
         type: "launch",
         command: "echo hello",
       });
+
+      const schemaPath = join(process.env.TUIREEL_HOME, "schema.json");
+      const rawSchema = await readFile(schemaPath, "utf8");
+      const parsedSchema = JSON.parse(rawSchema) as {
+        type?: string;
+        properties?: Record<string, unknown>;
+        required?: unknown;
+      };
+
+      expect(parsedSchema.type).toBe("object");
+      expect(parsedSchema.properties).toEqual(
+        expect.objectContaining({
+          output: expect.any(Object),
+          fps: expect.any(Object),
+          cols: expect.any(Object),
+          rows: expect.any(Object),
+          steps: expect.any(Object),
+        }),
+      );
+      expect(Array.isArray(parsedSchema.required)).toBe(true);
+      expect(parsedSchema.required).toContain("steps");
+
+      const stepsSchema = (parsedSchema.properties as Record<string, unknown>).steps as {
+        items?: {
+          oneOf?: Array<Record<string, unknown>>;
+        };
+      };
+      const variants = stepsSchema.items?.oneOf ?? [];
+
+      expect(variants).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            properties: expect.objectContaining({
+              type: expect.objectContaining({ const: "launch" }),
+              command: expect.any(Object),
+            }),
+          }),
+          expect.objectContaining({
+            properties: expect.objectContaining({
+              type: expect.objectContaining({ const: "type" }),
+              text: expect.any(Object),
+            }),
+          }),
+          expect.objectContaining({
+            properties: expect.objectContaining({
+              type: expect.objectContaining({ const: "press" }),
+              key: expect.any(Object),
+            }),
+          }),
+          expect.objectContaining({
+            properties: expect.objectContaining({
+              type: expect.objectContaining({ const: "wait" }),
+              pattern: expect.any(Object),
+            }),
+          }),
+          expect.objectContaining({
+            properties: expect.objectContaining({
+              type: expect.objectContaining({ const: "pause" }),
+              duration: expect.any(Object),
+            }),
+          }),
+        ]),
+      );
     } finally {
       if (previousTuireelHome === undefined) {
         delete process.env.TUIREEL_HOME;
