@@ -70,8 +70,13 @@ async function runFfmpeg(
       maxBuffer: 10 * 1024 * 1024,
     });
   } catch (error) {
-    const baseMessage = error instanceof Error ? error.message : String(error);
-    throw new Error(`ffmpeg failed to ${operationDescription}: ${baseMessage}${getErrorStderr(error)}`);
+    const exitCode = (error as { code?: number }).code ?? "unknown";
+    const command = [ffmpegPath, ...args].join(" ");
+    const stderr = getErrorStderr(error);
+    throw new Error(
+      `ffmpeg failed to ${operationDescription} (exit code: ${exitCode}).\nCommand: ${command}${stderr}`,
+      { cause: error },
+    );
   }
 }
 
