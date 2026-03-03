@@ -4,23 +4,23 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 8 — Presets & Reliability (v1.1)
+**Current focus:** Phase 9 — Diagnostics (v1.1)
 
 ## Current Position
 
-Phase: 8 of 12 (Presets & Reliability)
-Plan: 4 of 4 in current phase
-Status: Phase complete
-Last activity: 2026-03-03 — Completed 08-03-PLAN.md (Preset Wiring + Init Prompt + Cursor/HUD Passthrough)
+Phase: 9 of 12 (Diagnostics)
+Plan: 2 of 2 in current phase (09-01 pending, 09-02 complete)
+Status: In progress
+Last activity: 2026-03-03 — Completed 09-02-PLAN.md (Error message audit with actionable guidance)
 
-Progress: [██████████████████████████████] Phase 8: 4/4 summaries
+Progress: [███████████████░░░░░░░░░░░░░░░] Phase 9: 1/2 summaries
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12 | 9/10+ | In progress (Phase 8 complete) | — |
+| v1.1 Branding, Docs & Hardening | 7-12 | 10/14+ | In progress (Phase 9 in progress) | -- |
 
 ## Performance Metrics
 
@@ -29,7 +29,7 @@ Progress: [███████████████████████
 - 6 phases, 50 tasks
 - Shipped in <1 day
 
-**v1.1:** 9 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min).
+**v1.1:** 10 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9: 09-02 (8 min).
 
 ## Accumulated Context
 
@@ -48,7 +48,7 @@ Recent decisions:
 - Minimal PR template (3 sections, no checklists)
 - favicon.svg used as composite source for banner/OG (icon-only, better centering)
 - scripts/ directory established for reproducible asset generation
-- 3 badges only for README (npm, CI, license) — no badge overload
+- 3 badges only for README (npm, CI, license) -- no badge overload
 - Relative image paths in README for portability
 - README section order established: logo -> banner -> tagline -> badges -> install -> quickstart -> features -> docs -> contributing -> license
 
@@ -57,19 +57,24 @@ Phase 8 decisions:
 - Interrupt check every 100 frames balances responsiveness vs overhead
 - ffmpeg errors: drop error.message, use exit code + command string + stderr instead
 - Error cause chaining with { cause: error } for debugging
-- Sound merge uses full replacement, not partial deep merge — avoids confusing partial sound merge pitfall
-- Preset key stripped from resolved output — resolution directive, not runtime config
-- PresetConfig excludes steps/output/$schema/format — presets set presentation only
-- ExecuteStepsCallbacks renamed to ExecuteStepsOptions (no external consumers)
+- Sound merge uses full replacement, not partial deep merge
+- Preset key stripped from resolved output
+- PresetConfig excludes steps/output/$schema/format
+- ExecuteStepsCallbacks renamed to ExecuteStepsOptions
 - Timeout cascade: per-step timeout > defaultWaitTimeout > no timeout
-- Session error wrapping with context + cause preservation for debugging
+- Session error wrapping with context + cause preservation
+- Preset resolution runs before Zod validation in both loading paths
+- Init preset prompt only shows in TTY mode (non-interactive skips)
 
-  - Preset resolution runs before Zod validation in both loading paths
-  - Init preset prompt only shows in TTY mode (non-interactive skips)
+Phase 9 decisions:
+- Keep plain Error class (no custom error hierarchies) for simplicity
+- Error message pattern: "What went wrong. Try: actionable suggestion."
+- Preserve { cause: error } chaining on all re-thrown errors
+- ENOENT-specific handling added to config loader for file-not-found guidance
 
 ### Blockers/Concerns
 
-- None. Phase 8 complete.
+- 09-01 (Logger infrastructure + verbose/debug CLI flags) still pending -- needed to complete Phase 9
 
 ### Key Risks
 
@@ -83,5 +88,5 @@ Phase 8 decisions:
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 08-03-PLAN.md — Phase 8 complete
-Resume: Phase 9 — next phase
+Stopped at: Completed 09-02-PLAN.md -- 09-01 still pending
+Resume: Execute 09-01-PLAN.md to complete Phase 9

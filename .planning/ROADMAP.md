@@ -85,7 +85,7 @@ Plans:
 
 Plans:
 - [ ] 09-01-PLAN.md — Logger infrastructure + verbose/debug CLI flags + recorder/compositor wiring
-- [ ] 09-02-PLAN.md — Error message audit with actionable guidance across all core modules
+- [x] 09-02-PLAN.md — Error message audit with actionable guidance across all core modules
 
 ### Phase 10: Documentation
 **Goal**: A public Mintlify docs site covers installation, configuration, all features, and every CLI command.
@@ -144,7 +144,7 @@ Plans:
 | 1-6 | v1.0 MVP | 23/23 | Complete | 2026-03-03 |
 | 7. Branding & Repo Polish | v1.1 | 5/5 | Complete | 2026-03-03 |
 | 8. Presets & Reliability | v1.1 | 4/4 | Complete | 2026-03-03 |
-| 9. Diagnostics | v1.1 | 0/2 | Planned | - |
+| 9. Diagnostics | v1.1 | 1/2 | In progress | - |
 | 10. Documentation | v1.1 | 0/3 | Planned | - |
 | 11. CI & Linting | v1.1 | 0/2 | Planned | - |
 | 12. Release & Performance | v1.1 | 0/3 | Planned | - |
