@@ -142,6 +142,7 @@ export async function preview(config: TuireelConfig): Promise<void> {
     });
 
     await executeSteps(session, config.steps, {
+      defaultWaitTimeout: config.defaultWaitTimeout,
       onStepStart: (step) => {
         console.log(`▶ ${step.type}: ${summarizeStep(step)}`);
       },

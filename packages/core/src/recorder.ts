@@ -284,6 +284,7 @@ export async function record(config: TuireelConfig): Promise<void> {
     const runSteps = (async () => {
       capturer.start();
       await executeSteps(session, config.steps, {
+        defaultWaitTimeout: config.defaultWaitTimeout,
         onStepStart: (step, index) => {
           if (step.type !== "launch") {
             const target = resolveCursorTarget(step, index, frameDimensions.width, frameDimensions.height);
@@ -293,11 +294,14 @@ export async function record(config: TuireelConfig): Promise<void> {
             currentCursor = target;
           }
 
+          const hudVisible = config.hud?.visible ?? true;
           const labels = hudLabelsForStep(step);
           if (labels.length > 0) {
-            timeline.showHud(labels);
+            if (hudVisible) {
+              timeline.showHud(labels);
+            }
             timeline.addEvent("key");
-          } else {
+          } else if (hudVisible) {
             timeline.hideHud();
           }
         },
@@ -332,6 +336,7 @@ export async function record(config: TuireelConfig): Promise<void> {
     await compose(artifacts.rawVideoPath, timeline.toJSON(), config.output, {
       format: config.format,
       sound: config.sound,
+      cursorConfig: config.cursor ? { visible: config.cursor.visible ?? true } : undefined,
     });
   } catch (error) {
     await cleanup();

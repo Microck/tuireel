@@ -4,6 +4,8 @@ export async function waitStep(
   session: TuireelSession,
   pattern: string | RegExp,
   timeout?: number,
+  defaultTimeout?: number,
 ): Promise<void> {
-  await session.waitForText(pattern, timeout === undefined ? undefined : { timeout });
+  const effectiveTimeout = timeout ?? defaultTimeout;
+  await session.waitForText(pattern, effectiveTimeout === undefined ? undefined : { timeout: effectiveTimeout });
 }

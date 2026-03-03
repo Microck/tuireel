@@ -15,9 +15,10 @@ import { waitStep } from "./steps/wait.js";
 export type Step = TuireelStep;
 type WaitPattern = Extract<Step, { type: "wait" }>["pattern"];
 
-export interface ExecuteStepsCallbacks {
+export interface ExecuteStepsOptions {
   onStepStart?: (step: Step, index: number) => void | Promise<void>;
   onStepComplete?: (step: Step, index: number) => void | Promise<void>;
+  defaultWaitTimeout?: number;
 }
 
 function errorMessage(error: unknown): string {
@@ -43,10 +44,10 @@ function compileWaitPattern(pattern: WaitPattern): string | RegExp {
 export async function executeSteps(
   session: TuireelSession,
   steps: Step[],
-  callbacks: ExecuteStepsCallbacks = {},
+  options: ExecuteStepsOptions = {},
 ): Promise<void> {
   for (const [index, step] of steps.entries()) {
-    await callbacks.onStepStart?.(step, index);
+    await options.onStepStart?.(step, index);
 
     try {
       switch (step.type) {
@@ -63,7 +64,7 @@ export async function executeSteps(
           break;
         }
         case "wait": {
-          await waitStep(session, compileWaitPattern(step.pattern), step.timeout);
+          await waitStep(session, compileWaitPattern(step.pattern), step.timeout, options.defaultWaitTimeout);
           break;
         }
         case "pause": {
@@ -103,6 +104,6 @@ export async function executeSteps(
     if (step.type !== "screenshot") {
       await session.waitIdle();
     }
-    await callbacks.onStepComplete?.(step, index);
+    await options.onStepComplete?.(step, index);
   }
 }
