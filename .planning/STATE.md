@@ -4,23 +4,23 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 9 — Diagnostics (v1.1)
+**Current focus:** Phase 10 -- Documentation (v1.1)
 
 ## Current Position
 
 Phase: 9 of 12 (Diagnostics)
-Plan: 2 of 2 in current phase (09-01 pending, 09-02 complete)
-Status: In progress
-Last activity: 2026-03-03 — Completed 09-02-PLAN.md (Error message audit with actionable guidance)
+Plan: 2 of 2 in current phase
+Status: Phase complete
+Last activity: 2026-03-03 -- Completed 09-01-PLAN.md (Logger Infrastructure + CLI flags)
 
-Progress: [███████████████░░░░░░░░░░░░░░░] Phase 9: 1/2 summaries
+Progress: [████████████████████████████████] Phase 9: 2/2 summaries
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12 | 10/14+ | In progress (Phase 9 in progress) | -- |
+| v1.1 Branding, Docs & Hardening | 7-12 | 11/14+ | In progress (Phase 9 complete) | -- |
 
 ## Performance Metrics
 
@@ -29,7 +29,7 @@ Progress: [███████████████░░░░░░░░
 - 6 phases, 50 tasks
 - Shipped in <1 day
 
-**v1.1:** 10 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9: 09-02 (8 min).
+**v1.1:** 11 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9 complete: 09-01 (8 min), 09-02 (8 min).
 
 ## Accumulated Context
 
@@ -67,6 +67,10 @@ Phase 8 decisions:
 - Init preset prompt only shows in TTY mode (non-interactive skips)
 
 Phase 9 decisions:
+- All logger output to stderr (not stdout) to avoid interfering with piped output
+- Logger is always optional with silent default fallback -- no breaking API changes
+- LogLevel enum: silent(0) < normal(1) < verbose(2) < debug(3)
+- --debug flag takes precedence over --verbose when both specified
 - Keep plain Error class (no custom error hierarchies) for simplicity
 - Error message pattern: "What went wrong. Try: actionable suggestion."
 - Preserve { cause: error } chaining on all re-thrown errors
@@ -74,7 +78,7 @@ Phase 9 decisions:
 
 ### Blockers/Concerns
 
-- 09-01 (Logger infrastructure + verbose/debug CLI flags) still pending -- needed to complete Phase 9
+- None. Phase 9 complete.
 
 ### Key Risks
 
@@ -88,5 +92,5 @@ Phase 9 decisions:
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 09-02-PLAN.md -- 09-01 still pending
-Resume: Execute 09-01-PLAN.md to complete Phase 9
+Stopped at: Completed Phase 9 -- all diagnostics requirements met (DIAG-01, DIAG-02, DIAG-03)
+Resume: Phase 10 -- Documentation (Mintlify docs site)
