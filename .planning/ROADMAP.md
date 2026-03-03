@@ -50,7 +50,7 @@ Archive:
 
 Plans:
 - [x] 07-01-PLAN.md — Logo SVG + favicon (icon, dark/light variants, color palette)
-- [ ] 07-02-PLAN.md — LICENSE (Apache 2.0) + package.json updates + CONTRIBUTING.md
+- [x] 07-02-PLAN.md — LICENSE (Apache 2.0) + package.json updates + CONTRIBUTING.md
 - [ ] 07-03-PLAN.md — GitHub issue templates (YAML) + PR template
 - [ ] 07-04-PLAN.md — Banner PNG (1280x640) + OG image PNG (1200x630) via Sharp
 - [ ] 07-05-PLAN.md — README.md (branded, with logo/banner/badges) + human verification
@@ -118,7 +118,7 @@ Plans:
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1-6 | v1.0 MVP | 23/23 | Complete | 2026-03-03 |
-| 7. Branding & Repo Polish | v1.1 | 0/5 | Planned | - |
+| 7. Branding & Repo Polish | v1.1 | 2/5 | In progress | - |
 | 8. Presets & Reliability | v1.1 | 0/TBD | Not started | - |
 | 9. Diagnostics | v1.1 | 0/TBD | Not started | - |
 | 10. Documentation | v1.1 | 0/TBD | Not started | - |
