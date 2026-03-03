@@ -8,19 +8,19 @@ See: `.planning/PROJECT.md` (updated 2026-07-16)
 
 ## Current Position
 
-Phase: 7 of 12 (Branding & Repo Polish) — COMPLETE
-Plan: 5 of 5 in current phase
-Status: Phase complete
-Last activity: 2026-03-03 — Completed 07-05-PLAN.md (Branded README)
+Phase: 8 of 12 (Presets & Reliability)
+Plan: 2 of 4 in current phase
+Status: In progress
+Last activity: 2026-03-03 — Completed 08-02-PLAN.md (Compositor Signal Handling & Error Messages)
 
-Progress: [████████████████████] 100% (v1.0 complete, v1.1 Phase 7: 5/5 plans done)
+Progress: [██████████████████████░░░░░░] Phase 8: 1/4 summaries
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12 | 5/5+ | In progress (Phase 7 complete) | — |
+| v1.1 Branding, Docs & Hardening | 7-12 | 6/10+ | In progress (Phase 8 in progress) | — |
 
 ## Performance Metrics
 
@@ -29,7 +29,7 @@ Progress: [████████████████████] 100% (v
 - 6 phases, 50 tasks
 - Shipped in <1 day
 
-**v1.1:** 5 plans completed (07-01 Logo/Favicon 1 min, 07-02 License/Contributing 1 min, 07-03 Templates 1 min, 07-04 Banner/OG 3 min, 07-05 README 1 min). Phase 7 complete.
+**v1.1:** 6 plans completed. Phase 7 complete (5 plans). Phase 8: 08-02 complete (2 min).
 
 ## Accumulated Context
 
@@ -48,14 +48,19 @@ Recent decisions:
 - Minimal PR template (3 sections, no checklists)
 - favicon.svg used as composite source for banner/OG (icon-only, better centering)
 - scripts/ directory established for reproducible asset generation
-
 - 3 badges only for README (npm, CI, license) — no badge overload
 - Relative image paths in README for portability
-- README section order established: logo → banner → tagline → badges → install → quickstart → features → docs → contributing → license
+- README section order established: logo -> banner -> tagline -> badges -> install -> quickstart -> features -> docs -> contributing -> license
+
+Phase 8 decisions:
+- process.once (not process.on) for compositor signal handling to avoid conflicts with recorder
+- Interrupt check every 100 frames balances responsiveness vs overhead
+- ffmpeg errors: drop error.message, use exit code + command string + stderr instead
+- Error cause chaining with { cause: error } for debugging
 
 ### Blockers/Concerns
 
-- None. Phase 7 complete, ready for Phase 8.
+- None. Phase 8 in progress.
 
 ### Key Risks
 
@@ -69,5 +74,5 @@ Recent decisions:
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 07-05-PLAN.md (Branded README) — Phase 7 complete
-Resume: Next is Phase 8 (Presets & Reliability) — needs planning
+Stopped at: Completed 08-02-PLAN.md (Compositor Signal Handling & Error Messages)
+Resume: Continue Phase 8 — next plans are 08-01 (if not yet done), 08-03, 08-04
