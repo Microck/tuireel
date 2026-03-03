@@ -31,12 +31,21 @@ TUI tool authors can produce polished demo videos from a declarative script, wit
 
 ### Active
 
-- [ ] Reliability hardening for long-running recordings and watch sessions
-- [ ] Performance profiling and optimization for compositing throughput
-- [ ] Release automation for package publishing and tagging workflow
-- [ ] CI pipeline for regression suites across MP4/WebM/GIF outputs
-- [ ] Better diagnostics for ffmpeg and tuistory runtime failures
-- [ ] User-facing presets for polished overlays/audio combinations
+**Current Milestone: v1.1 Branding, Docs & Hardening**
+
+**Goal:** Ship tuireel as a polished, documented, published open-source project with full branding, Mintlify docs, reliability hardening, CI, and release automation.
+
+**Target features:**
+- Full branding package (logo, color palette, banner images, visual identity)
+- Repository polish (README.md, CONTRIBUTING.md, CHANGELOG, LICENSE, badges)
+- Mintlify documentation site (in `docs/` monorepo folder, initialized from scratch)
+- Reliability hardening for long-running recordings and watch sessions
+- Performance profiling and optimization for compositing throughput
+- Release automation for npm publishing and GitHub tagging workflow
+- GitHub Actions CI pipeline for regression suites across MP4/WebM/GIF outputs
+- Better diagnostics for ffmpeg and tuistory runtime failures
+- User-facing presets for polished overlays/audio combinations
+- Apache 2.0 license
 
 ### Out of Scope
 
@@ -62,6 +71,7 @@ TUI tool authors can produce polished demo videos from a declarative script, wit
 **Known follow-up themes:**
 - Stabilize edge-case capture/encode behavior.
 - Improve release confidence with broader automated verification.
+- Establish public-facing project identity and documentation.
 
 ## Constraints
 
@@ -86,5 +96,9 @@ TUI tool authors can produce polished demo videos from a declarative script, wit
 | Split authoring loader vs runtime loader | Support multi-video authoring without runtime ambiguity. | ✓ Good |
 | Runtime `set-env` via shell export + idle wait | Make env mutation observable and deterministic in-session. | ✓ Good |
 
+| Apache 2.0 license | Permissive with patent grant; standard for open-source dev tools. | — Pending |
+| Mintlify for docs | Polished hosted docs; supports monorepo `docs/` folder. | — Pending |
+| GitHub Actions for CI | Standard for GitHub-hosted repos; good ecosystem for matrix testing. | — Pending |
+
 ---
-*Last updated: 2026-03-03 after v1.0 milestone completion*
+*Last updated: 2026-07-16 after v1.1 milestone start*
