@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 6 of 6 (Workflow & Polish)
-Plan: 4 of 5
-Status: In progress
-Last activity: 2026-03-03 - Completed 06-04-PLAN.md (watch mode)
-Progress: ███████████████████░ 95% (21/22 plans)
+Plan: 5 of 5
+Status: Phase complete
+Last activity: 2026-03-03 - Completed 06-05-PLAN.md (npm/Bun distribution packaging)
+Progress: ████████████████████ 100% (22/22 plans)
 
 ## Current Phase
 
-Phase 6: Workflow & Polish — In progress (4/5 plans complete)
+Phase 6: Workflow & Polish — Complete (5/5 plans complete)
 
 ## Project Reference
 
@@ -27,7 +27,7 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 | 3 | Output Quality | ● Complete | 100% |
 | 4 | Overlay System | ● Complete | 100% |
 | 5 | Sound | ● Complete | 100% |
-| 6 | Workflow & Polish | ◐ In progress | 80% |
+| 6 | Workflow & Polish | ● Complete | 100% |
 
 ## Requirement Coverage
 
@@ -86,6 +86,8 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 | 06-03 | Normalize `loadConfig()` to always return `TuireelConfig[]` and add `loadSingleConfig()` for single-video commands. | Supports one-invocation multi-video record while keeping preview/composite deterministic and backward compatible. |
 | 06-04 | Implement watch mode as core `watchAndRecord()` plus CLI `record --watch` routing. | Keeps watch/re-record behavior reusable in core while keeping CLI command logic minimal. |
 | 06-04 | Reuse record-cycle config normalization (format override + relative sound track resolution) inside watch mode runs. | Preserves output parity between one-shot `record` and watch-triggered re-record cycles. |
+| 06-05 | Keep CLI package as ESM with explicit `bin`, `main`, `files`, and `engines` metadata, and preserve shebang banner in build output. | Ensures `tuireel` remains publishable and executable through npm package runners. |
+| 06-05 | Use realpath-aware direct execution detection in CLI entrypoint. | Prevents symlinked npx/bunx bin invocations from skipping CLI command registration. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -102,6 +104,6 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 
 ## Session Continuity
 
-Last session: 2026-03-03T04:33:21Z
-Stopped at: Completed 06-04-PLAN.md (watch mode)
-Resume file: .planning/phases/06-workflow-polish/06-05-PLAN.md
+Last session: 2026-03-03T04:55:10Z
+Stopped at: Completed 06-05-PLAN.md (npm/Bun distribution packaging)
+Resume file: None
