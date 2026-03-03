@@ -3,20 +3,20 @@
 ## Current Position
 
 Phase: 6 of 6 (Workflow & Polish)
-Plan: 5 of 5
+Plan: 6 of 6
 Status: Phase complete
-Last activity: 2026-03-03 - Completed 06-05-PLAN.md (npm/Bun distribution packaging)
-Progress: ████████████████████ 100% (22/22 plans)
+Last activity: 2026-03-03 - Completed 06-06-PLAN.md (set-env runtime gap closure)
+Progress: ████████████████████ 100% (23/23 plans)
 
 ## Current Phase
 
-Phase 6: Workflow & Polish — Complete (5/5 plans complete)
+Phase 6: Workflow & Polish — Complete (6/6 plans complete)
 
 ## Project Reference
 
 See: `.planning/PROJECT.md` (updated 2025-07-26)
 Core value: TUI tool authors can produce polished demo videos from a declarative script.
-Current focus: Expanding workflow ergonomics with advanced steps, then preview/watch and multi-video polish.
+Current focus: Closing STEP-09 by wiring `set-env` to observable runtime behavior and adding regression coverage.
 
 ## Phase Progress
 
@@ -88,6 +88,8 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 | 06-04 | Reuse record-cycle config normalization (format override + relative sound track resolution) inside watch mode runs. | Preserves output parity between one-shot `record` and watch-triggered re-record cycles. |
 | 06-05 | Keep CLI package as ESM with explicit `bin`, `main`, `files`, and `engines` metadata, and preserve shebang banner in build output. | Ensures `tuireel` remains publishable and executable through npm package runners. |
 | 06-05 | Use realpath-aware direct execution detection in CLI entrypoint. | Prevents symlinked npx/bunx bin invocations from skipping CLI command registration. |
+| 06-06 | Apply `set-env` updates via session-owned shell export emission with deterministic single-quote escaping. | Makes set-env behavior user-visible at runtime while keeping env value handling predictable for spaces and quotes. |
+| 06-06 | Wait for idle after `set-env` now that it emits terminal commands. | Prevents downstream step timing races after runtime environment mutation commands. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -104,6 +106,6 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 
 ## Session Continuity
 
-Last session: 2026-03-03T04:55:10Z
-Stopped at: Completed 06-05-PLAN.md (npm/Bun distribution packaging)
+Last session: 2026-03-03T05:21:13Z
+Stopped at: Completed 06-06-PLAN.md
 Resume file: None
