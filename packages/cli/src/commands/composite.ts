@@ -3,6 +3,8 @@ import { basename, dirname, extname, isAbsolute, join, resolve } from "node:path
 
 import {
   OUTPUT_FORMATS,
+  LogLevel,
+  createLogger,
   compose,
   loadSingleConfig,
   type OutputFormat,
@@ -22,6 +24,8 @@ interface CompositeOptions {
   cursorSize?: number;
   cursor: boolean;
   hud: boolean;
+  verbose?: boolean;
+  debug?: boolean;
 }
 
 function parseOutputFormat(value: string): OutputFormat {
@@ -120,8 +124,12 @@ export function registerCompositeCommand(program: Command): void {
     .option("--cursor-size <n>", "Cursor size in pixels", parseCursorSize)
     .option("--no-cursor", "Disable cursor overlay")
     .option("--no-hud", "Disable keystroke HUD overlay")
+    .option("--verbose", "Show step-by-step progress and stats")
+    .option("--debug", "Show ffmpeg commands and internal timing")
     .action(async (configPathArg: string, options: CompositeOptions) => {
       const configPath = resolve(process.cwd(), options.config ?? configPathArg);
+      const logLevel = options.debug ? LogLevel.debug : options.verbose ? LogLevel.verbose : LogLevel.normal;
+      const logger = createLogger(logLevel);
 
       try {
         const config = await loadSingleConfig(configPath);
@@ -154,6 +162,7 @@ export function registerCompositeCommand(program: Command): void {
               visible: options.cursor,
             },
             sound: resolvedSound,
+            logger,
           },
         );
 
