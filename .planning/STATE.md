@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 4 of 6 (Overlay System)
-Plan: 3 of 4
-Status: In progress
-Last activity: 2026-03-03 - Completed 04-03-PLAN.md (keystroke HUD renderer)
-Progress: █████████████░░░░░░░░ 62% (13/21 plans)
+Plan: 4 of 4
+Status: Phase complete
+Last activity: 2026-03-03 - Completed 04-04-PLAN.md (compositor + composite CLI)
+Progress: █████████████░░░░░░░ 67% (14/21 plans)
 
 ## Current Phase
 
-Phase 4: Overlay System — In progress (3/4 plans complete)
+Phase 4: Overlay System — Complete (4/4 plans complete)
 
 ## Project Reference
 
@@ -25,7 +25,7 @@ Current focus: Integrating overlay renderers into the composite pass (cursor + H
 | 1 | Foundation | ● Complete | 100% |
 | 2 | Core Pipeline | ● Complete | 100% |
 | 3 | Output Quality | ● Complete | 100% |
-| 4 | Overlay System | ◐ In progress | 75% |
+| 4 | Overlay System | ● Complete | 100% |
 | 5 | Sound | ○ Pending | 0% |
 | 6 | Workflow & Polish | ○ Pending | 0% |
 
@@ -69,6 +69,9 @@ Current focus: Integrating overlay renderers into the composite pass (cursor + H
 | 04-02 | Render cursor overlays from SVG to PNG via Sharp, with default circle SVG and drop shadow filter. | Produces alpha-ready compositor assets while keeping cursor visuals configurable through SVG overrides. |
 | 04-03 | Define shared overlay contracts in `overlay/types.ts` (`OverlayImage`, `CursorConfig`, `HudConfig`) with exported defaults. | Keeps cursor and HUD renderers aligned on config and compositing payload structure before compositor integration. |
 | 04-03 | Render keystroke HUD badges as SVG and rasterize through Sharp with group-level opacity control. | Produces alpha-safe, frame-positioned overlays that support multi-key labels and fade animation in a single render step. |
+| 04-04 | Implement `compose()` as ffmpeg frame decode + Sharp overlay + profile-based re-encode, including GIF two-pass finalize. | Reuses established encoder behavior while adding per-frame overlay compositing without changing format contracts. |
+| 04-04 | Persist `.tuireel/raw/{name}.mp4` and `.tuireel/timelines/{name}.timeline.json` during record, then compose final output from those artifacts. | Delivers true two-pass flow and enables re-compositing with new overlay settings without re-recording steps. |
+| 04-04 | Handle `--no-hud` by stripping HUD state in CLI input and `--no-cursor` via cursor visibility override. | Keeps compositor API focused on rendering while exposing user-facing overlay toggles in `tuireel composite`. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -85,6 +88,6 @@ Current focus: Integrating overlay renderers into the composite pass (cursor + H
 
 ## Session Continuity
 
-Last session: 2026-03-03T02:00:42Z
-Stopped at: Completed 04-03-PLAN.md (keystroke HUD renderer)
-Resume file: .planning/phases/04-overlay-system/04-04-PLAN.md
+Last session: 2026-03-03T02:21:44Z
+Stopped at: Completed 04-04-PLAN.md (compositor + composite CLI)
+Resume file: .planning/phases/05-sound/05-01-PLAN.md
