@@ -18,9 +18,26 @@ const pressStepSchema = z.object({
   key: z.string().min(1),
 });
 
+const waitRegexPatternSchema = z
+  .object({
+    regex: z.string().min(1),
+    flags: z.string().optional(),
+  })
+  .superRefine((value, context) => {
+    try {
+      new RegExp(value.regex, value.flags);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `Invalid regular expression: ${message}`,
+      });
+    }
+  });
+
 const waitStepSchema = z.object({
   type: z.literal("wait"),
-  pattern: z.string().min(1),
+  pattern: z.union([z.string().min(1), waitRegexPatternSchema]),
   timeout: z.number().nonnegative().optional(),
 });
 
