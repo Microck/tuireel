@@ -1,6 +1,12 @@
 import { dirname, isAbsolute, resolve } from "node:path";
 
-import { OUTPUT_FORMATS, loadConfig, record as runRecord, type OutputFormat } from "@tuireel/core";
+import {
+  OUTPUT_FORMATS,
+  loadConfig,
+  record as runRecord,
+  type OutputFormat,
+  type TuireelConfig,
+} from "@tuireel/core";
 import { InvalidArgumentError, type Command } from "commander";
 
 const DEFAULT_CONFIG_PATH = ".tuireel.jsonc";
@@ -9,7 +15,7 @@ interface RecordOptions {
   format?: OutputFormat;
 }
 
-type SoundConfig = NonNullable<Awaited<ReturnType<typeof loadConfig>>["sound"]>;
+type ResolvedSoundConfig = TuireelConfig["sound"];
 
 function parseOutputFormat(value: string): OutputFormat {
   if (OUTPUT_FORMATS.includes(value as OutputFormat)) {
@@ -20,9 +26,9 @@ function parseOutputFormat(value: string): OutputFormat {
 }
 
 function resolveSoundConfig(
-  sound: Awaited<ReturnType<typeof loadConfig>>["sound"],
+  sound: ResolvedSoundConfig,
   resolvedConfigPath: string,
-): Awaited<ReturnType<typeof loadConfig>>["sound"] {
+): ResolvedSoundConfig {
   if (!sound || !sound.track || sound.track.trim().length === 0) {
     return sound;
   }
@@ -32,7 +38,7 @@ function resolveSoundConfig(
     track: isAbsolute(sound.track)
       ? sound.track
       : resolve(dirname(resolvedConfigPath), sound.track),
-  } satisfies SoundConfig;
+  } satisfies NonNullable<ResolvedSoundConfig>;
 }
 
 export function registerRecordCommand(program: Command): void {
@@ -45,15 +51,22 @@ export function registerRecordCommand(program: Command): void {
       const configPath = resolve(process.cwd(), configPathArg);
 
       try {
-        const config = await loadConfig(configPath);
-        const resolvedConfig = {
-          ...config,
-          format: options.format ?? config.format,
-          sound: resolveSoundConfig(config.sound, configPath),
-        };
+        const configs = await loadConfig(configPath);
 
-        await runRecord(resolvedConfig);
-        console.log(`Recording complete: ${resolvedConfig.output}`);
+        for (const [index, config] of configs.entries()) {
+          const resolvedConfig = {
+            ...config,
+            format: options.format ?? config.format,
+            sound: resolveSoundConfig(config.sound, configPath),
+          } satisfies TuireelConfig;
+
+          if (configs.length > 1) {
+            console.log(`[${index + 1}/${configs.length}] Recording: ${resolvedConfig.output}`);
+          }
+
+          await runRecord(resolvedConfig);
+          console.log(`Recording complete: ${resolvedConfig.output}`);
+        }
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         console.error(`Recording failed: ${message}`);

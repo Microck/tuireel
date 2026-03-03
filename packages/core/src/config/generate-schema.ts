@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-import { configSchema } from "./schema.js";
+import { configInputSchema } from "./schema.js";
 
 export function generateJsonSchema(): Record<string, unknown> {
-  const schema = z.toJSONSchema(configSchema, {
+  const schema = z.toJSONSchema(configInputSchema, {
     target: "draft-07",
     io: "input",
   }) as Record<string, unknown>;

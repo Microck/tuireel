@@ -4,7 +4,7 @@ import { basename, dirname, extname, isAbsolute, join, resolve } from "node:path
 import {
   OUTPUT_FORMATS,
   compose,
-  loadConfig,
+  loadSingleConfig,
   type OutputFormat,
   type SoundConfig,
   type TimelineData,
@@ -124,7 +124,7 @@ export function registerCompositeCommand(program: Command): void {
       const configPath = resolve(process.cwd(), options.config ?? configPathArg);
 
       try {
-        const config = await loadConfig(configPath);
+        const config = await loadSingleConfig(configPath);
         const resolvedSound = resolveSoundConfig(config.sound, configPath);
         const recordingName = recordingNameFromOutput(config.output);
         const artifacts = resolveRecordingArtifacts(recordingName);

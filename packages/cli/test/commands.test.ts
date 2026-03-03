@@ -59,6 +59,44 @@ function waitPatternAlternativesFromStepsSchema(
   return patternSchema.anyOf ?? patternSchema.oneOf ?? [];
 }
 
+function schemaAlternatives(schema: Record<string, unknown>): Array<Record<string, unknown>> {
+  const anyOf = schema.anyOf as Array<Record<string, unknown>> | undefined;
+  if (Array.isArray(anyOf)) {
+    return anyOf;
+  }
+
+  const oneOf = schema.oneOf as Array<Record<string, unknown>> | undefined;
+  if (Array.isArray(oneOf)) {
+    return oneOf;
+  }
+
+  return [];
+}
+
+function topLevelConfigVariants(schema: Record<string, unknown>): Array<Record<string, unknown>> {
+  const variants = schemaAlternatives(schema);
+  return variants.length > 0 ? variants : [schema];
+}
+
+function stepVariantsFromConfigVariant(
+  configVariant: Record<string, unknown>,
+): Array<Record<string, unknown>> {
+  const properties = configVariant.properties as Record<string, unknown> | undefined;
+  const stepsSchema = properties?.steps as {
+    items?: Record<string, unknown>;
+  } | undefined;
+
+  if (!stepsSchema?.items) {
+    throw new Error("Expected steps schema in single-video config variant");
+  }
+
+  const variants = schemaAlternatives(stepsSchema.items);
+  return variants.flatMap((variant) => {
+    const nestedVariants = schemaAlternatives(variant);
+    return nestedVariants.length > 0 ? nestedVariants : [variant];
+  });
+}
+
 describe("cli commands", () => {
   it("init writes .tuireel.jsonc with $schema and valid config", async () => {
     const directory = await makeTempDirectory();
@@ -88,13 +126,25 @@ describe("cli commands", () => {
       const schemaPath = join(process.env.TUIREEL_HOME, "schema.json");
       const rawSchema = await readFile(schemaPath, "utf8");
       const parsedSchema = JSON.parse(rawSchema) as {
-        type?: string;
-        properties?: Record<string, unknown>;
-        required?: unknown;
+        anyOf?: Array<Record<string, unknown>>;
+        oneOf?: Array<Record<string, unknown>>;
       };
 
-      expect(parsedSchema.type).toBe("object");
-      expect(parsedSchema.properties).toEqual(
+      const configVariants = topLevelConfigVariants(parsedSchema as Record<string, unknown>);
+      const singleVideoVariant = configVariants.find((variant) => {
+        const properties = variant.properties as Record<string, unknown> | undefined;
+        return properties?.steps !== undefined;
+      });
+      const multiVideoVariant = configVariants.find((variant) => {
+        const properties = variant.properties as Record<string, unknown> | undefined;
+        return properties?.videos !== undefined;
+      });
+
+      expect(singleVideoVariant).toBeDefined();
+      expect(multiVideoVariant).toBeDefined();
+
+      const singleProperties = (singleVideoVariant?.properties ?? {}) as Record<string, unknown>;
+      expect(singleProperties).toEqual(
         expect.objectContaining({
           format: expect.any(Object),
           output: expect.any(Object),
@@ -104,15 +154,14 @@ describe("cli commands", () => {
           steps: expect.any(Object),
         }),
       );
-      expect(Array.isArray(parsedSchema.required)).toBe(true);
-      expect(parsedSchema.required).toContain("steps");
+      expect((multiVideoVariant?.properties ?? {}) as Record<string, unknown>).toEqual(
+        expect.objectContaining({
+          defaults: expect.any(Object),
+          videos: expect.any(Object),
+        }),
+      );
 
-      const stepsSchema = (parsedSchema.properties as Record<string, unknown>).steps as {
-        items?: {
-          oneOf?: Array<Record<string, unknown>>;
-        };
-      };
-      const variants = stepsSchema.items?.oneOf ?? [];
+      const variants = stepVariantsFromConfigVariant(singleVideoVariant as Record<string, unknown>);
 
       expect(variants).toEqual(
         expect.arrayContaining([
@@ -144,6 +193,11 @@ describe("cli commands", () => {
             properties: expect.objectContaining({
               type: expect.objectContaining({ const: "pause" }),
               duration: expect.any(Object),
+            }),
+          }),
+          expect.objectContaining({
+            properties: expect.objectContaining({
+              $include: expect.any(Object),
             }),
           }),
         ]),

@@ -7,27 +7,42 @@ import {
   type ParseError,
 } from "jsonc-parser";
 
+import type {
+  MultiVideoConfig,
+  StepWithInclude,
+  TuireelInputConfig,
+  TuireelStep,
+  VideoDefinition,
+} from "./schema.js";
+
 interface IncludeDirective {
   $include: string;
 }
 
-type StepWithInclude<Step extends Record<string, unknown>> = Step | IncludeDirective;
+type ResolvedConfigInput = Omit<VideoDefinition, "name"> & {
+  $schema?: string;
+};
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function isIncludeDirective<Step extends Record<string, unknown>>(
-  step: StepWithInclude<Step>,
+function isIncludeDirective(
+  step: StepWithInclude,
 ): step is IncludeDirective {
-  return (
-    isRecord(step)
-    && typeof step.$include === "string"
-    && step.$include.trim().length > 0
-  );
+  if (!isRecord(step) || !Object.hasOwn(step, "$include")) {
+    return false;
+  }
+
+  const includePath = (step as Record<string, unknown>)["$include"];
+  return typeof includePath === "string" && includePath.trim().length > 0;
 }
 
-function parseIncludeFile(filePath: string, rawContent: string): Array<Record<string, unknown>> {
+function isMultiVideoConfig(rawConfig: TuireelInputConfig): rawConfig is MultiVideoConfig {
+  return "videos" in rawConfig;
+}
+
+function parseIncludeFile(filePath: string, rawContent: string): StepWithInclude[] {
   const parseErrors: ParseError[] = [];
   const parsed = parseJsonc(rawContent, parseErrors, {
     allowTrailingComma: true,
@@ -45,24 +60,28 @@ function parseIncludeFile(filePath: string, rawContent: string): Array<Record<st
     throw new Error(`Include file must define a steps array: ${filePath}`);
   }
 
-  return parsed.steps.filter(isRecord);
+  if (!parsed.steps.every(isRecord)) {
+    throw new Error(`Include file must define a steps array of objects: ${filePath}`);
+  }
+
+  return parsed.steps as StepWithInclude[];
 }
 
 function buildIncludeChain(seen: Set<string>, currentPath: string): string {
   return [...seen, currentPath].join(" -> ");
 }
 
-export async function resolveIncludes<Step extends Record<string, unknown>>(
-  steps: ReadonlyArray<StepWithInclude<Step>>,
+export async function resolveIncludes(
+  steps: ReadonlyArray<StepWithInclude>,
   baseDir: string,
   seen: Set<string> = new Set(),
   parentFile = "<config>",
-): Promise<Step[]> {
-  const resolvedSteps: Step[] = [];
+): Promise<TuireelStep[]> {
+  const resolvedSteps: TuireelStep[] = [];
 
   for (const step of steps) {
     if (!isIncludeDirective(step)) {
-      resolvedSteps.push(step as Step);
+      resolvedSteps.push(step);
       continue;
     }
 
@@ -87,9 +106,7 @@ export async function resolveIncludes<Step extends Record<string, unknown>>(
       throw error;
     }
 
-    const parsedIncludeSteps = parseIncludeFile(includePath, includeRawContent) as Array<
-      StepWithInclude<Step>
-    >;
+    const parsedIncludeSteps = parseIncludeFile(includePath, includeRawContent);
 
     const nextSeen = new Set(seen);
     nextSeen.add(includePath);
@@ -105,4 +122,46 @@ export async function resolveIncludes<Step extends Record<string, unknown>>(
   }
 
   return resolvedSteps;
+}
+
+function mergeVideoWithDefaults(
+  video: VideoDefinition,
+  defaults: Partial<ResolvedConfigInput>,
+  schemaRef: string | undefined,
+): ResolvedConfigInput {
+  const { name: _name, ...videoOverrides } = video;
+
+  return {
+    ...defaults,
+    ...videoOverrides,
+    $schema: defaults.$schema ?? schemaRef,
+    steps: video.steps,
+  };
+}
+
+export async function resolveMultiConfig(
+  rawConfig: TuireelInputConfig,
+  configPath: string,
+): Promise<ResolvedConfigInput[]> {
+  const configDir = dirname(configPath);
+  const includeSeed = new Set<string>([configPath]);
+
+  if (!isMultiVideoConfig(rawConfig)) {
+    const steps = await resolveIncludes(rawConfig.steps, configDir, includeSeed, configPath);
+    return [{ ...rawConfig, steps }];
+  }
+
+  const defaults = rawConfig.defaults ?? {};
+  const configs: ResolvedConfigInput[] = [];
+
+  for (const video of rawConfig.videos) {
+    const merged = mergeVideoWithDefaults(video, defaults, rawConfig.$schema);
+    const steps = await resolveIncludes(merged.steps, configDir, includeSeed, configPath);
+    configs.push({
+      ...merged,
+      steps,
+    });
+  }
+
+  return configs;
 }

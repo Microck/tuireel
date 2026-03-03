@@ -1,4 +1,4 @@
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -81,6 +81,44 @@ function waitPatternAlternativesFromStepsSchema(
   return patternSchema.anyOf ?? patternSchema.oneOf ?? [];
 }
 
+function schemaAlternatives(schema: Record<string, unknown>): Array<Record<string, unknown>> {
+  const anyOf = schema.anyOf as Array<Record<string, unknown>> | undefined;
+  if (Array.isArray(anyOf)) {
+    return anyOf;
+  }
+
+  const oneOf = schema.oneOf as Array<Record<string, unknown>> | undefined;
+  if (Array.isArray(oneOf)) {
+    return oneOf;
+  }
+
+  return [];
+}
+
+function topLevelConfigVariants(schema: Record<string, unknown>): Array<Record<string, unknown>> {
+  const variants = schemaAlternatives(schema);
+  return variants.length > 0 ? variants : [schema];
+}
+
+function stepVariantsFromConfigVariant(
+  configVariant: Record<string, unknown>,
+): Array<Record<string, unknown>> {
+  const properties = configVariant.properties as Record<string, unknown> | undefined;
+  const stepsSchema = properties?.steps as {
+    items?: Record<string, unknown>;
+  } | undefined;
+
+  if (!stepsSchema?.items) {
+    throw new Error("Expected steps schema on single-video config variant");
+  }
+
+  const variants = schemaAlternatives(stepsSchema.items);
+  return variants.flatMap((variant) => {
+    const nestedVariants = schemaAlternatives(variant);
+    return nestedVariants.length > 0 ? nestedVariants : [variant];
+  });
+}
+
 describe("config parser", () => {
   it("parses a valid minimal config from disk", async () => {
     const directory = await mkdtemp(join(tmpdir(), "tuireel-config-"));
@@ -89,13 +127,152 @@ describe("config parser", () => {
     const filePath = join(directory, ".tuireel.jsonc");
     await writeFile(filePath, VALID_MINIMAL_CONFIG, "utf8");
 
-    const config = await loadConfig(filePath);
+    const configs = await loadConfig(filePath);
+    const [config] = configs;
 
+    expect(configs).toHaveLength(1);
+    expect(config).toBeDefined();
     expect(config.steps).toHaveLength(1);
     expect(config.steps[0]).toMatchObject({
       type: "launch",
       command: "npm run dev",
     });
+  });
+
+  it("resolves $include directives relative to the including config file", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "tuireel-include-"));
+    tempDirectories.push(directory);
+
+    const snippetsDir = join(directory, "snippets");
+    await mkdir(snippetsDir, { recursive: true });
+    await writeFile(
+      join(snippetsDir, "shared-steps.jsonc"),
+      `{
+        "steps": [
+          { "type": "type", "text": "pnpm test" },
+          { "type": "press", "key": "Enter" }
+        ]
+      }`,
+      "utf8",
+    );
+
+    const configPath = join(directory, ".tuireel.jsonc");
+    await writeFile(
+      configPath,
+      `{
+        "steps": [
+          { "type": "launch", "command": "pnpm dev" },
+          { "$include": "./snippets/shared-steps.jsonc" },
+          { "type": "wait", "pattern": "ready" }
+        ]
+      }`,
+      "utf8",
+    );
+
+    const [config] = await loadConfig(configPath);
+
+    expect(config).toBeDefined();
+    expect(config.steps).toEqual([
+      { type: "launch", command: "pnpm dev" },
+      { type: "type", text: "pnpm test" },
+      { type: "press", key: "Enter" },
+      { type: "wait", pattern: "ready" },
+    ]);
+  });
+
+  it("expands multi-video configs with defaults merged per video", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "tuireel-multi-"));
+    tempDirectories.push(directory);
+
+    const configPath = join(directory, "multi.jsonc");
+    await writeFile(
+      configPath,
+      `{
+        "defaults": {
+          "format": "webm",
+          "fps": 60,
+          "cols": 120,
+          "rows": 30
+        },
+        "videos": [
+          {
+            "name": "intro",
+            "output": "intro.webm",
+            "steps": [
+              { "type": "launch", "command": "echo intro" }
+            ]
+          },
+          {
+            "name": "demo",
+            "output": "demo.webm",
+            "format": "gif",
+            "steps": [
+              { "type": "launch", "command": "echo demo" }
+            ]
+          }
+        ]
+      }`,
+      "utf8",
+    );
+
+    const configs = await loadConfig(configPath);
+
+    expect(configs).toHaveLength(2);
+    expect(configs[0]).toMatchObject({
+      output: "intro.webm",
+      format: "webm",
+      fps: 60,
+      cols: 120,
+      rows: 30,
+      steps: [{ type: "launch", command: "echo intro" }],
+    });
+    expect(configs[1]).toMatchObject({
+      output: "demo.webm",
+      format: "gif",
+      fps: 60,
+      cols: 120,
+      rows: 30,
+      steps: [{ type: "launch", command: "echo demo" }],
+    });
+  });
+
+  it("reports circular includes with a clear validation error", async () => {
+    const directory = await mkdtemp(join(tmpdir(), "tuireel-cycle-"));
+    tempDirectories.push(directory);
+
+    await writeFile(
+      join(directory, "a.jsonc"),
+      `{
+        "steps": [
+          { "$include": "./b.jsonc" }
+        ]
+      }`,
+      "utf8",
+    );
+
+    await writeFile(
+      join(directory, "b.jsonc"),
+      `{
+        "steps": [
+          { "$include": "./a.jsonc" }
+        ]
+      }`,
+      "utf8",
+    );
+
+    const configPath = join(directory, ".tuireel.jsonc");
+    await writeFile(
+      configPath,
+      `{
+        "steps": [
+          { "type": "launch", "command": "echo cycle" },
+          { "$include": "./a.jsonc" }
+        ]
+      }`,
+      "utf8",
+    );
+
+    await expect(loadConfig(configPath)).rejects.toThrow(/Circular include detected:/);
   });
 
   it("parses config containing JSONC comments", () => {
@@ -258,15 +435,29 @@ describe("config parser", () => {
   it("generates JSON Schema with config fields and step variants", () => {
     const jsonSchema = generateJsonSchema() as {
       $schema?: string;
-      type?: string;
-      properties?: Record<string, unknown>;
-      required?: unknown;
+      anyOf?: Array<Record<string, unknown>>;
+      oneOf?: Array<Record<string, unknown>>;
     };
 
     expect(jsonSchema).toBeTypeOf("object");
     expect(jsonSchema.$schema).toContain("json-schema.org/draft");
-    expect(jsonSchema.type).toBe("object");
-    expect(jsonSchema.properties).toEqual(
+
+    const configVariants = topLevelConfigVariants(jsonSchema as Record<string, unknown>);
+
+    const singleVideoVariant = configVariants.find((variant) => {
+      const properties = variant.properties as Record<string, unknown> | undefined;
+      return properties?.steps !== undefined;
+    });
+    const multiVideoVariant = configVariants.find((variant) => {
+      const properties = variant.properties as Record<string, unknown> | undefined;
+      return properties?.videos !== undefined;
+    });
+
+    expect(singleVideoVariant).toBeDefined();
+    expect(multiVideoVariant).toBeDefined();
+
+    const singleProperties = (singleVideoVariant?.properties ?? {}) as Record<string, unknown>;
+    expect(singleProperties).toEqual(
       expect.objectContaining({
         format: expect.any(Object),
         output: expect.any(Object),
@@ -278,20 +469,15 @@ describe("config parser", () => {
       }),
     );
 
-    expect(Array.isArray(jsonSchema.required)).toBe(true);
-    expect(jsonSchema.required).toContain("steps");
+    const multiProperties = (multiVideoVariant?.properties ?? {}) as Record<string, unknown>;
+    expect(multiProperties).toEqual(
+      expect.objectContaining({
+        defaults: expect.any(Object),
+        videos: expect.any(Object),
+      }),
+    );
 
-    const properties = jsonSchema.properties as Record<string, unknown>;
-    const stepsSchema = properties.steps as {
-      items?: {
-        oneOf?: Array<Record<string, unknown>>;
-      };
-    };
-
-    expect(stepsSchema.items).toBeDefined();
-    expect(Array.isArray(stepsSchema.items?.oneOf)).toBe(true);
-
-    const variants = stepsSchema.items?.oneOf ?? [];
+    const variants = stepVariantsFromConfigVariant(singleVideoVariant as Record<string, unknown>);
 
     expect(variants).toEqual(
       expect.arrayContaining([
@@ -367,6 +553,12 @@ describe("config parser", () => {
             value: expect.any(Object),
           }),
           required: expect.arrayContaining(["type", "key", "value"]),
+        }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            $include: expect.any(Object),
+          }),
+          required: expect.arrayContaining(["$include"]),
         }),
       ]),
     );

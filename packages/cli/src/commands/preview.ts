@@ -1,6 +1,6 @@
 import { resolve } from "node:path";
 
-import { loadConfig, preview as runPreview } from "@tuireel/core";
+import { loadSingleConfig, preview as runPreview } from "@tuireel/core";
 import type { Command } from "commander";
 
 const DEFAULT_CONFIG_PATH = ".tuireel.jsonc";
@@ -14,7 +14,7 @@ export function registerPreviewCommand(program: Command): void {
       const configPath = resolve(process.cwd(), configPathArg);
 
       try {
-        const config = await loadConfig(configPath);
+        const config = await loadSingleConfig(configPath);
         await runPreview(config);
         console.log("Preview complete");
       } catch (error) {
