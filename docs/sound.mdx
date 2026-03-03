@@ -1,0 +1,152 @@
+---
+title: "Sound"
+description: "Add click effects, keypress sounds, and background audio tracks to recordings"
+icon: "volume-high"
+---
+
+Sound is opt-in in Tuireel. You can add click and keypress effects that sync to your scripted actions, play a background audio track, or use a preset that includes sound.
+
+## Enabling Sound
+
+Add the `sound` field to your config:
+
+```jsonc
+{
+  "sound": {
+    "effects": {
+      "click": 1,
+      "key": 1
+    }
+  },
+  "output": "demo.mp4",
+  "steps": [...]
+}
+```
+
+Or use a preset that includes sound — `polished` and `demo` both enable click and key effects:
+
+```jsonc
+{
+  "preset": "polished",
+  "output": "demo.mp4",
+  "steps": [...]
+}
+```
+
+## Sound Effects
+
+Effects are triggered by step actions: `click` effects play on `click` steps, and `key` effects play on `type` and `press` steps.
+
+### Built-in Variants
+
+Each effect type has 4 built-in variants (numbered 1-4):
+
+```jsonc
+{
+  "sound": {
+    "effects": {
+      "click": 2,
+      "key": 3
+    }
+  }
+}
+```
+
+### Custom Audio Files
+
+Instead of a variant number, pass a file path to use your own sound:
+
+```jsonc
+{
+  "sound": {
+    "effects": {
+      "click": "./sounds/my-click.mp3",
+      "key": "./sounds/my-key.wav"
+    }
+  }
+}
+```
+
+File paths are resolved relative to the current working directory.
+
+### Effects Volume
+
+Control the overall volume of sound effects with `effectsVolume` (0 to 1, default `0.5`):
+
+```jsonc
+{
+  "sound": {
+    "effects": { "click": 1, "key": 1 },
+    "effectsVolume": 0.3
+  }
+}
+```
+
+## Background Audio Track
+
+Add a background music or ambient audio track with the `track` field:
+
+```jsonc
+{
+  "sound": {
+    "track": "./audio/background-music.mp3",
+    "trackVolume": 0.2
+  },
+  "output": "demo.mp4",
+  "steps": [...]
+}
+```
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `track` | `string` | — | Path to audio file (relative to working directory) |
+| `trackVolume` | `number` | `0.3` | Track volume, 0 to 1 |
+
+The track is trimmed to the video duration and fades out over the last 2 seconds.
+
+## Combining Effects and Track
+
+You can use both effects and a background track together:
+
+```jsonc
+{
+  "sound": {
+    "effects": {
+      "click": 1,
+      "key": 1
+    },
+    "effectsVolume": 0.5,
+    "track": "./audio/ambient.mp3",
+    "trackVolume": 0.2
+  },
+  "output": "demo.mp4",
+  "steps": [...]
+}
+```
+
+Effects are mixed on top of the background track in the final output.
+
+## Full Sound Config Reference
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `effects.click` | `1-4` or `string` | — | Click effect variant or custom audio path |
+| `effects.key` | `1-4` or `string` | — | Key effect variant or custom audio path |
+| `effectsVolume` | `number` | `0.5` | Effects volume (0-1) |
+| `track` | `string` | — | Background audio file path |
+| `trackVolume` | `number` | `0.3` | Track volume (0-1) |
+
+<Note>
+  Sound encoding requires **ffmpeg**. Effects are mixed using ffmpeg's filter_complex pipeline and encoded as AAC (MP4) or Opus (WebM). GIF output does not support audio.
+</Note>
+
+## Presets with Sound
+
+Two built-in presets include sound effects:
+
+| Preset | Effects |
+|--------|---------|
+| `polished` | click variant 1, key variant 1 |
+| `demo` | click variant 1, key variant 1 |
+
+The `minimal` and `silent` presets do not include sound.

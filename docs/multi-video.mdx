@@ -1,0 +1,158 @@
+---
+title: "Multi-video & Includes"
+description: "Record multiple videos from one config and share steps across recordings"
+icon: "layer-group"
+---
+
+Tuireel supports two advanced config patterns: **multi-video configs** for producing multiple recordings from a single file, and **step includes** for sharing reusable step sequences across configs.
+
+## Multi-video Configs
+
+Instead of a single config object, define a `videos` array to produce multiple recordings in one run:
+
+```jsonc
+{
+  "defaults": {
+    "theme": "catppuccin",
+    "cols": 80,
+    "rows": 24,
+    "fps": 30
+  },
+  "videos": [
+    {
+      "name": "install",
+      "output": "videos/install.mp4",
+      "steps": [
+        { "type": "launch", "command": "bash" },
+        { "type": "type", "text": "npm install my-cli" },
+        { "type": "press", "key": "Enter" },
+        { "type": "pause", "duration": 3 }
+      ]
+    },
+    {
+      "name": "usage",
+      "output": "videos/usage.mp4",
+      "steps": [
+        { "type": "launch", "command": "bash" },
+        { "type": "type", "text": "my-cli --help" },
+        { "type": "press", "key": "Enter" },
+        { "type": "pause", "duration": 2 }
+      ]
+    }
+  ]
+}
+```
+
+### How It Works
+
+- Each video entry gets its own output file and recording
+- The `defaults` object provides shared settings — any field you'd normally put at the top level (theme, sound, cursor, HUD, cols, rows, fps, etc.)
+- Each video can override any default with its own value
+- Every video must have a `name` (used for identification) and `output` (output file path)
+- Each video must define its own `steps` array
+
+### Video Definition Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | `string` | Yes | Unique name for this video |
+| `output` | `string` | Yes | Output file path |
+| `steps` | `array` | Yes | Steps for this video |
+| `preset` | `string` | No | Override preset for this video |
+| `format` | `string` | No | Override format (mp4, webm, gif) |
+| `theme` | `string` or `object` | No | Override theme |
+| `sound` | `object` | No | Override sound config |
+| `cursor` | `object` | No | Override cursor config |
+| `hud` | `object` | No | Override HUD config |
+| `fps` | `number` | No | Override FPS |
+| `cols` | `number` | No | Override terminal width |
+| `rows` | `number` | No | Override terminal height |
+
+## Step Includes
+
+Extract reusable step sequences into separate JSONC files and reference them with `$include`:
+
+```jsonc
+{
+  "output": "demo.mp4",
+  "steps": [
+    { "$include": "./shared/setup.jsonc" },
+    { "type": "type", "text": "echo 'Main demo starts here'" },
+    { "type": "press", "key": "Enter" },
+    { "type": "pause", "duration": 2 }
+  ]
+}
+```
+
+### Include File Format
+
+Include files must define a `steps` array:
+
+```jsonc
+// shared/setup.jsonc
+{
+  "steps": [
+    { "type": "launch", "command": "bash" },
+    { "type": "type", "text": "cd my-project" },
+    { "type": "press", "key": "Enter" },
+    { "type": "pause", "duration": 1 }
+  ]
+}
+```
+
+The steps from the include file are inlined at the position of the `$include` directive — they replace the include object in the final step array.
+
+### Include Path Resolution
+
+Include paths are resolved relative to the config file directory. If your config is at `demos/.tuireel.jsonc` and you reference `"$include": "./shared/setup.jsonc"`, Tuireel looks for `demos/shared/setup.jsonc`.
+
+### Nested Includes
+
+Include files can themselves contain `$include` directives. Nested paths are resolved relative to each include file's own directory. Circular includes are detected and produce a clear error.
+
+## Multi-video with Includes
+
+Combine both features for maximum reuse:
+
+```jsonc
+{
+  "defaults": {
+    "theme": "dracula",
+    "cursor": { "visible": true }
+  },
+  "videos": [
+    {
+      "name": "quickstart",
+      "output": "videos/quickstart.mp4",
+      "steps": [
+        { "$include": "./shared/setup.jsonc" },
+        { "type": "type", "text": "my-cli init" },
+        { "type": "press", "key": "Enter" },
+        { "type": "pause", "duration": 3 }
+      ]
+    },
+    {
+      "name": "advanced",
+      "output": "videos/advanced.mp4",
+      "steps": [
+        { "$include": "./shared/setup.jsonc" },
+        { "type": "type", "text": "my-cli run --verbose" },
+        { "type": "press", "key": "Enter" },
+        { "type": "pause", "duration": 5 }
+      ]
+    }
+  ]
+}
+```
+
+Both videos share the same setup steps, but each has its own main content. Changes to `shared/setup.jsonc` automatically apply to every video that includes it.
+
+## When to Use These Features
+
+| Scenario | Feature |
+|----------|---------|
+| Demo suites with shared branding | Multi-video with `defaults` |
+| Common setup steps across recordings | Step includes |
+| Multiple output formats for same content | Multi-video (one per format) |
+| Shared onboarding sequence | Step include referenced from multiple configs |
+| CI-generated documentation videos | Multi-video for batch recording |
