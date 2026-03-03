@@ -1,11 +1,12 @@
 import { readFile, stat } from "node:fs/promises";
-import { basename, extname, join, resolve } from "node:path";
+import { basename, dirname, extname, isAbsolute, join, resolve } from "node:path";
 
 import {
   OUTPUT_FORMATS,
   compose,
   loadConfig,
   type OutputFormat,
+  type SoundConfig,
   type TimelineData,
 } from "@tuireel/core";
 import { InvalidArgumentError, type Command } from "commander";
@@ -93,6 +94,22 @@ function stripHudFromTimeline(timelineData: TimelineData): TimelineData {
   };
 }
 
+function resolveSoundConfig(
+  sound: SoundConfig | undefined,
+  resolvedConfigPath: string,
+): SoundConfig | undefined {
+  if (!sound || !sound.track || sound.track.trim().length === 0) {
+    return sound;
+  }
+
+  return {
+    ...sound,
+    track: isAbsolute(sound.track)
+      ? sound.track
+      : resolve(dirname(resolvedConfigPath), sound.track),
+  };
+}
+
 export function registerCompositeCommand(program: Command): void {
   program
     .command("composite")
@@ -104,10 +121,11 @@ export function registerCompositeCommand(program: Command): void {
     .option("--no-cursor", "Disable cursor overlay")
     .option("--no-hud", "Disable keystroke HUD overlay")
     .action(async (configPathArg: string, options: CompositeOptions) => {
-      const configPath = options.config ?? configPathArg;
+      const configPath = resolve(process.cwd(), options.config ?? configPathArg);
 
       try {
         const config = await loadConfig(configPath);
+        const resolvedSound = resolveSoundConfig(config.sound, configPath);
         const recordingName = recordingNameFromOutput(config.output);
         const artifacts = resolveRecordingArtifacts(recordingName);
 
@@ -135,6 +153,7 @@ export function registerCompositeCommand(program: Command): void {
               size: options.cursorSize,
               visible: options.cursor,
             },
+            sound: resolvedSound,
           },
         );
 

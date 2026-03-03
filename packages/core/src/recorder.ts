@@ -326,6 +326,7 @@ export async function record(config: TuireelConfig): Promise<void> {
 
     await compose(artifacts.rawVideoPath, timeline.toJSON(), config.output, {
       format: config.format,
+      sound: config.sound,
     });
   } catch (error) {
     await cleanup();

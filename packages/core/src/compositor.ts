@@ -13,6 +13,12 @@ import { ensureFfmpeg } from "./ffmpeg/downloader.js";
 import { renderCursor } from "./overlay/cursor-renderer.js";
 import { renderHud } from "./overlay/hud-renderer.js";
 import type { CursorConfig, CursorImage, HudConfig, OverlayImage } from "./overlay/types.js";
+import {
+  extractSoundEvents,
+  finalizeMp4WithSound,
+  finalizeWebmWithSound,
+  type SoundConfig,
+} from "./sound.js";
 import { InteractionTimeline } from "./timeline/interaction-timeline.js";
 import type { FrameData, TimelineData } from "./timeline/types.js";
 
@@ -27,6 +33,7 @@ export interface ComposeOptions {
   format?: OutputFormat;
   cursorConfig?: CursorConfig;
   hudConfig?: HudConfig;
+  sound?: SoundConfig;
 }
 
 interface EncodeFramesOptions {
@@ -215,6 +222,8 @@ export async function compose(
   const tempDirectory = await mkdtemp(join(tmpdir(), "tuireel-compositor-"));
   const decodedFramesDirectory = join(tempDirectory, "decoded");
   const compositedFramesDirectory = join(tempDirectory, "composited");
+  const encodedVideoPath =
+    format === "gif" ? outputPath : join(tempDirectory, `composited-silent.${format}`);
 
   await mkdir(decodedFramesDirectory, { recursive: true });
   await mkdir(compositedFramesDirectory, { recursive: true });
@@ -288,11 +297,39 @@ export async function compose(
     await encodeFrames({
       ffmpegPath,
       framesDirectory: compositedFramesDirectory,
-      outputPath,
+      outputPath: encodedVideoPath,
       fps,
       format,
       tempDirectory,
     });
+
+    if (format === "gif") {
+      return;
+    }
+
+    const soundEvents = extractSoundEvents(timelineData);
+    const durationSec = frameFiles.length / fps;
+
+    if (format === "webm") {
+      finalizeWebmWithSound(
+        ffmpegPath,
+        encodedVideoPath,
+        outputPath,
+        soundEvents,
+        durationSec,
+        options.sound,
+      );
+      return;
+    }
+
+    finalizeMp4WithSound(
+      ffmpegPath,
+      encodedVideoPath,
+      outputPath,
+      soundEvents,
+      durationSec,
+      options.sound,
+    );
   } finally {
     await rm(tempDirectory, { recursive: true, force: true });
   }
