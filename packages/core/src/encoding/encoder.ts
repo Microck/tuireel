@@ -145,12 +145,18 @@ export class FfmpegEncoder {
     }
   }
 
-  async abort(signal: NodeJS.Signals = "SIGTERM"): Promise<void> {
+  terminate(signal: NodeJS.Signals = "SIGTERM"): void {
     this.finalized = true;
 
     if (this.process.exitCode === null && !this.process.killed) {
       this.process.kill(signal);
     }
+
+    this.resolveDrain();
+  }
+
+  async abort(signal: NodeJS.Signals = "SIGTERM"): Promise<void> {
+    this.terminate(signal);
 
     await this.exitPromise;
   }

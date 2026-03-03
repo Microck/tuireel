@@ -24,28 +24,6 @@ function getLaunchCommand(config: TuireelConfig): string {
 export async function record(config: TuireelConfig): Promise<void> {
   const { createSession } = await import("./session.js");
 
-  const ffmpegPath = await ensureFfmpeg();
-  const fps = config.fps ?? DEFAULT_FPS;
-  const launchCommand = getLaunchCommand(config);
-
-  const session = await createSession({
-    command: launchCommand,
-    cols: config.cols,
-    rows: config.rows,
-  });
-
-  const encoder = new FfmpegEncoder({
-    ffmpegPath,
-    fps,
-    outputPath: config.output,
-  });
-
-  const capturer = new FrameCapturer({
-    session,
-    encoder,
-    fps,
-  });
-
   const signals: NodeJS.Signals[] = ["SIGINT", "SIGTERM"];
   let interruptedSignal: NodeJS.Signals | null = null;
   let resolveInterrupted: (() => void) | null = null;
@@ -53,6 +31,10 @@ export async function record(config: TuireelConfig): Promise<void> {
   const interrupted = new Promise<void>((resolve) => {
     resolveInterrupted = resolve;
   });
+
+  let session: Awaited<ReturnType<typeof createSession>> | null = null;
+  let encoder: FfmpegEncoder | null = null;
+  let capturer: FrameCapturer | null = null;
 
   let cleanupStarted = false;
 
@@ -63,14 +45,20 @@ export async function record(config: TuireelConfig): Promise<void> {
 
     cleanupStarted = true;
 
-    session.close();
+    session?.close();
 
-    await encoder.abort().catch(() => {
+    await encoder?.abort().catch(() => {
       // Best-effort shutdown
     });
-    await capturer.stop().catch(() => {
+    await capturer?.stop().catch(() => {
       // Best-effort shutdown
     });
+  };
+
+  const throwIfInterrupted = (): void => {
+    if (interruptedSignal) {
+      throw new Error(`Recording interrupted by ${interruptedSignal}`);
+    }
   };
 
   const handleSignal = (signal: NodeJS.Signals): void => {
@@ -79,31 +67,60 @@ export async function record(config: TuireelConfig): Promise<void> {
     }
 
     interruptedSignal = signal;
+    session?.close();
+    encoder?.terminate("SIGKILL");
     resolveInterrupted?.();
   };
-
-  const runSteps = (async () => {
-    capturer.start();
-    await executeSteps(session, config.steps);
-    await session.waitIdle();
-  })();
-
-  runSteps.catch(() => {
-    // Prevent unhandled rejections if interrupted mid-step
-  });
 
   for (const signal of signals) {
     process.once(signal, handleSignal);
   }
 
   try {
+    const ffmpegPath = await ensureFfmpeg();
+    throwIfInterrupted();
+
+    const fps = config.fps ?? DEFAULT_FPS;
+    const launchCommand = getLaunchCommand(config);
+
+    session = await createSession({
+      command: launchCommand,
+      cols: config.cols,
+      rows: config.rows,
+    });
+    throwIfInterrupted();
+
+    encoder = new FfmpegEncoder({
+      ffmpegPath,
+      fps,
+      outputPath: config.output,
+    });
+    throwIfInterrupted();
+
+    capturer = new FrameCapturer({
+      session,
+      encoder,
+      fps,
+    });
+
+    const runSteps = (async () => {
+      capturer.start();
+      await executeSteps(session, config.steps);
+      await session.waitIdle();
+    })();
+
+    runSteps.catch(() => {
+      // Prevent unhandled rejections if interrupted mid-step
+    });
+
     const outcome = await Promise.race([
       runSteps.then(() => "steps" as const),
       interrupted.then(() => "signal" as const),
     ]);
 
     if (outcome === "signal") {
-      throw new Error(`Recording interrupted by ${interruptedSignal ?? "signal"}`);
+      throwIfInterrupted();
+      throw new Error("Recording interrupted by signal");
     }
 
     await capturer.stop();
@@ -122,7 +139,7 @@ export async function record(config: TuireelConfig): Promise<void> {
     }
 
     if (!cleanupStarted) {
-      session.close();
+      session?.close();
     }
   }
 }
