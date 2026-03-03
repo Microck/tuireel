@@ -1,9 +1,10 @@
 import { mkdir, stat, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, resolve } from "node:path";
+import { createInterface } from "node:readline";
 import { pathToFileURL } from "node:url";
 
-import { generateJsonSchema } from "@tuireel/core";
+import { generateJsonSchema, PRESET_NAMES } from "@tuireel/core";
 import type { Command } from "commander";
 
 const DEFAULT_CONFIG_PATH = ".tuireel.jsonc";
@@ -37,13 +38,53 @@ async function exists(filePath: string): Promise<boolean> {
   }
 }
 
-function createStarterConfig(schemaPath: string): string {
+const PRESET_DESCRIPTIONS: Record<string, string> = {
+  polished: "catppuccin + sound + cursor + HUD",
+  minimal: "tokyo-night + cursor only",
+  demo: "dracula + sound + cursor + HUD",
+  silent: "no overlays, no sound",
+};
+
+async function promptPreset(): Promise<string | undefined> {
+  if (!process.stdin.isTTY) {
+    return undefined;
+  }
+
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+
+  console.log("\nChoose a preset (optional):");
+  for (const [index, name] of PRESET_NAMES.entries()) {
+    const desc = PRESET_DESCRIPTIONS[name] ?? "";
+    console.log(`  ${index + 1}. ${name}  - ${desc}`);
+  }
+  console.log(`  ${PRESET_NAMES.length + 1}. none  - start from scratch`);
+
+  return new Promise<string | undefined>((resolve) => {
+    rl.question("\nEnter number or press Enter to skip: ", (answer) => {
+      rl.close();
+      const trimmed = answer.trim();
+      if (trimmed === "" || trimmed === String(PRESET_NAMES.length + 1)) {
+        resolve(undefined);
+        return;
+      }
+      const index = parseInt(trimmed, 10) - 1;
+      if (index >= 0 && index < PRESET_NAMES.length) {
+        resolve(PRESET_NAMES[index]);
+        return;
+      }
+      resolve(undefined);
+    });
+  });
+}
+
+function createStarterConfig(schemaPath: string, preset?: string): string {
   const schemaUrl = pathToFileURL(schemaPath).href;
+  const presetLine = preset ? `\n  "preset": "${preset}",` : "";
 
   return `// Tuireel recording configuration (JSONC supports comments).
 // Edit steps below, then run: tuireel validate .tuireel.jsonc
 {
-  "$schema": "${schemaUrl}",
+  "$schema": "${schemaUrl}",${presetLine}
   "output": "demo.mp4",
   "fps": 30,
   "cols": 80,
@@ -90,10 +131,15 @@ export function registerInitCommand(program: Command): void {
       const schema = generateJsonSchema();
       await writeFile(`${schemaPath}`, `${JSON.stringify(schema, null, 2)}\n`, "utf8");
 
+      const presetChoice = await promptPreset();
+
       await mkdir(dirname(outputPath), { recursive: true });
-      await writeFile(outputPath, createStarterConfig(schemaPath), "utf8");
+      await writeFile(outputPath, createStarterConfig(schemaPath, presetChoice), "utf8");
 
       console.log(`Created config: ${outputPath}`);
+      if (presetChoice) {
+        console.log(`Using preset: ${presetChoice}`);
+      }
       console.log(`Schema generated: ${schemaPath}`);
       console.log("Next steps:");
       console.log(`  1. Edit ${outputPath}`);
