@@ -1,0 +1,248 @@
+---
+title: "Steps Reference"
+description: "Complete reference for all Tuireel step types"
+icon: "list-check"
+---
+
+Steps are the building blocks of a Tuireel recording. Each step is an object with a `type` field and type-specific properties. Steps are executed sequentially in the order they appear in the `steps` array.
+
+## launch
+
+Starts a terminal program. Typically the first step in any recording.
+
+<ResponseField name="type" type='"launch"' required>
+  Must be `"launch"`.
+</ResponseField>
+
+<ResponseField name="command" type="string" required>
+  The shell command to execute. Must be non-empty.
+</ResponseField>
+
+```jsonc
+{ "type": "launch", "command": "bash" }
+{ "type": "launch", "command": "python3" }
+{ "type": "launch", "command": "node --interactive" }
+```
+
+## type
+
+Types text into the terminal, simulating keyboard input.
+
+<ResponseField name="type" type='"type"' required>
+  Must be `"type"`.
+</ResponseField>
+
+<ResponseField name="text" type="string" required>
+  The text to type.
+</ResponseField>
+
+<ResponseField name="speed" type="number" required={false}>
+  Typing speed multiplier. Must be a positive number. Higher values mean faster typing.
+</ResponseField>
+
+```jsonc
+{ "type": "type", "text": "echo 'Hello, world!'" }
+{ "type": "type", "text": "npm install tuireel", "speed": 2 }
+```
+
+## press
+
+Sends a single key press to the terminal.
+
+<ResponseField name="type" type='"press"' required>
+  Must be `"press"`.
+</ResponseField>
+
+<ResponseField name="key" type="string" required>
+  The key to press. Must be non-empty. Common values: `Enter`, `Tab`, `Escape`, `Backspace`, `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `Ctrl+C`, `Ctrl+D`.
+</ResponseField>
+
+```jsonc
+{ "type": "press", "key": "Enter" }
+{ "type": "press", "key": "Tab" }
+{ "type": "press", "key": "Ctrl+C" }
+```
+
+## wait
+
+Waits for specific text to appear in the terminal output before continuing.
+
+<ResponseField name="type" type='"wait"' required>
+  Must be `"wait"`.
+</ResponseField>
+
+<ResponseField name="pattern" type="string | { regex: string, flags?: string }" required>
+  The text pattern to wait for. Pass a plain string for exact matching, or an object with `regex` and optional `flags` for regular expression matching.
+</ResponseField>
+
+<ResponseField name="timeout" type="number" required={false}>
+  Maximum time to wait in milliseconds. Must be non-negative. If not specified, falls back to the config-level `defaultWaitTimeout`, or waits indefinitely.
+</ResponseField>
+
+```jsonc
+// Wait for exact text
+{ "type": "wait", "pattern": "$ " }
+
+// Wait with timeout
+{ "type": "wait", "pattern": "Ready", "timeout": 5000 }
+
+// Wait with regex pattern
+{ "type": "wait", "pattern": { "regex": "\\d+ tests passed", "flags": "i" } }
+```
+
+## pause
+
+Pauses execution for a fixed duration.
+
+<ResponseField name="type" type='"pause"' required>
+  Must be `"pause"`.
+</ResponseField>
+
+<ResponseField name="duration" type="number" required>
+  Duration to pause in milliseconds. Must be non-negative.
+</ResponseField>
+
+```jsonc
+{ "type": "pause", "duration": 1000 }
+{ "type": "pause", "duration": 500 }
+```
+
+## scroll
+
+Scrolls the terminal view.
+
+<ResponseField name="type" type='"scroll"' required>
+  Must be `"scroll"`.
+</ResponseField>
+
+<ResponseField name="direction" type='"up" | "down"' required>
+  Scroll direction.
+</ResponseField>
+
+<ResponseField name="amount" type="integer" required={false} default={3}>
+  Number of lines to scroll. Must be a positive integer.
+</ResponseField>
+
+```jsonc
+{ "type": "scroll", "direction": "down" }
+{ "type": "scroll", "direction": "up", "amount": 10 }
+```
+
+## click
+
+Clicks on text matching a pattern in the terminal.
+
+<ResponseField name="type" type='"click"' required>
+  Must be `"click"`.
+</ResponseField>
+
+<ResponseField name="pattern" type="string" required>
+  Text pattern to click on. Must be non-empty.
+</ResponseField>
+
+```jsonc
+{ "type": "click", "pattern": "Submit" }
+```
+
+## screenshot
+
+Takes a screenshot at the current point in the recording.
+
+<ResponseField name="type" type='"screenshot"' required>
+  Must be `"screenshot"`.
+</ResponseField>
+
+<ResponseField name="output" type="string" required>
+  Output file path for the screenshot. Must be non-empty.
+</ResponseField>
+
+```jsonc
+{ "type": "screenshot", "output": "screenshot.png" }
+```
+
+## resize
+
+Resizes the terminal dimensions mid-recording.
+
+<ResponseField name="type" type='"resize"' required>
+  Must be `"resize"`.
+</ResponseField>
+
+<ResponseField name="cols" type="integer" required>
+  New number of columns. Must be a positive integer.
+</ResponseField>
+
+<ResponseField name="rows" type="integer" required>
+  New number of rows. Must be a positive integer.
+</ResponseField>
+
+```jsonc
+{ "type": "resize", "cols": 120, "rows": 40 }
+```
+
+## set-env
+
+Sets an environment variable in the terminal session.
+
+<ResponseField name="type" type='"set-env"' required>
+  Must be `"set-env"`.
+</ResponseField>
+
+<ResponseField name="key" type="string" required>
+  Environment variable name. Must start with a letter or underscore and contain only letters, numbers, or underscores.
+</ResponseField>
+
+<ResponseField name="value" type="string" required>
+  Value to assign to the environment variable.
+</ResponseField>
+
+```jsonc
+{ "type": "set-env", "key": "NODE_ENV", "value": "production" }
+```
+
+## Include Steps
+
+You can include steps from external files using the `$include` directive:
+
+```jsonc
+{
+  "steps": [
+    { "$include": "./shared/setup-steps.jsonc" },
+    { "type": "type", "text": "echo 'After included steps'" },
+    { "type": "press", "key": "Enter" }
+  ]
+}
+```
+
+The `$include` value is a path to another JSONC file containing step definitions.
+
+## Complete Example
+
+A realistic multi-step recording script:
+
+```jsonc
+{
+  "preset": "polished",
+  "output": "demo.mp4",
+  "cols": 100,
+  "rows": 30,
+  "steps": [
+    { "type": "set-env", "key": "PS1", "value": "$ " },
+    { "type": "launch", "command": "bash" },
+    { "type": "wait", "pattern": "$ " },
+    { "type": "type", "text": "npm init -y" },
+    { "type": "press", "key": "Enter" },
+    { "type": "wait", "pattern": "package.json", "timeout": 5000 },
+    { "type": "pause", "duration": 1000 },
+    { "type": "type", "text": "npm install tuireel" },
+    { "type": "press", "key": "Enter" },
+    { "type": "wait", "pattern": "added", "timeout": 30000 },
+    { "type": "pause", "duration": 1500 },
+    { "type": "type", "text": "npx tuireel --help" },
+    { "type": "press", "key": "Enter" },
+    { "type": "pause", "duration": 3000 },
+    { "type": "screenshot", "output": "help-output.png" },
+    { "type": "press", "key": "Ctrl+D" }
+  ]
+}
+```

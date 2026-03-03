@@ -1,0 +1,202 @@
+---
+title: "CLI Reference"
+description: "Complete reference for Tuireel CLI commands and flags"
+icon: "terminal"
+---
+
+Tuireel provides a command-line interface for initializing configs, validating them, recording sessions, previewing steps, and re-compositing recordings.
+
+```bash
+tuireel [command] [options]
+```
+
+Global options:
+
+| Flag | Description |
+|------|-------------|
+| `-V, --version` | Print the version number |
+| `-h, --help` | Display help for a command |
+
+## init
+
+Create a starter `.tuireel.jsonc` config file with JSON Schema support.
+
+```bash
+tuireel init [options]
+```
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `-o, --output <path>` | Output config file path | `.tuireel.jsonc` |
+| `-f, --force` | Overwrite an existing config file | `false` |
+
+In TTY mode, `init` prompts you to select a preset:
+
+```
+Choose a preset (optional):
+  1. polished  - catppuccin + sound + cursor + HUD
+  2. minimal   - tokyo-night + cursor only
+  3. demo      - dracula + sound + cursor + HUD
+  4. silent    - no overlays, no sound
+  5. none      - start from scratch
+```
+
+In non-interactive mode (piped input), the preset prompt is skipped.
+
+**Examples:**
+
+```bash
+# Create default config
+tuireel init
+
+# Create config at a custom path
+tuireel init -o my-demo.jsonc
+
+# Overwrite existing config
+tuireel init --force
+```
+
+## validate
+
+Validate a config file against the Tuireel schema. Reports errors with line and column numbers.
+
+```bash
+tuireel validate [configPath]
+```
+
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `configPath` | Path to the config file | `.tuireel.jsonc` |
+
+Exits with code `0` on success, `1` on validation failure.
+
+**Examples:**
+
+```bash
+# Validate default config
+tuireel validate
+
+# Validate a specific config
+tuireel validate my-demo.jsonc
+```
+
+**Output on success:**
+```
+✓ Config is valid: .tuireel.jsonc
+```
+
+**Output on failure:**
+```
+✗ steps.0.type: Invalid discriminator value. Expected 'launch' | 'type' | ...
+```
+
+## record
+
+Record a TUI session to video. Spawns a PTY, executes all steps, captures frames, and encodes the output.
+
+```bash
+tuireel record [configPath] [options]
+```
+
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `configPath` | Path to the config file | `.tuireel.jsonc` |
+
+| Flag | Description |
+|------|-------------|
+| `--format <format>` | Override output format (`mp4`, `webm`, `gif`) |
+| `-w, --watch` | Watch config file and re-record on changes |
+| `--verbose` | Show step-by-step progress and recording stats |
+| `--debug` | Show ffmpeg commands and internal timing details |
+
+When using a multi-video config, all videos are recorded sequentially with progress indicators.
+
+**Examples:**
+
+```bash
+# Record with default config
+tuireel record
+
+# Record a specific config
+tuireel record my-demo.jsonc
+
+# Record as GIF instead of MP4
+tuireel record --format gif
+
+# Watch mode — re-records on config changes
+tuireel record -w
+
+# Verbose output for troubleshooting
+tuireel record --verbose
+
+# Debug output showing ffmpeg internals
+tuireel record --debug
+```
+
+## preview
+
+Run the scripted steps in a visible terminal without recording video. Useful for testing and debugging your step sequence before committing to a full recording.
+
+```bash
+tuireel preview [config] [options]
+```
+
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `config` | Path to the config file | `.tuireel.jsonc` |
+
+| Flag | Description |
+|------|-------------|
+| `--verbose` | Show step-by-step progress and stats |
+| `--debug` | Show internal timing details |
+
+**Examples:**
+
+```bash
+# Preview default config
+tuireel preview
+
+# Preview a specific config
+tuireel preview my-demo.jsonc
+
+# Preview with verbose output
+tuireel preview --verbose
+```
+
+## composite
+
+Re-composite overlays (cursor, HUD, sound) onto an existing raw recording without re-recording the terminal session. Requires a prior `tuireel record` run (uses raw video and timeline data from `.tuireel/`).
+
+```bash
+tuireel composite [configPath] [options]
+```
+
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `configPath` | Path to the config file | `.tuireel.jsonc` |
+
+| Flag | Description |
+|------|-------------|
+| `-c, --config <path>` | Config file path (overrides positional argument) |
+| `--format <format>` | Override output format (`mp4`, `webm`, `gif`) |
+| `--cursor-size <n>` | Cursor size in pixels |
+| `--no-cursor` | Disable cursor overlay |
+| `--no-hud` | Disable keystroke HUD overlay |
+| `--verbose` | Show step-by-step progress and stats |
+| `--debug` | Show ffmpeg commands and internal timing |
+
+**Examples:**
+
+```bash
+# Re-composite with current config settings
+tuireel composite
+
+# Change format without re-recording
+tuireel composite --format gif
+
+# Re-composite without cursor or HUD
+tuireel composite --no-cursor --no-hud
+
+# Adjust cursor size
+tuireel composite --cursor-size 24
+```
