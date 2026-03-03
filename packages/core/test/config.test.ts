@@ -14,6 +14,30 @@ const VALID_MINIMAL_CONFIG = `{
   "steps": [{ "type": "launch", "command": "npm run dev" }]
 }`;
 
+const VALID_CUSTOM_THEME = {
+  background: "#101010",
+  foreground: "#f0f0f0",
+  cursor: "#ffffff",
+  colors: {
+    black: "#111111",
+    red: "#aa0000",
+    green: "#00aa00",
+    yellow: "#aaaa00",
+    blue: "#0000aa",
+    magenta: "#aa00aa",
+    cyan: "#00aaaa",
+    white: "#aaaaaa",
+    brightBlack: "#555555",
+    brightRed: "#ff5555",
+    brightGreen: "#55ff55",
+    brightYellow: "#ffff55",
+    brightBlue: "#5555ff",
+    brightMagenta: "#ff55ff",
+    brightCyan: "#55ffff",
+    brightWhite: "#ffffff",
+  },
+};
+
 const tempDirectories: string[] = [];
 
 afterEach(async () => {
@@ -183,6 +207,54 @@ describe("config parser", () => {
     expect(config.output).toBe("demo.webm");
   });
 
+  it("accepts built-in theme names in config", () => {
+    const config = validateConfig(`{
+      "theme": "dracula",
+      "steps": [{ "type": "launch", "command": "echo themed" }]
+    }`);
+
+    expect(config.theme).toBe("dracula");
+  });
+
+  it("accepts custom theme objects in config", () => {
+    const config = validateConfig(
+      JSON.stringify({
+        theme: {
+          ...VALID_CUSTOM_THEME,
+          padding: 4,
+          fontFamily: "./fonts/jetbrains-mono.ttf",
+          fontSize: 16,
+        },
+        steps: [{ type: "launch", command: "echo themed" }],
+      }),
+    );
+
+    expect(config.theme).toEqual({
+      ...VALID_CUSTOM_THEME,
+      padding: 4,
+      fontFamily: "./fonts/jetbrains-mono.ttf",
+      fontSize: 16,
+    });
+  });
+
+  it("rejects invalid custom theme colors", () => {
+    const error = captureValidationError(
+      JSON.stringify({
+        theme: {
+          ...VALID_CUSTOM_THEME,
+          colors: {
+            ...VALID_CUSTOM_THEME.colors,
+            brightWhite: "white",
+          },
+        },
+        steps: [{ type: "launch", command: "echo themed" }],
+      }),
+    );
+
+    expect(error.issues.some((issue) => issue.path.includes("theme.colors.brightWhite"))).toBe(true);
+    expect(error.message).toMatch(/#RRGGBB/i);
+  });
+
   it("generates JSON Schema with config fields and step variants", () => {
     const jsonSchema = generateJsonSchema() as {
       $schema?: string;
@@ -198,6 +270,7 @@ describe("config parser", () => {
       expect.objectContaining({
         format: expect.any(Object),
         output: expect.any(Object),
+        theme: expect.any(Object),
         fps: expect.any(Object),
         cols: expect.any(Object),
         rows: expect.any(Object),

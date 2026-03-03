@@ -3,6 +3,7 @@ import { executeSteps } from "./executor/step-executor.js";
 import { ensureFfmpeg } from "./ffmpeg/downloader.js";
 import { FrameCapturer } from "./capture/frame-capturer.js";
 import { FfmpegEncoder } from "./encoding/encoder.js";
+import { resolveTheme } from "./themes/resolve.js";
 
 const DEFAULT_FPS = 30;
 
@@ -82,11 +83,13 @@ export async function record(config: TuireelConfig): Promise<void> {
 
     const fps = config.fps ?? DEFAULT_FPS;
     const launchCommand = getLaunchCommand(config);
+    const resolvedTheme = config.theme ? resolveTheme(config.theme) : undefined;
 
     session = await createSession({
       command: launchCommand,
       cols: config.cols,
       rows: config.rows,
+      theme: resolvedTheme,
     });
     throwIfInterrupted();
 

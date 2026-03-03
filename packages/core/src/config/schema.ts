@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { themeSchema } from "../themes/schema.js";
+
 const stepTypes = ["launch", "type", "press", "wait", "pause"] as const;
 const outputFormats = ["mp4", "webm", "gif"] as const;
 
@@ -59,6 +61,7 @@ export const configSchema = z.object({
   $schema: z.string().optional(),
   format: z.enum(outputFormats).default("mp4"),
   output: z.string().default("output.mp4"),
+  theme: z.union([z.string(), themeSchema]).optional(),
   fps: z.number().int().positive().default(30),
   cols: z.number().int().positive().default(80),
   rows: z.number().int().positive().default(24),

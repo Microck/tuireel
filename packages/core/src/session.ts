@@ -1,38 +1,138 @@
-import { renderTerminalToImage } from "ghostty-opentui/image";
+import {
+  renderTerminalToImage,
+  type RenderImageOptions,
+} from "ghostty-opentui/image";
 import { launchTerminal, type Key, type Session } from "tuistory";
+
+import type { ThemeConfig } from "./themes/schema.js";
 
 export interface SessionConfig {
   command: string;
   cols?: number;
   rows?: number;
   env?: Record<string, string | undefined>;
+  theme?: ThemeConfig;
 }
 
 type ScreenshotFormat = "jpeg" | "png" | "webp";
 
 const SCREENSHOT_FONT_SIZE = 14;
 const SCREENSHOT_LINE_HEIGHT = 1.5;
+const SCREENSHOT_QUALITY = 90;
+const OSC_TERMINATOR = "\u0007";
+
+const ANSI_THEME_COLOR_INDEXES: Array<[keyof ThemeConfig["colors"], number]> = [
+  ["black", 0],
+  ["red", 1],
+  ["green", 2],
+  ["yellow", 3],
+  ["blue", 4],
+  ["magenta", 5],
+  ["cyan", 6],
+  ["white", 7],
+  ["brightBlack", 8],
+  ["brightRed", 9],
+  ["brightGreen", 10],
+  ["brightYellow", 11],
+  ["brightBlue", 12],
+  ["brightMagenta", 13],
+  ["brightCyan", 14],
+  ["brightWhite", 15],
+];
+
+function buildOscCommand(code: string, value: string): string {
+  return `\u001b]${code};${value}${OSC_TERMINATOR}`;
+}
+
+function looksLikeFontPath(value: string): boolean {
+  return /[\\/]/.test(value) || /\.(ttf|otf|woff|woff2)$/i.test(value);
+}
+
+export function buildThemeEscapeSequence(theme: ThemeConfig): string {
+  const paletteCommands = ANSI_THEME_COLOR_INDEXES.map(([name, index]) =>
+    buildOscCommand(`4;${index}`, theme.colors[name]),
+  );
+
+  const defaultCommands = [
+    buildOscCommand("10", theme.foreground),
+    buildOscCommand("11", theme.background),
+  ];
+
+  if (theme.cursor) {
+    defaultCommands.push(buildOscCommand("12", theme.cursor));
+  }
+
+  return [...paletteCommands, ...defaultCommands].join("");
+}
+
+type ScreenshotRenderOptions = RenderImageOptions & { fontFamily?: string };
+
+export function buildScreenshotRenderOptions(options: {
+  format: ScreenshotFormat;
+  rows: number;
+  theme?: ThemeConfig;
+}): ScreenshotRenderOptions {
+  const fontSize = options.theme?.fontSize ?? SCREENSHOT_FONT_SIZE;
+
+  const renderOptions: ScreenshotRenderOptions = {
+    format: options.format,
+    quality: SCREENSHOT_QUALITY,
+    fontSize,
+    lineHeight: SCREENSHOT_LINE_HEIGHT,
+    height: Math.round(options.rows * fontSize * SCREENSHOT_LINE_HEIGHT),
+  };
+
+  if (!options.theme) {
+    return renderOptions;
+  }
+
+  renderOptions.theme = {
+    background: options.theme.background,
+    text: options.theme.foreground,
+  };
+
+  if (options.theme.padding !== undefined) {
+    renderOptions.paddingX = options.theme.padding;
+    renderOptions.paddingY = options.theme.padding;
+  }
+
+  if (options.theme.fontFamily) {
+    renderOptions.fontFamily = options.theme.fontFamily;
+
+    if (looksLikeFontPath(options.theme.fontFamily)) {
+      renderOptions.fontPath = options.theme.fontFamily;
+    }
+  }
+
+  return renderOptions;
+}
 
 export class TuireelSession {
   private readonly session: Session;
 
-  constructor(session: Session) {
+  private readonly theme?: ThemeConfig;
+
+  constructor(session: Session, theme?: ThemeConfig) {
     this.session = session;
+    this.theme = theme;
   }
 
   async screenshot(format: ScreenshotFormat = "jpeg"): Promise<Buffer> {
     const terminalData = this.session.getTerminalData();
-    const viewportHeight = Math.round(
-      terminalData.rows * SCREENSHOT_FONT_SIZE * SCREENSHOT_LINE_HEIGHT,
-    );
 
-    return renderTerminalToImage(terminalData, {
-      format,
-      quality: 90,
-      fontSize: SCREENSHOT_FONT_SIZE,
-      lineHeight: SCREENSHOT_LINE_HEIGHT,
-      height: viewportHeight,
-    });
+    return renderTerminalToImage(
+      terminalData,
+      buildScreenshotRenderOptions({
+        format,
+        rows: terminalData.rows,
+        theme: this.theme,
+      }),
+    );
+  }
+
+  async applyTheme(theme: ThemeConfig): Promise<void> {
+    this.session.writeRaw(buildThemeEscapeSequence(theme));
+    await this.waitIdle({ timeout: 250 });
   }
 
   waitIdle(options?: { timeout?: number }): Promise<void> {
@@ -72,5 +172,11 @@ export async function createSession(config: SessionConfig): Promise<TuireelSessi
     env: config.env,
   });
 
-  return new TuireelSession(session);
+  const tuireelSession = new TuireelSession(session, config.theme);
+
+  if (config.theme) {
+    await tuireelSession.applyTheme(config.theme);
+  }
+
+  return tuireelSession;
 }
