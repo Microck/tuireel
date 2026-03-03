@@ -2,21 +2,21 @@
 
 ## Current Position
 
-Phase: 4 of 6 (Overlay System)
-Plan: 5 of 5
-Status: Phase complete
-Last activity: 2026-03-03 - Completed 04-05-PLAN.md (overlay gap closure)
-Progress: ██████████████░░░░░░ 71% (15/21 plans)
+Phase: 5 of 6 (Sound)
+Plan: 1 of 2
+Status: In progress
+Last activity: 2026-03-03 - Completed 05-01-PLAN.md (sound effects engine)
+Progress: ███████████████░░░░░ 76% (16/21 plans)
 
 ## Current Phase
 
-Phase 4: Overlay System — Complete (5/5 plans complete)
+Phase 5: Sound — In progress (1/2 plans complete)
 
 ## Project Reference
 
 See: `.planning/PROJECT.md` (updated 2025-07-26)
 Core value: TUI tool authors can produce polished demo videos from a declarative script.
-Current focus: Transitioning into Phase 5 to map timeline events into synchronized sound effects.
+Current focus: Completing Phase 5 by adding custom audio track mixing on top of synchronized sound effects.
 
 ## Phase Progress
 
@@ -26,7 +26,7 @@ Current focus: Transitioning into Phase 5 to map timeline events into synchroniz
 | 2 | Core Pipeline | ● Complete | 100% |
 | 3 | Output Quality | ● Complete | 100% |
 | 4 | Overlay System | ● Complete | 100% |
-| 5 | Sound | ○ Pending | 0% |
+| 5 | Sound | ◐ In progress | 50% |
 | 6 | Workflow & Polish | ○ Pending | 0% |
 
 ## Requirement Coverage
@@ -74,6 +74,8 @@ Current focus: Transitioning into Phase 5 to map timeline events into synchroniz
 | 04-04 | Handle `--no-hud` by stripping HUD state in CLI input and `--no-cursor` via cursor visibility override. | Keeps compositor API focused on rendering while exposing user-facing overlay toggles in `tuireel composite`. |
 | 04-05 | Scale cursor micro-jitter with a distance ramp plus long-move boost so long travel reaches visible 1-2px amplitude while endpoints stay subtle. | Closes OVR-01 verification gap without changing path/duration APIs or endpoint exactness guarantees. |
 | 04-05 | Define and consume shared `CursorImage` overlay contract across cursor renderer and compositor paths. | Removes local type divergence and keeps overlay renderer/compositor contracts aligned under `overlay/types.ts`. |
+| 05-01 | Resolve bundled SFX directory through runtime candidate paths (`__dirname`, workspace, node_modules). | Keeps default sound preset lookups working across ESM/CJS builds and local workspace execution. |
+| 05-01 | Keep sound behavior strictly opt-in via optional `sound.effects` and skip audio mix when SFX config is absent. | Preserves silent-by-default output for existing configs while enabling explicit sound configuration. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -90,6 +92,6 @@ Current focus: Transitioning into Phase 5 to map timeline events into synchroniz
 
 ## Session Continuity
 
-Last session: 2026-03-03T02:46:51Z
-Stopped at: Completed 04-05-PLAN.md (overlay gap closure)
-Resume file: .planning/phases/05-sound/05-01-PLAN.md
+Last session: 2026-03-03T03:12:30Z
+Stopped at: Completed 05-01-PLAN.md (sound effects engine)
+Resume file: .planning/phases/05-sound/05-02-PLAN.md
