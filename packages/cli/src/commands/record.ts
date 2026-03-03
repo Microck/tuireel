@@ -4,6 +4,7 @@ import {
   OUTPUT_FORMATS,
   loadConfig,
   record as runRecord,
+  watchAndRecord,
   type OutputFormat,
   type TuireelConfig,
 } from "@tuireel/core";
@@ -13,6 +14,7 @@ const DEFAULT_CONFIG_PATH = ".tuireel.jsonc";
 
 interface RecordOptions {
   format?: OutputFormat;
+  watch?: boolean;
 }
 
 type ResolvedSoundConfig = TuireelConfig["sound"];
@@ -47,10 +49,19 @@ export function registerRecordCommand(program: Command): void {
     .description("Record a TUI session to video")
     .argument("[configPath]", "Path to config file", DEFAULT_CONFIG_PATH)
     .option("--format <format>", "Output format (mp4, webm, gif)", parseOutputFormat)
+    .option("-w, --watch", "Watch config and re-record on changes")
     .action(async (configPathArg: string, options: RecordOptions) => {
       const configPath = resolve(process.cwd(), configPathArg);
 
       try {
+        if (options.watch) {
+          console.log(`Watching ${configPath} for changes...`);
+          await watchAndRecord(configPath, {
+            format: options.format,
+          });
+          return;
+        }
+
         const configs = await loadConfig(configPath);
 
         for (const [index, config] of configs.entries()) {

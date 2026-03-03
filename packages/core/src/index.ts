@@ -5,6 +5,7 @@ export * from "./ffmpeg/index.js";
 export { compose } from "./compositor.js";
 export { preview } from "./preview.js";
 export { record } from "./recorder.js";
+export { watchAndRecord } from "./watch.js";
 export {
   buildAudioMixArgs,
   buildFullAudioArgs,
