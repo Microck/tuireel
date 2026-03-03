@@ -37,6 +37,28 @@ async function runProgram(program: Command, args: string[]): Promise<number> {
   return exitCode;
 }
 
+function waitPatternAlternativesFromStepsSchema(
+  variants: Array<Record<string, unknown>>,
+): Array<Record<string, unknown>> {
+  const waitVariant = variants.find((variant) => {
+    const properties = variant.properties as Record<string, unknown> | undefined;
+    const typeProperty = properties?.type as { const?: unknown } | undefined;
+    return typeProperty?.const === "wait";
+  });
+
+  if (!waitVariant) {
+    throw new Error("Expected wait step variant in persisted schema");
+  }
+
+  const waitProperties = waitVariant.properties as Record<string, unknown>;
+  const patternSchema = waitProperties.pattern as {
+    anyOf?: Array<Record<string, unknown>>;
+    oneOf?: Array<Record<string, unknown>>;
+  };
+
+  return patternSchema.anyOf ?? patternSchema.oneOf ?? [];
+}
+
 describe("cli commands", () => {
   it("init writes .tuireel.jsonc with $schema and valid config", async () => {
     const directory = await makeTempDirectory();
@@ -122,6 +144,30 @@ describe("cli commands", () => {
               type: expect.objectContaining({ const: "pause" }),
               duration: expect.any(Object),
             }),
+          }),
+        ]),
+      );
+
+      const waitPatternAlternatives = waitPatternAlternativesFromStepsSchema(variants);
+
+      expect(waitPatternAlternatives).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            type: "string",
+            minLength: 1,
+          }),
+          expect.objectContaining({
+            type: "object",
+            properties: expect.objectContaining({
+              regex: expect.objectContaining({
+                type: "string",
+                minLength: 1,
+              }),
+              flags: expect.objectContaining({
+                type: "string",
+              }),
+            }),
+            required: expect.arrayContaining(["regex"]),
           }),
         ]),
       );

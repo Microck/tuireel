@@ -35,6 +35,28 @@ function captureValidationError(input: string): ConfigValidationError {
   throw new Error("Expected validateConfig to throw ConfigValidationError");
 }
 
+function waitPatternAlternativesFromStepsSchema(
+  variants: Array<Record<string, unknown>>,
+): Array<Record<string, unknown>> {
+  const waitVariant = variants.find((variant) => {
+    const properties = variant.properties as Record<string, unknown> | undefined;
+    const typeProperty = properties?.type as { const?: unknown } | undefined;
+    return typeProperty?.const === "wait";
+  });
+
+  if (!waitVariant) {
+    throw new Error("Expected wait step variant in generated schema");
+  }
+
+  const waitProperties = waitVariant.properties as Record<string, unknown>;
+  const patternSchema = waitProperties.pattern as {
+    anyOf?: Array<Record<string, unknown>>;
+    oneOf?: Array<Record<string, unknown>>;
+  };
+
+  return patternSchema.anyOf ?? patternSchema.oneOf ?? [];
+}
+
 describe("config parser", () => {
   it("parses a valid minimal config from disk", async () => {
     const directory = await mkdtemp(join(tmpdir(), "tuireel-config-"));
@@ -73,6 +95,51 @@ describe("config parser", () => {
     }`);
 
     expect(config).not.toHaveProperty("$schema");
+  });
+
+  it("accepts wait step with plain text pattern", () => {
+    const config = validateConfig(`{
+      "steps": [{ "type": "wait", "pattern": "Ready" }]
+    }`);
+
+    expect(config.steps[0]).toEqual({
+      type: "wait",
+      pattern: "Ready",
+    });
+  });
+
+  it("accepts wait step with regex pattern and flags", () => {
+    const config = validateConfig(`{
+      "steps": [{ "type": "wait", "pattern": { "regex": "Ready|Done", "flags": "i" } }]
+    }`);
+
+    expect(config.steps[0]).toEqual({
+      type: "wait",
+      pattern: {
+        regex: "Ready|Done",
+        flags: "i",
+      },
+    });
+  });
+
+  it("rejects invalid wait regex payloads with pattern issues", () => {
+    const malformedPatternError = captureValidationError(`{
+      "steps": [{ "type": "wait", "pattern": { "regex": "(", "flags": "i" } }]
+    }`);
+
+    expect(
+      malformedPatternError.issues.some((issue) => issue.path.includes("steps.0.pattern")),
+    ).toBe(true);
+    expect(malformedPatternError.message).toMatch(/invalid regular expression/i);
+
+    const invalidFlagsError = captureValidationError(`{
+      "steps": [{ "type": "wait", "pattern": { "regex": "Ready", "flags": "q" } }]
+    }`);
+
+    expect(invalidFlagsError.issues.some((issue) => issue.path.includes("steps.0.pattern"))).toBe(
+      true,
+    );
+    expect(invalidFlagsError.message).toMatch(/invalid regular expression/i);
   });
 
   it("reports missing required steps with actionable message", () => {
@@ -176,6 +243,30 @@ describe("config parser", () => {
             duration: expect.any(Object),
           }),
           required: expect.arrayContaining(["type", "duration"]),
+        }),
+      ]),
+    );
+
+    const waitPatternAlternatives = waitPatternAlternativesFromStepsSchema(variants);
+
+    expect(waitPatternAlternatives).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: "string",
+          minLength: 1,
+        }),
+        expect.objectContaining({
+          type: "object",
+          properties: expect.objectContaining({
+            regex: expect.objectContaining({
+              type: "string",
+              minLength: 1,
+            }),
+            flags: expect.objectContaining({
+              type: "string",
+            }),
+          }),
+          required: expect.arrayContaining(["regex"]),
         }),
       ]),
     );
