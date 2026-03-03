@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 6 of 6 (Workflow & Polish)
-Plan: 2 of 5
+Plan: 3 of 5
 Status: In progress
-Last activity: 2026-03-03 - Completed 06-02-PLAN.md (preview mode)
-Progress: ██████████████████░░ 90% (19/21 plans)
+Last activity: 2026-03-03 - Completed 06-03-PLAN.md (multi-video config + includes)
+Progress: ███████████████████░ 95% (20/21 plans)
 
 ## Current Phase
 
-Phase 6: Workflow & Polish — In progress (2/5 plans complete)
+Phase 6: Workflow & Polish — In progress (3/5 plans complete)
 
 ## Project Reference
 
@@ -27,7 +27,7 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 | 3 | Output Quality | ● Complete | 100% |
 | 4 | Overlay System | ● Complete | 100% |
 | 5 | Sound | ● Complete | 100% |
-| 6 | Workflow & Polish | ◐ In progress | 40% |
+| 6 | Workflow & Polish | ◐ In progress | 60% |
 
 ## Requirement Coverage
 
@@ -82,6 +82,8 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 | 06-01 | Skip global idle waits after `screenshot` and `set-env` dispatch cases. | Avoids unnecessary settle delays for steps that do not mutate terminal render state. |
 | 06-02 | Implement preview runtime by reusing `executeSteps` callbacks for per-step logging, with no capture/encode pipeline. | Keeps preview behavior aligned with record step semantics while remaining fast and output-free. |
 | 06-02 | Register `preview` as a first-class CLI command and stop stub command registration. | Prevents duplicate command wiring and exposes production preview UX via commander. |
+| 06-03 | Separate authoring-time config validation (`configInputSchema`) from runtime single-video config validation (`configSchema`). | Enables multi-video + `$include` authoring without forcing recorder/executor consumers to handle unresolved config shapes. |
+| 06-03 | Normalize `loadConfig()` to always return `TuireelConfig[]` and add `loadSingleConfig()` for single-video commands. | Supports one-invocation multi-video record while keeping preview/composite deterministic and backward compatible. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -98,6 +100,6 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 
 ## Session Continuity
 
-Last session: 2026-03-03T04:04:43Z
-Stopped at: Completed 06-02-PLAN.md (preview mode)
-Resume file: .planning/phases/06-workflow-polish/06-03-PLAN.md
+Last session: 2026-03-03T04:24:06Z
+Stopped at: Completed 06-03-PLAN.md (multi-video config + includes)
+Resume file: .planning/phases/06-workflow-polish/06-04-PLAN.md
