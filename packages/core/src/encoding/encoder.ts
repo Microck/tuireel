@@ -1,7 +1,12 @@
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
+import { randomUUID } from "node:crypto";
+import { rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 import type { OutputFormat } from "../config/schema.js";
 import { ENCODER_PROFILES } from "./encoder-profiles.js";
+import { encodeGifTwoPass } from "./gif-encoder.js";
 
 export interface FfmpegEncoderOptions {
   ffmpegPath: string;
@@ -26,6 +31,10 @@ function applyCrfOverride(args: readonly string[], crf?: number | string): strin
   return updatedArgs;
 }
 
+function createTemporaryOutputPath(extension: string): string {
+  return join(tmpdir(), `tuireel-${randomUUID()}.${extension}`);
+}
+
 function formatStderr(stderrChunks: string[]): string {
   const stderr = stderrChunks.join("").trim();
   if (stderr.length === 0) {
@@ -36,6 +45,14 @@ function formatStderr(stderrChunks: string[]): string {
 }
 
 export class FfmpegEncoder {
+  private readonly ffmpegPath: string;
+
+  private readonly finalOutputPath: string;
+
+  private readonly intermediateOutputPath: string | null;
+
+  private readonly gifFinalizeOptions: { fps: number; scaleWidth?: number } | null;
+
   private readonly process: ChildProcessWithoutNullStreams;
 
   private readonly stderrChunks: string[] = [];
@@ -51,9 +68,27 @@ export class FfmpegEncoder {
   private finalized = false;
 
   constructor(options: FfmpegEncoderOptions) {
-    const profile = ENCODER_PROFILES[options.format];
-    const outputFps = profile.outputFps ?? options.fps;
-    const profileArgs = applyCrfOverride(profile.args, options.crf);
+    this.ffmpegPath = options.ffmpegPath;
+    this.finalOutputPath = options.outputPath;
+
+    const selectedProfile = ENCODER_PROFILES[options.format];
+    const streamProfile = selectedProfile.twoPass ? ENCODER_PROFILES.mp4 : selectedProfile;
+
+    this.intermediateOutputPath = selectedProfile.twoPass
+      ? createTemporaryOutputPath("mp4")
+      : null;
+    this.gifFinalizeOptions =
+      options.format === "gif" && selectedProfile.twoPass
+        ? {
+            fps: selectedProfile.outputFps ?? options.fps,
+            scaleWidth: selectedProfile.scaleWidth,
+          }
+        : null;
+
+    const streamOutputPath = this.intermediateOutputPath ?? this.finalOutputPath;
+
+    const outputFps = streamProfile.outputFps ?? options.fps;
+    const profileArgs = applyCrfOverride(streamProfile.args, options.crf);
 
     const args = [
       "-y",
@@ -68,7 +103,7 @@ export class FfmpegEncoder {
       ...profileArgs,
       "-r",
       String(outputFps),
-      options.outputPath,
+      streamOutputPath,
     ];
 
     this.process = spawn(options.ffmpegPath, args, {
@@ -90,6 +125,30 @@ export class FfmpegEncoder {
         this.resolveDrain();
         resolve(code);
       });
+    });
+  }
+
+  private async cleanupIntermediateOutput(): Promise<void> {
+    if (!this.intermediateOutputPath) {
+      return;
+    }
+
+    await rm(this.intermediateOutputPath, { force: true }).catch(() => {
+      // Best-effort cleanup
+    });
+  }
+
+  private async runTwoPassFinalize(): Promise<void> {
+    if (!this.gifFinalizeOptions || !this.intermediateOutputPath) {
+      return;
+    }
+
+    await encodeGifTwoPass({
+      ffmpegPath: this.ffmpegPath,
+      inputPath: this.intermediateOutputPath,
+      outputPath: this.finalOutputPath,
+      fps: this.gifFinalizeOptions.fps,
+      scaleWidth: this.gifFinalizeOptions.scaleWidth,
     });
   }
 
@@ -153,6 +212,12 @@ export class FfmpegEncoder {
     if (exitCode !== 0) {
       throw new Error(`ffmpeg exited with code ${exitCode}${formatStderr(this.stderrChunks)}`);
     }
+
+    try {
+      await this.runTwoPassFinalize();
+    } finally {
+      await this.cleanupIntermediateOutput();
+    }
   }
 
   terminate(signal: NodeJS.Signals = "SIGTERM"): void {
@@ -169,5 +234,6 @@ export class FfmpegEncoder {
     this.terminate(signal);
 
     await this.exitPromise;
+    await this.cleanupIntermediateOutput();
   }
 }

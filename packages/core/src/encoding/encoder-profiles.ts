@@ -4,6 +4,7 @@ export interface EncoderProfile {
   args: string[];
   outputFps?: number;
   twoPass?: boolean;
+  scaleWidth?: number;
 }
 
 const COLOR_SPACE_ARGS = [
@@ -49,7 +50,8 @@ export const ENCODER_PROFILES: Record<OutputFormat, EncoderProfile> = {
     ],
   },
   gif: {
-    args: ["-vf", "fps=15,pad=ceil(iw/2)*2:ceil(ih/2)*2", "-loop", "0"],
+    args: [],
     outputFps: 15,
+    twoPass: true,
   },
 };
