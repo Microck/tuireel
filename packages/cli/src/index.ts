@@ -1,4 +1,5 @@
-import { pathToFileURL } from "node:url";
+import { realpathSync } from "node:fs";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { Command } from "commander";
 import { VERSION } from "@tuireel/core";
@@ -47,7 +48,13 @@ function isDirectExecution(): boolean {
     return false;
   }
 
-  return import.meta.url === pathToFileURL(entryPoint).href;
+  try {
+    const resolvedEntryPoint = realpathSync(entryPoint);
+    const resolvedModulePath = realpathSync(fileURLToPath(import.meta.url));
+    return resolvedModulePath === resolvedEntryPoint;
+  } catch {
+    return import.meta.url === pathToFileURL(entryPoint).href;
+  }
 }
 
 if (isDirectExecution()) {

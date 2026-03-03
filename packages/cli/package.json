@@ -1,6 +1,21 @@
 {
   "name": "tuireel",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "description": "Scripted TUI demo recorder CLI for terminal videos.",
+  "keywords": [
+    "tuireel",
+    "terminal",
+    "tui",
+    "recorder",
+    "demo-video",
+    "cli"
+  ],
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuireel/tuireel.git",
+    "directory": "packages/cli"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,6 +25,9 @@
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",

@@ -1,6 +1,20 @@
 {
   "name": "@tuireel/core",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "description": "Core Tuireel recording, compositing, and workflow engine.",
+  "keywords": [
+    "tuireel",
+    "terminal",
+    "tui",
+    "video",
+    "recording"
+  ],
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuireel/tuireel.git",
+    "directory": "packages/core"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -15,6 +29,9 @@
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
