@@ -4,9 +4,16 @@ const DEFAULT_FPS = 30;
 const MIN_STEPS = 6;
 const SHORT_MOVE_THRESHOLD = 80;
 const JITTER_THRESHOLD = 60;
+const JITTER_RAMP_DISTANCE = 240;
+const JITTER_LONG_MOVE_BASE = 300;
+const JITTER_LONG_MOVE_RANGE = 700;
 
 function roundToTenth(value: number): number {
   return Math.round(value * 10) / 10;
+}
+
+function clamp01(value: number): number {
+  return Math.max(0, Math.min(1, value));
 }
 
 function humanEase(t: number): number {
@@ -52,7 +59,9 @@ function evalBezier(t: number, p0: CursorPoint, p1: CursorPoint, p2: CursorPoint
 
 function microJitter(t: number, dist: number): CursorPoint {
   const bell = Math.exp(-8 * (t - 0.5) * (t - 0.5));
-  const magnitude = Math.min(0.4, dist * 0.0004) * bell;
+  const jitterRamp = clamp01((dist - JITTER_THRESHOLD) / JITTER_RAMP_DISTANCE);
+  const longMoveBoost = 1 + clamp01((dist - JITTER_LONG_MOVE_BASE) / JITTER_LONG_MOVE_RANGE);
+  const magnitude = jitterRamp * longMoveBoost * bell;
 
   return {
     x: (Math.random() * 2 - 1) * magnitude,
