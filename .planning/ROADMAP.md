@@ -19,13 +19,14 @@
 4. On first invocation, ffmpeg is downloaded to `~/.tuireel/` and subsequent runs reuse the cached binary
 5. The monorepo builds cleanly: `@tuireel/core` exports a public API, `tuireel` CLI binary resolves commands
 
-### Plans: 4 plans
+### Plans: 5 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Monorepo scaffold (pnpm + Turborepo + both packages)
-- [ ] 01-02-PLAN.md — Config schema, JSONC parser, JSON Schema generation (TDD)
-- [ ] 01-03-PLAN.md — ffmpeg auto-download with platform detection and caching
-- [ ] 01-04-PLAN.md — CLI commands: init, validate, and stub commands
+- [x] 01-01-PLAN.md — Monorepo scaffold (pnpm + Turborepo + both packages)
+- [x] 01-02-PLAN.md — Config schema, JSONC parser, JSON Schema generation (TDD)
+- [x] 01-03-PLAN.md — ffmpeg auto-download with platform detection and caching
+- [x] 01-04-PLAN.md — CLI commands: init, validate, and stub commands
+- [x] 01-05-PLAN.md — Gap closure: JSON Schema parity for IDE autocomplete (`CLI-02`)
 
 ---
 
@@ -40,11 +41,12 @@ Plans:
 3. User can configure frame rate and terminal viewport (cols/rows) in the config and the output reflects those settings
 4. The recording pipeline handles tuistory idle detection correctly — no missing frames during fast TUI updates
 
-**Plans:** 2 plans
+**Plans:** 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Session wrapper + step executor (tuistory integration, 5 step types, human-like typing)
-- [ ] 02-02-PLAN.md — Frame capture + ffmpeg encoding + CLI wiring (screenshot loop, image2pipe, `tuireel record`)
+- [x] 02-01-PLAN.md — Session wrapper + step executor (tuistory integration, 5 step types, human-like typing)
+- [x] 02-02-PLAN.md — Frame capture + ffmpeg encoding + CLI wiring (screenshot loop, image2pipe, `tuireel record`)
+- [x] 02-03-PLAN.md — Gap closure: wait regex config contract + executor wiring (`STEP-03`)
 
 ---
 
@@ -62,8 +64,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — WebM VP9 + GIF two-pass palettegen encoding
-- [ ] 03-02-PLAN.md — Terminal theming (8 built-in + custom themes)
+- [x] 03-01-PLAN.md — WebM VP9 + GIF two-pass palettegen encoding
+- [x] 03-02-PLAN.md — Terminal theming (8 built-in + custom themes)
 
 ---
 
@@ -78,13 +80,14 @@ Plans:
 3. Running `tuireel composite` on a previously saved InteractionTimeline produces new output without re-recording
 4. Changing overlay settings and re-running `tuireel composite` applies the changes to the existing recording
 
-### Plans: 4 plans
+### Plans: 5 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — InteractionTimeline data structure + serialization (TDD)
-- [ ] 04-02-PLAN.md — Cursor overlay: Bezier path computation + Sharp renderer
-- [ ] 04-03-PLAN.md — Keystroke HUD overlay: key badge renderer
-- [ ] 04-04-PLAN.md — Two-pass compositor engine + `tuireel composite` CLI command
+- [x] 04-01-PLAN.md — InteractionTimeline data structure + serialization (TDD)
+- [x] 04-02-PLAN.md — Cursor overlay: Bezier path computation + Sharp renderer
+- [x] 04-03-PLAN.md — Keystroke HUD overlay: key badge renderer
+- [x] 04-04-PLAN.md — Two-pass compositor engine + `tuireel composite` CLI command
+- [x] 04-05-PLAN.md — Gap closure: cursor jitter amplitude + shared overlay contract adoption
 
 ---
 
@@ -101,8 +104,8 @@ Plans:
 ### Plans: 2 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Sound effects engine (assets, extraction, ffmpeg audio builder, config schema, tests)
-- [ ] 05-02-PLAN.md — Custom audio track mixing + compositor/CLI integration
+- [x] 05-01-PLAN.md — Sound effects engine (assets, extraction, ffmpeg audio builder, config schema, tests)
+- [x] 05-02-PLAN.md — Custom audio track mixing + compositor/CLI integration
 
 ---
 
@@ -118,14 +121,15 @@ Plans:
 4. Shared step includes (`$include`) resolve correctly and the same step sequence can be reused across videos
 5. The package is installable and runnable via both `npx tuireel` and `bunx tuireel`
 
-**Plans:** 5 plans
+**Plans:** 6 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Advanced step types (scroll, click, screenshot, resize, set-env)
-- [ ] 06-02-PLAN.md — Preview mode (execute steps without recording)
-- [ ] 06-03-PLAN.md — Multi-video configs + $include directive
-- [ ] 06-04-PLAN.md — Watch mode (chokidar file watcher, debounced re-record)
-- [ ] 06-05-PLAN.md — npm/Bun distribution packaging
+- [x] 06-01-PLAN.md — Advanced step types (scroll, click, screenshot, resize, set-env)
+- [x] 06-02-PLAN.md — Preview mode (execute steps without recording)
+- [x] 06-03-PLAN.md — Multi-video configs + $include directive
+- [x] 06-04-PLAN.md — Watch mode (chokidar file watcher, debounced re-record)
+- [x] 06-05-PLAN.md — npm/Bun distribution packaging
+- [x] 06-06-PLAN.md — Gap closure: runtime `set-env` propagation + STEP-09 regression coverage
 
 ---
 
