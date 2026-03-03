@@ -2,21 +2,21 @@
 
 ## Current Position
 
-Phase: 5 of 6 (Sound)
-Plan: 2 of 2
-Status: Phase complete
-Last activity: 2026-03-03 - Completed 05-02-PLAN.md (custom audio track mixing + CLI integration)
-Progress: ████████████████░░░░ 81% (17/21 plans)
+Phase: 6 of 6 (Workflow & Polish)
+Plan: 1 of 5
+Status: In progress
+Last activity: 2026-03-03 - Completed 06-01-PLAN.md (advanced step types)
+Progress: █████████████████░░░ 86% (18/21 plans)
 
 ## Current Phase
 
-Phase 5: Sound — Complete (2/2 plans complete)
+Phase 6: Workflow & Polish — In progress (1/5 plans complete)
 
 ## Project Reference
 
 See: `.planning/PROJECT.md` (updated 2025-07-26)
 Core value: TUI tool authors can produce polished demo videos from a declarative script.
-Current focus: Completing Phase 5 by adding custom audio track mixing on top of synchronized sound effects.
+Current focus: Expanding workflow ergonomics with advanced steps, then preview/watch and multi-video polish.
 
 ## Phase Progress
 
@@ -27,7 +27,7 @@ Current focus: Completing Phase 5 by adding custom audio track mixing on top of 
 | 3 | Output Quality | ● Complete | 100% |
 | 4 | Overlay System | ● Complete | 100% |
 | 5 | Sound | ● Complete | 100% |
-| 6 | Workflow & Polish | ○ Pending | 0% |
+| 6 | Workflow & Polish | ◐ In progress | 20% |
 
 ## Requirement Coverage
 
@@ -78,6 +78,8 @@ Current focus: Completing Phase 5 by adding custom audio track mixing on top of 
 | 05-01 | Keep sound behavior strictly opt-in via optional `sound.effects` and skip audio mix when SFX config is absent. | Preserves silent-by-default output for existing configs while enabling explicit sound configuration. |
 | 05-02 | Finalize audio using a shared `buildFullAudioArgs` pipeline for effects-only, track-only, and mixed modes. | Consolidates sound branching logic while keeping mp4/webm finalizers format-specific and predictable. |
 | 05-02 | Resolve `sound.track` relative to config file path in both `record` and `composite` commands. | Prevents cwd-dependent custom track failures and keeps CLI behavior stable across invocation locations. |
+| 06-01 | Extend `TuireelSession` with `scroll`/`clickText` helpers plus mutable `env` state. | Keeps advanced step handlers decoupled from tuistory internals while supporting set-env updates. |
+| 06-01 | Skip global idle waits after `screenshot` and `set-env` dispatch cases. | Avoids unnecessary settle delays for steps that do not mutate terminal render state. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -94,6 +96,6 @@ Current focus: Completing Phase 5 by adding custom audio track mixing on top of 
 
 ## Session Continuity
 
-Last session: 2026-03-03T03:29:57Z
-Stopped at: Completed 05-02-PLAN.md (custom audio track mixing + CLI integration)
-Resume file: .planning/phases/06-workflow-polish/06-01-PLAN.md
+Last session: 2026-03-03T03:54:19Z
+Stopped at: Completed 06-01-PLAN.md (advanced step types)
+Resume file: .planning/phases/06-workflow-polish/06-02-PLAN.md
