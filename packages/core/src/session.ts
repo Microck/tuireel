@@ -150,8 +150,16 @@ export class TuireelSession {
     this.session.close();
   }
 
-  type(text: string): Promise<void> {
-    return this.session.type(text);
+  async type(text: string): Promise<void> {
+    try {
+      await this.session.type(text);
+    } catch (error) {
+      const preview = text.length > 50 ? `${text.slice(0, 50)}...` : text;
+      throw new Error(
+        `Failed to type text "${preview}": ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
+      );
+    }
   }
 
   writeRaw(text: string): void {
@@ -163,12 +171,29 @@ export class TuireelSession {
     this.session.writeRaw(`export ${key}=${quoteForShell(value)}\r`);
   }
 
-  press(keys: Key | Key[]): Promise<void> {
-    return this.session.press(keys);
+  async press(keys: Key | Key[]): Promise<void> {
+    try {
+      await this.session.press(keys);
+    } catch (error) {
+      const keyStr = Array.isArray(keys) ? keys.join("+") : String(keys);
+      throw new Error(
+        `Failed to press key "${keyStr}": ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
+      );
+    }
   }
 
-  waitForText(pattern: string | RegExp, options?: { timeout?: number }): Promise<string> {
-    return this.session.waitForText(pattern, options);
+  async waitForText(pattern: string | RegExp, options?: { timeout?: number }): Promise<string> {
+    try {
+      return await this.session.waitForText(pattern, options);
+    } catch (error) {
+      const patternStr = pattern instanceof RegExp ? pattern.toString() : `"${pattern}"`;
+      const timeoutStr = options?.timeout ? ` (timeout: ${options.timeout}ms)` : "";
+      throw new Error(
+        `Failed waiting for text matching ${patternStr}${timeoutStr}: ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
+      );
+    }
   }
 
   async scroll(direction: "up" | "down", amount: number): Promise<void> {
