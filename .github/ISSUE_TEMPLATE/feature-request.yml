@@ -1,0 +1,28 @@
+name: Feature request
+description: Suggest an idea for Tuireel
+labels: [enhancement]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What problem does this solve, or what use case does it enable?
+      placeholder: "As a Tuireel user I want [goal] so that [benefit]."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Suggested solution
+      description: How could this work? Config examples, CLI flags, or API sketches are welcome.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you thought about.
+    validations:
+      required: false
