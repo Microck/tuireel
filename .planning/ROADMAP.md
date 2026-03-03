@@ -49,7 +49,7 @@ Archive:
 **Plans:** 5 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Logo SVG + favicon (icon, dark/light variants, color palette)
+- [x] 07-01-PLAN.md — Logo SVG + favicon (icon, dark/light variants, color palette)
 - [ ] 07-02-PLAN.md — LICENSE (Apache 2.0) + package.json updates + CONTRIBUTING.md
 - [ ] 07-03-PLAN.md — GitHub issue templates (YAML) + PR template
 - [ ] 07-04-PLAN.md — Banner PNG (1280x640) + OG image PNG (1200x630) via Sharp

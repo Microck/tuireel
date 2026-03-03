@@ -9,18 +9,18 @@ See: `.planning/PROJECT.md` (updated 2026-07-16)
 ## Current Position
 
 Phase: 7 of 12 (Branding & Repo Polish)
-Plan: 0 of 5 in current phase
-Status: Planned — ready to execute
-Last activity: 2026-03-03 — Phase 7 planned (5 plans, 3 waves)
+Plan: 2 of 5 in current phase
+Status: In progress
+Last activity: 2026-03-03 — Completed 07-02-PLAN.md (LICENSE + CONTRIBUTING)
 
-Progress: [██████████░░░░░░░░░░] 50% (v1.0 complete, v1.1 starting)
+Progress: [███████████░░░░░░░░░] 54% (v1.0 complete, v1.1: 2/5 plans done)
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12 | 0/5+ | In progress | — |
+| v1.1 Branding, Docs & Hardening | 7-12 | 2/5+ | In progress | — |
 
 ## Performance Metrics
 
@@ -29,17 +29,21 @@ Progress: [██████████░░░░░░░░░░] 50% (v1
 - 6 phases, 50 tasks
 - Shipped in <1 day
 
-**v1.1:** No plans executed yet.
+**v1.1:** 2 plans completed (07-01 Logo/Favicon 1 min, 07-02 License/Contributing 1 min).
 
 ## Accumulated Context
 
 ### Decisions
 
 Decisions logged in PROJECT.md Key Decisions table.
-Recent pending decisions:
+Recent decisions:
 - Apache 2.0 license (confirmed in requirements)
 - Mintlify for docs (confirmed in requirements)
 - GitHub Actions for CI (confirmed in requirements)
+- Icon concept: film reel frame + terminal prompt (>_) with sprocket holes
+- Color palette: teal #06B6D4, amber #F59E0B, navy #0F172A, off-white #F8FAFC
+- Copyright holder: "Tuireel Contributors" (community project)
+- LICENSE uses official apache.org text verbatim for GitHub detection
 
 ### Blockers/Concerns
 
@@ -57,5 +61,5 @@ Recent pending decisions:
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Phase 7 planned — 5 plans in 3 waves, ready to execute
-Resume command: `/gsd-execute-phase 7`
+Stopped at: Completed 07-02-PLAN.md (LICENSE + CONTRIBUTING)
+Resume: Next plan is 07-03 (GitHub meta: issue/PR templates)
