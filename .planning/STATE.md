@@ -11,16 +11,16 @@ See: `.planning/PROJECT.md` (updated 2026-07-16)
 Phase: 8 of 12 (Presets & Reliability)
 Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-03-03 — Completed 08-02-PLAN.md (Compositor Signal Handling & Error Messages)
+Last activity: 2026-03-03 — Completed 08-01-PLAN.md (Preset Schema + Definitions + Resolution)
 
-Progress: [██████████████████████░░░░░░] Phase 8: 1/4 summaries
+Progress: [██████████████████████████░░] Phase 8: 2/4 summaries
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12 | 6/10+ | In progress (Phase 8 in progress) | — |
+| v1.1 Branding, Docs & Hardening | 7-12 | 7/10+ | In progress (Phase 8 in progress) | — |
 
 ## Performance Metrics
 
@@ -29,7 +29,7 @@ Progress: [██████████████████████░
 - 6 phases, 50 tasks
 - Shipped in <1 day
 
-**v1.1:** 6 plans completed. Phase 7 complete (5 plans). Phase 8: 08-02 complete (2 min).
+**v1.1:** 7 plans completed. Phase 7 complete (5 plans). Phase 8: 08-01 complete (3 min), 08-02 complete (2 min).
 
 ## Accumulated Context
 
@@ -57,6 +57,9 @@ Phase 8 decisions:
 - Interrupt check every 100 frames balances responsiveness vs overhead
 - ffmpeg errors: drop error.message, use exit code + command string + stderr instead
 - Error cause chaining with { cause: error } for debugging
+- Sound merge uses full replacement, not partial deep merge — avoids confusing partial sound merge pitfall
+- Preset key stripped from resolved output — resolution directive, not runtime config
+- PresetConfig excludes steps/output/$schema/format — presets set presentation only
 
 ### Blockers/Concerns
 
@@ -74,5 +77,5 @@ Phase 8 decisions:
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 08-02-PLAN.md (Compositor Signal Handling & Error Messages)
-Resume: Continue Phase 8 — next plans are 08-01 (if not yet done), 08-03, 08-04
+Stopped at: Completed 08-01-PLAN.md (Preset Schema + Definitions + Resolution)
+Resume: Continue Phase 8 — next plans are 08-03, 08-04
