@@ -65,7 +65,13 @@ Plans:
   3. `tuireel init` prompts to choose a preset during scaffolding
   4. Pressing Ctrl+C during recording or compositing cleanly terminates all child processes and removes temp files
   5. A recording with 1000+ frames completes without zombie processes or unbounded memory growth
-**Plans**: TBD
+**Plans:** 4 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — Schema extensions + preset definitions + tested resolution logic (TDD)
+- [ ] 08-02-PLAN.md — Compositor signal handling + ffmpeg error enhancement
+- [ ] 08-03-PLAN.md — Preset wiring into loader + init command preset prompt + cursor/hud passthrough
+- [ ] 08-04-PLAN.md — defaultWaitTimeout wiring + tuistory error context + long recording verification
 
 ### Phase 9: Diagnostics
 **Goal**: Users can diagnose pipeline failures with verbose/debug output and every error message tells them what to do.
@@ -119,7 +125,7 @@ Plans:
 |-------|-----------|----------------|--------|-----------|
 | 1-6 | v1.0 MVP | 23/23 | Complete | 2026-03-03 |
 | 7. Branding & Repo Polish | v1.1 | 5/5 | Complete | 2026-03-03 |
-| 8. Presets & Reliability | v1.1 | 0/TBD | Not started | - |
+| 8. Presets & Reliability | v1.1 | 0/4 | Planned | - |
 | 9. Diagnostics | v1.1 | 0/TBD | Not started | - |
 | 10. Documentation | v1.1 | 0/TBD | Not started | - |
 | 11. CI & Linting | v1.1 | 0/TBD | Not started | - |
