@@ -4,6 +4,7 @@ import { Command } from "commander";
 import { VERSION } from "@tuireel/core";
 
 import { registerInitCommand } from "./commands/init.js";
+import { registerRecordCommand } from "./commands/record.js";
 import { registerStubCommands } from "./commands/stubs.js";
 import { registerValidateCommand } from "./commands/validate.js";
 
@@ -27,6 +28,7 @@ export function createProgram(): Command {
 
   registerInitCommand(program);
   registerValidateCommand(program);
+  registerRecordCommand(program);
   registerStubCommands(program);
 
   return program;

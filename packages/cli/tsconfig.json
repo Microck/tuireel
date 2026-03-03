@@ -5,11 +5,6 @@
     "outDir": "dist",
     "composite": false
   },
-  "references": [
-    {
-      "path": "../core"
-    }
-  ],
   "include": [
     "src/**/*.ts"
   ]

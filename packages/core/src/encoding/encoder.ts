@@ -52,6 +52,8 @@ export class FfmpegEncoder {
       String(crf),
       "-pix_fmt",
       "yuv420p",
+      "-vf",
+      "pad=ceil(iw/2)*2:ceil(ih/2)*2",
       "-movflags",
       "+faststart",
       "-r",

@@ -1,7 +1,6 @@
 import type { Command } from "commander";
 
 const STUB_COMMANDS = [
-  { name: "record", phase: 2, description: "Record a TUI session to video" },
   {
     name: "preview",
     phase: 6,

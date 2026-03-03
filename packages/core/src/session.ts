@@ -10,6 +10,9 @@ export interface SessionConfig {
 
 type ScreenshotFormat = "jpeg" | "png" | "webp";
 
+const SCREENSHOT_FONT_SIZE = 14;
+const SCREENSHOT_LINE_HEIGHT = 1.5;
+
 export class TuireelSession {
   private readonly session: Session;
 
@@ -19,9 +22,16 @@ export class TuireelSession {
 
   async screenshot(format: ScreenshotFormat = "jpeg"): Promise<Buffer> {
     const terminalData = this.session.getTerminalData();
+    const viewportHeight = Math.round(
+      terminalData.rows * SCREENSHOT_FONT_SIZE * SCREENSHOT_LINE_HEIGHT,
+    );
+
     return renderTerminalToImage(terminalData, {
       format,
       quality: 90,
+      fontSize: SCREENSHOT_FONT_SIZE,
+      lineHeight: SCREENSHOT_LINE_HEIGHT,
+      height: viewportHeight,
     });
   }
 
