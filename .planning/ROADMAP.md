@@ -81,7 +81,11 @@ Plans:
   1. Running `tuireel record --verbose` shows step-by-step progress, frame counts, and encoding stats in the terminal
   2. Running `tuireel record --debug` additionally shows full ffmpeg stderr, tuistory events, and internal timing
   3. Every error the CLI can produce includes what went wrong and a concrete suggestion for what to try
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Logger infrastructure + verbose/debug CLI flags + recorder/compositor wiring
+- [ ] 09-02-PLAN.md — Error message audit with actionable guidance across all core modules
 
 ### Phase 10: Documentation
 **Goal**: A public Mintlify docs site covers installation, configuration, all features, and every CLI command.
@@ -92,7 +96,12 @@ Plans:
   2. A new user can follow the Quickstart page to install tuireel and produce their first recording
   3. Every config field, step type, CLI command, and built-in theme has a reference page with examples
   4. Presets and sound configuration each have dedicated pages with usage examples
-**Plans**: TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 10-01-PLAN.md — Mintlify site setup + branding + Introduction + Quickstart pages
+- [ ] 10-02-PLAN.md — Config reference + Steps reference + CLI reference pages
+- [ ] 10-03-PLAN.md — Themes + Presets + Sound + Multi-video/Includes pages
 
 ### Phase 11: CI & Linting
 **Goal**: Every PR and push to main is automatically validated for code quality and video output correctness.
@@ -103,7 +112,11 @@ Plans:
   2. ESLint + Prettier configs exist and `pnpm lint` passes across the monorepo
   3. A separate CI job records a short fixture as MP4, WebM, and GIF, asserting each output has correct codec, resolution, and non-zero duration
   4. When a video smoke test fails, the produced artifact is uploaded to the GitHub Actions run for inspection
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 11-01-PLAN.md — ESLint + Prettier + turbo lint + GitHub Actions CI workflow
+- [ ] 11-02-PLAN.md — Video smoke test CI job + artifact upload on failure
 
 ### Phase 12: Release & Performance
 **Goal**: Merging to main triggers automated npm publishing with GitHub releases, and compositing performance has a benchmark baseline with at least one optimization applied.
@@ -115,7 +128,12 @@ Plans:
   3. `npx tuireel` and `bunx tuireel` install and run successfully after the first publish
   4. A benchmark script records a standard fixture and reports total time, per-frame time, and compositing time
   5. At least one compositing optimization is applied and its improvement is measurable against the benchmark baseline
-**Plans**: TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 12-01-PLAN.md — Changesets setup + npm publish config
+- [ ] 12-02-PLAN.md — GitHub Actions release workflow (version PR + auto-publish)
+- [ ] 12-03-PLAN.md — Performance benchmark + compositing optimization
 
 ## Progress
 
@@ -126,7 +144,7 @@ Plans:
 | 1-6 | v1.0 MVP | 23/23 | Complete | 2026-03-03 |
 | 7. Branding & Repo Polish | v1.1 | 5/5 | Complete | 2026-03-03 |
 | 8. Presets & Reliability | v1.1 | 4/4 | Complete | 2026-03-03 |
-| 9. Diagnostics | v1.1 | 0/TBD | Not started | - |
-| 10. Documentation | v1.1 | 0/TBD | Not started | - |
-| 11. CI & Linting | v1.1 | 0/TBD | Not started | - |
-| 12. Release & Performance | v1.1 | 0/TBD | Not started | - |
+| 9. Diagnostics | v1.1 | 0/2 | Planned | - |
+| 10. Documentation | v1.1 | 0/3 | Planned | - |
+| 11. CI & Linting | v1.1 | 0/2 | Planned | - |
+| 12. Release & Performance | v1.1 | 0/3 | Planned | - |
