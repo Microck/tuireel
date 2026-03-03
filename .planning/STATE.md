@@ -16,7 +16,7 @@ Phase 4: Overlay System — Complete (4/4 plans complete)
 
 See: `.planning/PROJECT.md` (updated 2025-07-26)
 Core value: TUI tool authors can produce polished demo videos from a declarative script.
-Current focus: Integrating overlay renderers into the composite pass (cursor + HUD foundations complete).
+Current focus: Transitioning into Phase 5 to map timeline events into synchronized sound effects.
 
 ## Phase Progress
 
