@@ -4,6 +4,13 @@ import { themeSchema } from "../themes/schema.js";
 
 const stepTypes = ["launch", "type", "press", "wait", "pause"] as const;
 const outputFormats = ["mp4", "webm", "gif"] as const;
+const soundEffectSchema = z.union([
+  z.literal(1),
+  z.literal(2),
+  z.literal(3),
+  z.literal(4),
+  z.string(),
+]);
 
 const launchStepSchema = z.object({
   type: z.literal("launch"),
@@ -62,6 +69,16 @@ export const configSchema = z.object({
   format: z.enum(outputFormats).default("mp4"),
   output: z.string().default("output.mp4"),
   theme: z.union([z.string(), themeSchema]).optional(),
+  sound: z
+    .object({
+      effects: z
+        .object({
+          click: soundEffectSchema.optional(),
+          key: soundEffectSchema.optional(),
+        })
+        .optional(),
+    })
+    .optional(),
   fps: z.number().int().positive().default(30),
   cols: z.number().int().positive().default(80),
   rows: z.number().int().positive().default(24),
