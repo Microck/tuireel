@@ -5,8 +5,8 @@ import { VERSION } from "@tuireel/core";
 
 import { registerCompositeCommand } from "./commands/composite.js";
 import { registerInitCommand } from "./commands/init.js";
+import { registerPreviewCommand } from "./commands/preview.js";
 import { registerRecordCommand } from "./commands/record.js";
-import { registerStubCommands } from "./commands/stubs.js";
 import { registerValidateCommand } from "./commands/validate.js";
 
 export function createProgram(): Command {
@@ -29,9 +29,9 @@ export function createProgram(): Command {
 
   registerInitCommand(program);
   registerValidateCommand(program);
+  registerPreviewCommand(program);
   registerRecordCommand(program);
   registerCompositeCommand(program);
-  registerStubCommands(program);
 
   return program;
 }
