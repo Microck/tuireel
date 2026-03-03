@@ -9,7 +9,7 @@ function parseKeyInput(key: string): Key | Key[] {
     .filter((part) => part.length > 0);
 
   if (keys.length === 0) {
-    throw new Error("Press step key cannot be empty.");
+    throw new Error("Press step key cannot be empty. Try: specify a key name like 'Enter', 'Tab', or a combo like 'ctrl+c'.");
   }
 
   if (keys.length === 1) {

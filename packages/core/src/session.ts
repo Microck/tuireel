@@ -156,7 +156,7 @@ export class TuireelSession {
     } catch (error) {
       const preview = text.length > 50 ? `${text.slice(0, 50)}...` : text;
       throw new Error(
-        `Failed to type text "${preview}": ${error instanceof Error ? error.message : String(error)}`,
+        `Failed to type text "${preview}". Try: ensure the launched program is ready for input; add a 'wait' step before typing.`,
         { cause: error },
       );
     }
@@ -177,7 +177,7 @@ export class TuireelSession {
     } catch (error) {
       const keyStr = Array.isArray(keys) ? keys.join("+") : String(keys);
       throw new Error(
-        `Failed to press key "${keyStr}": ${error instanceof Error ? error.message : String(error)}`,
+        `Failed to press key "${keyStr}". Try: verify the key name is correct (e.g., 'Enter', 'Tab', 'Ctrl+C').`,
         { cause: error },
       );
     }
@@ -190,7 +190,7 @@ export class TuireelSession {
       const patternStr = pattern instanceof RegExp ? pattern.toString() : `"${pattern}"`;
       const timeoutStr = options?.timeout ? ` (timeout: ${options.timeout}ms)` : "";
       throw new Error(
-        `Failed waiting for text matching ${patternStr}${timeoutStr}: ${error instanceof Error ? error.message : String(error)}`,
+        `Timed out waiting for text matching ${patternStr}${timeoutStr}. Try: increase the timeout, check the expected text, or add '--debug' to see terminal output.`,
         { cause: error },
       );
     }

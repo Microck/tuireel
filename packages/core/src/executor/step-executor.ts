@@ -30,7 +30,7 @@ function errorMessage(error: unknown): string {
 }
 
 function assertNever(step: never): never {
-  throw new Error(`Unsupported step type: ${JSON.stringify(step)}`);
+  throw new Error(`Unsupported step type: ${JSON.stringify(step)}. Try: check available step types in the docs or run 'tuireel validate'.`);
 }
 
 function compileWaitPattern(pattern: WaitPattern): string | RegExp {
@@ -96,7 +96,7 @@ export async function executeSteps(
         }
       }
     } catch (error) {
-      throw new Error(`Step ${index + 1} (${step.type}) failed: ${errorMessage(error)}`, {
+      throw new Error(`Step ${index + 1} (${step.type}) failed: ${errorMessage(error)}. Try: check the step configuration and ensure the terminal is in the expected state.`, {
         cause: error,
       });
     }

@@ -53,15 +53,15 @@ function parseIncludeFile(filePath: string, rawContent: string): StepWithInclude
     const parseMessage = firstError
       ? printParseErrorCode(firstError.error)
       : "Unknown parse error";
-    throw new Error(`Failed to parse include file: ${filePath}: ${parseMessage}`);
+    throw new Error(`Failed to parse include file ${filePath}: ${parseMessage}. Try: validate JSON syntax in the include file.`);
   }
 
   if (!isRecord(parsed) || !Array.isArray(parsed.steps)) {
-    throw new Error(`Include file must define a steps array: ${filePath}`);
+    throw new Error(`Include file must define a "steps" array: ${filePath}. Try: ensure the file has the format { "steps": [...] }.`);
   }
 
   if (!parsed.steps.every(isRecord)) {
-    throw new Error(`Include file must define a steps array of objects: ${filePath}`);
+    throw new Error(`Include file "steps" must be an array of objects: ${filePath}. Try: check that each step is a JSON object with a "type" field.`);
   }
 
   return parsed.steps as StepWithInclude[];
@@ -89,7 +89,7 @@ export async function resolveIncludes(
 
     if (seen.has(includePath)) {
       const chain = buildIncludeChain(seen, includePath);
-      throw new Error(`Circular include detected: ${includePath} (chain: ${chain})`);
+      throw new Error(`Circular include detected: ${includePath} (chain: ${chain}). Try: remove the circular $include reference.`);
     }
 
     let includeRawContent: string;
@@ -99,7 +99,7 @@ export async function resolveIncludes(
       const maybeError = error as NodeJS.ErrnoException;
       if (maybeError.code === "ENOENT") {
         throw new Error(
-          `Include file not found: ${includePath} (referenced from ${parentFile})`,
+          `Include file not found: ${includePath} (referenced from ${parentFile}). Try: check the $include path is correct and relative to the config file.`,
         );
       }
 

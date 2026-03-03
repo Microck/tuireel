@@ -78,7 +78,7 @@ function runFfmpeg(ffmpegPath: string, args: string[]): void {
   if (result.status !== 0) {
     const stderr = result.stderr?.toString("utf8").slice(-2000) ?? "";
     throw new Error(
-      `ffmpeg exited with code ${result.status}${stderr.length > 0 ? `:\n${stderr}` : ""}`,
+      `ffmpeg audio mixing exited with code ${result.status}. Try: check that audio files exist and are valid, or run with '--debug' for details.${stderr.length > 0 ? `\n${stderr}` : ""}`,
     );
   }
 }

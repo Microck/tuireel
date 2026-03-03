@@ -14,7 +14,7 @@ export function resolveTheme(input: string | ThemeConfig): ThemeConfig {
 
     if (!resolved) {
       throw new Error(
-        `Unknown theme \"${input}\". Available themes: ${builtInThemeNames.join(", ")}.`,
+        `Unknown theme "${input}". Try: use one of the built-in themes: ${builtInThemeNames.join(", ")}, or provide a custom theme object.`,
       );
     }
 
@@ -28,6 +28,6 @@ export function resolveTheme(input: string | ThemeConfig): ThemeConfig {
       throw error;
     }
 
-    throw new Error(`Invalid theme configuration: ${String(error)}`);
+    throw new Error(`Invalid theme configuration: ${String(error)}. Try: check that all required theme fields (foreground, background, colors) are valid hex color strings.`);
   }
 }

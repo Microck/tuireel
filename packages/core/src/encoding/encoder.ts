@@ -164,18 +164,18 @@ export class FfmpegEncoder {
   private assertWritable(): void {
     if (this.processError) {
       throw new Error(
-        `ffmpeg process error: ${this.processError.message}${formatStderr(this.stderrChunks)}`,
+        `ffmpeg encoder process error: ${this.processError.message}. Try: run with '--debug' for full ffmpeg output.${formatStderr(this.stderrChunks)}`,
       );
     }
 
     if (!this.process.stdin.writable) {
-      throw new Error(`ffmpeg stdin is not writable${formatStderr(this.stderrChunks)}`);
+      throw new Error(`ffmpeg encoder stdin is not writable. Try: check available disk space and memory.${formatStderr(this.stderrChunks)}`);
     }
   }
 
   async writeFrame(jpegBuffer: Buffer): Promise<void> {
     if (this.finalized) {
-      throw new Error("Cannot write frame after finalize() has started");
+      throw new Error("Cannot write frame after encoder has been finalized. Try: this is an internal error — please report it at https://github.com/tuireel/tuireel/issues.");
     }
 
     this.assertWritable();
@@ -205,12 +205,12 @@ export class FfmpegEncoder {
 
     if (this.processError) {
       throw new Error(
-        `ffmpeg process error: ${this.processError.message}${formatStderr(this.stderrChunks)}`,
+        `ffmpeg encoding failed: ${this.processError.message}. Try: run with '--debug' for full ffmpeg output.${formatStderr(this.stderrChunks)}`,
       );
     }
 
     if (exitCode !== 0) {
-      throw new Error(`ffmpeg exited with code ${exitCode}${formatStderr(this.stderrChunks)}`);
+      throw new Error(`ffmpeg encoding exited with code ${exitCode}. Try: check available disk space or run with '--debug' for details.${formatStderr(this.stderrChunks)}`);
     }
 
     try {

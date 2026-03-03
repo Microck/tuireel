@@ -21,7 +21,7 @@ export function resolvePreset(
 
   if (!(presetName in BUILT_IN_PRESETS)) {
     throw new Error(
-      `Unknown preset "${presetName}". Available presets: ${Object.keys(BUILT_IN_PRESETS).join(", ")}.`,
+      `Unknown preset "${presetName}". Try: use one of the available presets: ${Object.keys(BUILT_IN_PRESETS).join(", ")}.`,
     );
   }
 

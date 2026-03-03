@@ -10,7 +10,7 @@ const SUMMARY_TEXT_LIMIT = 30;
 type LaunchStep = Extract<TuireelStep, { type: "launch" }>;
 
 function assertNever(step: never): never {
-  throw new Error(`Unsupported step type: ${JSON.stringify(step)}`);
+  throw new Error(`Unsupported step type: ${JSON.stringify(step)}. Try: check available step types in the docs or run 'tuireel validate'.`);
 }
 
 function isLaunchStep(step: TuireelStep): step is LaunchStep {
@@ -20,7 +20,7 @@ function isLaunchStep(step: TuireelStep): step is LaunchStep {
 function getLaunchCommand(config: TuireelConfig): string {
   const launchStep = config.steps.find(isLaunchStep);
   if (!launchStep) {
-    throw new Error("Config must include at least one launch step");
+    throw new Error("Config must include at least one 'launch' step. Try: add a step like { \"type\": \"launch\", \"command\": \"bash\" } to your config.");
   }
 
   return launchStep.command;

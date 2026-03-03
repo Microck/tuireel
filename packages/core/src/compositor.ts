@@ -10,6 +10,7 @@ import { OUTPUT_FORMATS, type OutputFormat } from "./config/schema.js";
 import { ENCODER_PROFILES } from "./encoding/encoder-profiles.js";
 import { encodeGifTwoPass } from "./encoding/gif-encoder.js";
 import { ensureFfmpeg } from "./ffmpeg/downloader.js";
+import { createLogger, type Logger } from "./logger.js";
 import { renderCursor } from "./overlay/cursor-renderer.js";
 import { renderHud } from "./overlay/hud-renderer.js";
 import type { CursorConfig, CursorImage, HudConfig, OverlayImage } from "./overlay/types.js";
@@ -34,6 +35,7 @@ export interface ComposeOptions {
   cursorConfig?: CursorConfig;
   hudConfig?: HudConfig;
   sound?: SoundConfig;
+  logger?: Logger;
 }
 
 interface EncodeFramesOptions {
@@ -43,6 +45,7 @@ interface EncodeFramesOptions {
   fps: number;
   format: OutputFormat;
   tempDirectory: string;
+  logger?: Logger;
 }
 
 function getErrorStderr(error: unknown): string {
@@ -64,17 +67,29 @@ async function runFfmpeg(
   ffmpegPath: string,
   args: string[],
   operationDescription: string,
+  log?: Logger,
 ): Promise<void> {
+  const command = [ffmpegPath, ...args].join(" ");
+  log?.debug(`ffmpeg: ${command}`);
+
   try {
-    await execFileAsync(ffmpegPath, args, {
+    const result = await execFileAsync(ffmpegPath, args, {
       maxBuffer: 10 * 1024 * 1024,
     });
+
+    if (result.stderr && result.stderr.trim().length > 0) {
+      log?.debug(`ffmpeg stderr:\n${result.stderr.trim()}`);
+    }
   } catch (error) {
     const exitCode = (error as { code?: number }).code ?? "unknown";
-    const command = [ffmpegPath, ...args].join(" ");
     const stderr = getErrorStderr(error);
+
+    if (stderr.length > 0) {
+      log?.debug(stderr);
+    }
+
     throw new Error(
-      `ffmpeg failed to ${operationDescription} (exit code: ${exitCode}).\nCommand: ${command}${stderr}`,
+      `ffmpeg failed to ${operationDescription} (exit code: ${exitCode}). Try: run with '--debug' to see full ffmpeg output, or verify ffmpeg is installed correctly.\nCommand: ${command}${stderr}`,
       { cause: error },
     );
   }
@@ -126,11 +141,13 @@ async function decodeRawFrames(
   ffmpegPath: string,
   rawVideoPath: string,
   outputDirectory: string,
+  log?: Logger,
 ): Promise<void> {
   await runFfmpeg(
     ffmpegPath,
     ["-y", "-i", rawVideoPath, "-vsync", "0", join(outputDirectory, FRAME_FILENAME_PATTERN)],
     "decode raw video into frame images",
+    log,
   );
 }
 
@@ -141,7 +158,7 @@ async function loadFrameFileNames(framesDirectory: string): Promise<string[]> {
     .sort((left, right) => left.localeCompare(right));
 
   if (frameFiles.length === 0) {
-    throw new Error("Compositor decode produced zero frame images");
+    throw new Error("Compositor decoded zero frame images. Try: verify the raw recording exists and is not empty; re-record with 'tuireel record'.");
   }
 
   return frameFiles;
@@ -172,6 +189,7 @@ async function encodeFrames(options: EncodeFramesOptions): Promise<void> {
         streamOutputPath,
       ],
       "encode intermediate composited stream",
+      options.logger,
     );
 
     try {
@@ -206,6 +224,7 @@ async function encodeFrames(options: EncodeFramesOptions): Promise<void> {
       options.outputPath,
     ],
     "encode composited output",
+    options.logger,
   );
 }
 
@@ -228,11 +247,12 @@ export async function compose(
 
   const throwIfInterrupted = (): void => {
     if (interrupted) {
-      throw new Error("Compositing interrupted by signal");
+      throw new Error("Compositing interrupted by signal. Try: re-run the command to start compositing again.");
     }
   };
 
   const ffmpegPath = await ensureFfmpeg();
+  const log = options.logger ?? createLogger();
   const format = resolveFormat(outputPath, options.format);
   const fps = resolveFps(timelineData.fps);
 
@@ -251,8 +271,12 @@ export async function compose(
   await mkdir(compositedFramesDirectory, { recursive: true });
 
   try {
-    await decodeRawFrames(ffmpegPath, rawVideoPath, decodedFramesDirectory);
+    log.verbose("Decoding raw frames...");
+    const decodeStart = Date.now();
+    await decodeRawFrames(ffmpegPath, rawVideoPath, decodedFramesDirectory, log);
     const frameFiles = await loadFrameFileNames(decodedFramesDirectory);
+    log.timing("frame decode", Date.now() - decodeStart);
+    log.stat("Decoded frames", frameFiles.length);
 
     throwIfInterrupted();
 
@@ -261,10 +285,18 @@ export async function compose(
     let hudCache: OverlayImage | null = null;
     let lastHudKey: string | null = null;
 
+    log.verbose("Compositing overlays...");
+    const compositeStart = Date.now();
+
     for (const [frameIndex, frameFile] of frameFiles.entries()) {
       if (frameIndex % 100 === 0) {
         throwIfInterrupted();
+        if (frameIndex > 0) {
+          log.verbose(`Compositing frames: ${frameIndex}/${frameFiles.length}`);
+        }
       }
+
+      const frameStart = Date.now();
 
       const frameState = resolveFrameState(expandedFrames, frameIndex);
       const overlays: sharp.OverlayOptions[] = [];
@@ -320,10 +352,18 @@ export async function compose(
         .composite(overlays)
         .jpeg({ quality: JPEG_QUALITY })
         .toFile(outputFramePath);
+
+      if (frameIndex < 5) {
+        log.timing(`frame ${frameIndex} composite`, Date.now() - frameStart);
+      }
     }
+
+    log.timing("overlay compositing", Date.now() - compositeStart);
 
     throwIfInterrupted();
 
+    log.verbose(`Encoding ${format} output...`);
+    const encodeStart = Date.now();
     await encodeFrames({
       ffmpegPath,
       framesDirectory: compositedFramesDirectory,
@@ -331,7 +371,10 @@ export async function compose(
       fps,
       format,
       tempDirectory,
+      logger: log,
     });
+    log.timing("final encode", Date.now() - encodeStart);
+    log.stat("Output format", format);
 
     if (format === "gif") {
       return;

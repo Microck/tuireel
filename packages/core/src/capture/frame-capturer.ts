@@ -31,7 +31,7 @@ export class FrameCapturer {
 
   constructor(options: FrameCapturerOptions) {
     if (!Number.isFinite(options.fps) || options.fps <= 0) {
-      throw new Error(`Invalid fps value: ${options.fps}`);
+      throw new Error(`Invalid fps value: ${options.fps}. Try: use a positive number like 20 or 30.`);
     }
 
     this.session = options.session;

@@ -12,7 +12,7 @@ describe("theme resolver", () => {
 
   it("throws a clear error for unknown theme names", () => {
     expect(() => resolveTheme("missing-theme")).toThrowErrorMatchingInlineSnapshot(
-      `[Error: Unknown theme "missing-theme". Available themes: catppuccin, dracula, gruvbox-dark, monokai, nord, one-dark, solarized-dark, tokyo-night.]`,
+      `[Error: Unknown theme "missing-theme". Try: use one of the built-in themes: catppuccin, dracula, gruvbox-dark, monokai, nord, one-dark, solarized-dark, tokyo-night, or provide a custom theme object.]`,
     );
   });
 

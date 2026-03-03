@@ -35,11 +35,11 @@ export function getFfmpegPath(): string {
 
 export function detectPlatform(): FfmpegPlatform {
   if (process.platform !== "darwin" && process.platform !== "linux") {
-    throw new Error(`Unsupported platform: ${process.platform}`);
+    throw new Error(`Unsupported platform: ${process.platform}. Try: tuireel supports macOS and Linux only. On Windows, use WSL.`);
   }
 
   if (process.arch !== "arm64" && process.arch !== "x64") {
-    throw new Error(`Unsupported architecture: ${process.arch}`);
+    throw new Error(`Unsupported architecture: ${process.arch}. Try: tuireel supports x64 and arm64 only.`);
   }
 
   return {
@@ -104,7 +104,7 @@ async function acquireLock(
       }
 
       if (Date.now() - start > LOCK_TIMEOUT_MS) {
-        throw new Error(`Timed out waiting for ffmpeg lock: ${lockPath}`);
+        throw new Error(`Timed out waiting for ffmpeg download lock: ${lockPath}. Try: delete the lock file manually and retry, or install ffmpeg via your system package manager.`);
       }
 
       await sleep(LOCK_WAIT_INTERVAL_MS);
@@ -115,7 +115,7 @@ async function acquireLock(
 async function downloadArchive(url: string, destinationPath: string): Promise<void> {
   const response = await fetch(url);
   if (!response.ok || !response.body) {
-    throw new Error(`Failed to download ffmpeg archive from ${url} (${response.status})`);
+    throw new Error(`Failed to download ffmpeg archive from ${url} (HTTP ${response.status}). Try: check your internet connection, or install ffmpeg manually and add it to PATH.`);
   }
 
   const archiveBuffer = Buffer.from(await response.arrayBuffer());
@@ -192,7 +192,7 @@ export async function ensureFfmpeg(): Promise<string> {
 
       const extractedBinary = await findFfmpegBinary(tempDirectory);
       if (!extractedBinary) {
-        throw new Error("Downloaded archive did not contain an ffmpeg binary");
+        throw new Error("Downloaded ffmpeg archive did not contain a binary. Try: install ffmpeg manually via your system package manager (e.g., 'brew install ffmpeg' or 'apt install ffmpeg').");
       }
 
       await copyFile(extractedBinary, ffmpegPath);

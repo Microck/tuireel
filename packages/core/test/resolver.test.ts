@@ -91,7 +91,7 @@ describe("resolveIncludes", () => {
     );
 
     await expect(resolveIncludes([{ $include: "./invalid.jsonc" }], directory)).rejects.toThrow(
-      /Failed to parse include file:/,
+      /Failed to parse include file/,
     );
   });
 

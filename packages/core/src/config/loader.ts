@@ -247,7 +247,22 @@ async function loadConfigFromString(rawConfig: string, configPath: string): Prom
 }
 
 export async function loadConfig(configPath: string): Promise<TuireelConfig[]> {
-  const rawConfig = await readFile(configPath, "utf8");
+  let rawConfig: string;
+  try {
+    rawConfig = await readFile(configPath, "utf8");
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code === "ENOENT") {
+      throw new Error(
+        `Config file not found: ${configPath}. Try: run 'tuireel init' to create one, or check the file path.`,
+        { cause: error },
+      );
+    }
+    throw new Error(
+      `Failed to read config file: ${configPath}. Try: check file permissions and ensure the path is correct.`,
+      { cause: error },
+    );
+  }
   return loadConfigFromString(rawConfig, configPath);
 }
 
@@ -256,13 +271,13 @@ export async function loadSingleConfig(configPath: string): Promise<TuireelConfi
 
   if (configs.length !== 1) {
     throw new Error(
-      `Expected exactly one video config but found ${configs.length}. Multi-video configs are only supported by \`tuireel record\`.`,
+      `Expected exactly one video config but found ${configs.length}. Try: use 'tuireel record' for multi-video configs, or split into separate config files.`,
     );
   }
 
   const [config] = configs;
   if (!config) {
-    throw new Error("No configuration resolved from input file.");
+    throw new Error("No configuration resolved from input file. Try: check the config file is not empty and contains valid JSON.");
   }
 
   return config;
