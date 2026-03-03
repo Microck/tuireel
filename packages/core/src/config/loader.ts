@@ -7,6 +7,7 @@ import {
 } from "jsonc-parser";
 import { ZodError } from "zod";
 
+import { resolvePreset } from "../presets/resolve.js";
 import { resolveMultiConfig } from "./resolver.js";
 import {
   STEP_TYPES,
@@ -169,13 +170,14 @@ function stripSchemaField(config: TuireelConfig): TuireelConfig {
 
 function parseSingleConfig(rawConfig: string): TuireelConfig {
   const parsedConfig = parseConfig(rawConfig);
+  const presetResolved = resolvePreset(parsedConfig as Record<string, unknown>);
 
-  const stepTypeIssues = findInvalidStepTypeIssues(parsedConfig);
+  const stepTypeIssues = findInvalidStepTypeIssues(presetResolved);
   if (stepTypeIssues.length > 0) {
     throw new ConfigValidationError(stepTypeIssues);
   }
 
-  const result = configSchema.safeParse(parsedConfig);
+  const result = configSchema.safeParse(presetResolved);
   if (!result.success) {
     throw new ConfigValidationError(mapZodIssues(result.error));
   }
@@ -216,13 +218,14 @@ function validateResolvedConfigs(
 
 async function loadConfigFromString(rawConfig: string, configPath: string): Promise<TuireelConfig[]> {
   const parsedConfig = parseConfig(rawConfig);
+  const presetResolved = resolvePreset(parsedConfig as Record<string, unknown>);
 
-  const stepTypeIssues = findInvalidStepTypeIssues(parsedConfig);
+  const stepTypeIssues = findInvalidStepTypeIssues(presetResolved);
   if (stepTypeIssues.length > 0) {
     throw new ConfigValidationError(stepTypeIssues);
   }
 
-  const inputConfig = parseInputConfig(parsedConfig);
+  const inputConfig = parseInputConfig(presetResolved);
   const isMultiVideo = "videos" in inputConfig;
 
   try {
