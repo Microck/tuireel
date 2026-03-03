@@ -48,6 +48,10 @@ function looksLikeFontPath(value: string): boolean {
   return /[\\/]/.test(value) || /\.(ttf|otf|woff|woff2)$/i.test(value);
 }
 
+function quoteForShell(value: string): string {
+  return `'${value.replace(/'/g, `'"'"'`)}'`;
+}
+
 export function buildThemeEscapeSequence(theme: ThemeConfig): string {
   const paletteCommands = ANSI_THEME_COLOR_INDEXES.map(([name, index]) =>
     buildOscCommand(`4;${index}`, theme.colors[name]),
@@ -152,6 +156,11 @@ export class TuireelSession {
 
   writeRaw(text: string): void {
     this.session.writeRaw(text);
+  }
+
+  setEnv(key: string, value: string): void {
+    this.env[key] = value;
+    this.session.writeRaw(`export ${key}=${quoteForShell(value)}\r`);
   }
 
   press(keys: Key | Key[]): Promise<void> {

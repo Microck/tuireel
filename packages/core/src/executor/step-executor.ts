@@ -87,7 +87,7 @@ export async function executeSteps(
           break;
         }
         case "set-env": {
-          setEnvStep(session, step);
+          await setEnvStep(session, step);
           break;
         }
         default: {
@@ -100,7 +100,7 @@ export async function executeSteps(
       });
     }
 
-    if (step.type !== "screenshot" && step.type !== "set-env") {
+    if (step.type !== "screenshot") {
       await session.waitIdle();
     }
     await callbacks.onStepComplete?.(step, index);

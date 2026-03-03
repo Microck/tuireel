@@ -3,6 +3,6 @@ import type { TuireelSession } from "../../session.js";
 
 type SetEnvStep = Extract<TuireelStep, { type: "set-env" }>;
 
-export function setEnvStep(session: TuireelSession, step: SetEnvStep): void {
-  session.env[step.key] = step.value;
+export async function setEnvStep(session: TuireelSession, step: SetEnvStep): Promise<void> {
+  session.setEnv(step.key, step.value);
 }
