@@ -1,0 +1,216 @@
+---
+title: "Configuration Reference"
+description: "Complete reference for .tuireel.jsonc configuration"
+icon: "gear"
+---
+
+Tuireel uses JSONC (JSON with Comments) configuration files, typically named `.tuireel.jsonc`. Run `tuireel init` to scaffold a starter config with JSON Schema support.
+
+## General
+
+<ResponseField name="$schema" type="string" required={false}>
+  Path or URL to the JSON Schema file for editor autocompletion. Generated automatically by `tuireel init`.
+</ResponseField>
+
+<ResponseField name="format" type='"mp4" | "webm" | "gif"' required={false} default="mp4">
+  Output video format.
+</ResponseField>
+
+<ResponseField name="output" type="string" required={false} default="output.mp4">
+  Output file path for the recording.
+</ResponseField>
+
+<ResponseField name="fps" type="integer" required={false} default={30}>
+  Frames per second for the recording. Must be a positive integer.
+</ResponseField>
+
+<ResponseField name="cols" type="integer" required={false} default={80}>
+  Number of terminal columns. Must be a positive integer.
+</ResponseField>
+
+<ResponseField name="rows" type="integer" required={false} default={24}>
+  Number of terminal rows. Must be a positive integer.
+</ResponseField>
+
+## Presentation
+
+<ResponseField name="preset" type='"polished" | "minimal" | "demo" | "silent"' required={false}>
+  Apply a built-in presentation preset. Presets configure theme, sound, cursor, and HUD defaults in one line. See [Presets](/presets) for details.
+
+  | Preset | Theme | Sound | Cursor | HUD |
+  |--------|-------|-------|--------|-----|
+  | `polished` | Catppuccin | Click + Key | Visible | Visible |
+  | `minimal` | Tokyo Night | None | Visible | Hidden |
+  | `demo` | Dracula | Click + Key | Visible | Visible |
+  | `silent` | Default | None | Hidden | Hidden |
+</ResponseField>
+
+<ResponseField name="theme" type="string | ThemeConfig" required={false}>
+  Terminal color theme. Pass a built-in theme name as a string, or an inline theme object.
+
+  ```jsonc
+  // Built-in theme by name
+  "theme": "catppuccin"
+
+  // Inline theme object
+  "theme": {
+    "background": "#1E1E2E",
+    "foreground": "#CDD6F4",
+    "colors": {
+      "black": "#45475A",
+      "red": "#F38BA8",
+      "green": "#A6E3A1",
+      "yellow": "#F9E2AF",
+      "blue": "#89B4FA",
+      "magenta": "#F5C2E7",
+      "cyan": "#94E2D5",
+      "white": "#BAC2DE",
+      "brightBlack": "#585B70",
+      "brightRed": "#F38BA8",
+      "brightGreen": "#A6E3A1",
+      "brightYellow": "#F9E2AF",
+      "brightBlue": "#89B4FA",
+      "brightMagenta": "#F5C2E7",
+      "brightCyan": "#94E2D5",
+      "brightWhite": "#A6ADC8"
+    }
+  }
+  ```
+
+  See [Themes](/themes) for the full `ThemeConfig` schema and available built-in themes.
+</ResponseField>
+
+<ResponseField name="cursor" type="object" required={false}>
+  Cursor overlay settings.
+
+  <Expandable title="cursor properties">
+    <ResponseField name="visible" type="boolean" required={false}>
+      Whether to render the cursor overlay on the recording.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="hud" type="object" required={false}>
+  Heads-up display (keystroke overlay) settings.
+
+  <Expandable title="hud properties">
+    <ResponseField name="visible" type="boolean" required={false}>
+      Whether to render the keystroke HUD overlay on the recording.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Sound
+
+<ResponseField name="sound" type="object" required={false}>
+  Sound configuration for the recording.
+
+  <Expandable title="sound properties">
+    <ResponseField name="effects" type="object" required={false}>
+      Sound effect mappings for keypresses.
+
+      <Expandable title="effects properties">
+        <ResponseField name="click" type="1 | 2 | 3 | 4 | string" required={false}>
+          Sound effect for mouse clicks. Use a number (1-4) for built-in variants, or a file path for a custom sound.
+        </ResponseField>
+        <ResponseField name="key" type="1 | 2 | 3 | 4 | string" required={false}>
+          Sound effect for key presses. Use a number (1-4) for built-in variants, or a file path for a custom sound.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="track" type="string" required={false}>
+      Path to a background audio track. Resolved relative to the config file.
+    </ResponseField>
+
+    <ResponseField name="trackVolume" type="number" required={false} default={0.3}>
+      Volume for the background track. Range: `0` (silent) to `1` (full volume).
+    </ResponseField>
+
+    <ResponseField name="effectsVolume" type="number" required={false} default={0.5}>
+      Volume for sound effects. Range: `0` (silent) to `1` (full volume).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Behavior
+
+<ResponseField name="defaultWaitTimeout" type="number" required={false}>
+  Default timeout in milliseconds for `wait` steps that don't specify their own timeout. Must be a positive number.
+</ResponseField>
+
+<ResponseField name="steps" type="Step[]" required>
+  Array of step objects defining the recording script. Must contain at least one step. See [Steps Reference](/steps-reference) for all step types.
+</ResponseField>
+
+## Multi-Video Configuration
+
+Tuireel also supports a multi-video config format for recording multiple videos from a single config file:
+
+```jsonc
+{
+  "defaults": {
+    "fps": 30,
+    "cols": 80,
+    "rows": 24,
+    "preset": "polished"
+  },
+  "videos": [
+    {
+      "name": "install",
+      "output": "install.mp4",
+      "steps": [
+        { "type": "launch", "command": "bash" },
+        { "type": "type", "text": "npm install mypackage" },
+        { "type": "press", "key": "Enter" },
+        { "type": "pause", "duration": 3 }
+      ]
+    },
+    {
+      "name": "usage",
+      "output": "usage.mp4",
+      "steps": [
+        { "type": "launch", "command": "bash" },
+        { "type": "type", "text": "mypackage --help" },
+        { "type": "press", "key": "Enter" },
+        { "type": "pause", "duration": 2 }
+      ]
+    }
+  ]
+}
+```
+
+The `defaults` object accepts all config fields (except `steps` and `output`) and is merged with each video definition. Each video in the `videos` array requires `name`, `output`, and `steps`.
+
+## Complete Example
+
+A full single-video config using all available options:
+
+```jsonc
+{
+  "$schema": "file:///home/user/.tuireel/schema.json",
+  "preset": "polished",
+  "format": "mp4",
+  "output": "demo.mp4",
+  "fps": 30,
+  "cols": 100,
+  "rows": 30,
+  "theme": "catppuccin",
+  "cursor": { "visible": true },
+  "hud": { "visible": true },
+  "sound": {
+    "effects": { "click": 1, "key": 2 },
+    "track": "./background.mp3",
+    "trackVolume": 0.2,
+    "effectsVolume": 0.6
+  },
+  "defaultWaitTimeout": 10000,
+  "steps": [
+    { "type": "launch", "command": "bash" },
+    { "type": "type", "text": "echo 'Hello, world!'" },
+    { "type": "press", "key": "Enter" },
+    { "type": "wait", "pattern": "Hello, world!" },
+    { "type": "pause", "duration": 2000 }
+  ]
+}
+```
