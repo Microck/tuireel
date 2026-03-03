@@ -1,0 +1,61 @@
+---
+title: "Introduction"
+description: "Scripted TUI demo recordings — no manual editing required"
+icon: "film"
+---
+
+# What is Tuireel?
+
+Tuireel is a command-line tool that turns declarative scripts into polished terminal demo videos. Instead of manually recording your terminal and hoping you don't make a typo, you write a simple JSONC config describing what to type, what keys to press, and what to wait for — then Tuireel records it perfectly, every time.
+
+Under the hood, Tuireel spawns a virtual PTY (pseudo-terminal), executes your scripted steps against a real shell, captures every frame, and composites the final output into MP4, WebM, or GIF. The result is a repeatable, pixel-perfect recording with optional overlays like cursors, HUDs, sound effects, and theming.
+
+No screen-recording software. No video editing. No retakes.
+
+## Why Tuireel?
+
+<CardGroup cols={2}>
+  <Card title="Repeatable" icon="repeat">
+    Same script, same output every time. Update your CLI and re-record in one command.
+  </Card>
+  <Card title="Scripted" icon="code">
+    Declarative JSONC config with typed steps: launch, type, press, wait, pause, and more.
+  </Card>
+  <Card title="Polished" icon="sparkles">
+    Built-in themes (Catppuccin, Dracula, Tokyo Night), cursor overlays, HUD, and sound effects.
+  </Card>
+  <Card title="Multiple Formats" icon="photo-film">
+    Output to MP4, WebM, or GIF. Multi-video configs for recording suites.
+  </Card>
+</CardGroup>
+
+## How it Works
+
+Tuireel follows a simple pipeline:
+
+1. **Script** — Write a `.tuireel.jsonc` config with your steps
+2. **Record** — Tuireel spawns a PTY, executes steps, captures frames
+3. **Composite** — Frames are composited with theme, cursor, and HUD overlays
+4. **Output** — Final video is encoded to your chosen format
+
+## Quick Example
+
+A minimal `.tuireel.jsonc` config:
+
+```jsonc
+{
+  "output": "demo.mp4",
+  "steps": [
+    { "type": "launch", "command": "node" },
+    { "type": "type", "text": "console.log('Hello from Tuireel!')" },
+    { "type": "press", "key": "Enter" },
+    { "type": "pause", "duration": 2 }
+  ]
+}
+```
+
+This launches a Node.js REPL, types a command, presses Enter, waits 2 seconds, and saves the recording as `demo.mp4`.
+
+<Card title="Get started in 5 minutes" icon="rocket" href="/quickstart">
+  Follow the Quickstart guide to install Tuireel and produce your first recording.
+</Card>

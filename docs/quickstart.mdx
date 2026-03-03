@@ -1,0 +1,122 @@
+---
+title: "Quickstart"
+description: "Install Tuireel and produce your first recording in under 5 minutes"
+icon: "rocket"
+---
+
+## Install Tuireel
+
+<CodeGroup>
+
+```bash npm
+npm install -g tuireel
+```
+
+```bash pnpm
+pnpm add -g tuireel
+```
+
+```bash npx (no install)
+npx tuireel
+```
+
+</CodeGroup>
+
+<Note>
+  Tuireel requires **ffmpeg** to be installed on your system for video encoding.
+  Install it with `brew install ffmpeg` (macOS), `apt install ffmpeg` (Ubuntu), or download from [ffmpeg.org](https://ffmpeg.org).
+</Note>
+
+## Create Your First Recording
+
+<Steps>
+  <Step title="Initialize a config">
+    Run `tuireel init` to scaffold a `.tuireel.jsonc` config file:
+
+    ```bash
+    tuireel init
+    ```
+
+    This creates a starter config with a simple example. You can optionally choose a preset (like `polished` or `demo`) during init.
+  </Step>
+
+  <Step title="Edit your steps">
+    Open `.tuireel.jsonc` and replace the steps with your own. Here's a simple example:
+
+    ```jsonc
+    {
+      "output": "demo.mp4",
+      "cols": 80,
+      "rows": 24,
+      "steps": [
+        { "type": "launch", "command": "bash" },
+        { "type": "type", "text": "echo 'Hello from Tuireel!'" },
+        { "type": "press", "key": "Enter" },
+        { "type": "pause", "duration": 2 }
+      ]
+    }
+    ```
+  </Step>
+
+  <Step title="Validate your config">
+    Check your config for errors before recording:
+
+    ```bash
+    tuireel validate .tuireel.jsonc
+    ```
+
+    This validates the schema, checks step types, and reports any issues.
+  </Step>
+
+  <Step title="Record">
+    Run the recording:
+
+    ```bash
+    tuireel record .tuireel.jsonc
+    ```
+
+    Tuireel will spawn a PTY, execute each step, capture frames, and encode the final video.
+  </Step>
+
+  <Step title="View your output">
+    Open the generated `demo.mp4` to see your recording. That's it — a polished terminal demo with no manual editing.
+  </Step>
+</Steps>
+
+## Add Polish with Presets
+
+Want instant polish? Add a preset to your config:
+
+```jsonc
+{
+  "preset": "polished",
+  "output": "demo.mp4",
+  "steps": [
+    { "type": "launch", "command": "bash" },
+    { "type": "type", "text": "echo 'Polished recording!'" },
+    { "type": "press", "key": "Enter" },
+    { "type": "pause", "duration": 2 }
+  ]
+}
+```
+
+The `polished` preset applies the Catppuccin theme, enables cursor overlay, HUD, and sound effects — all in one line.
+
+Available presets: `polished`, `minimal`, `demo`, `silent`.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Config Reference" icon="gear" href="/config-reference">
+    Full reference for all config fields and options.
+  </Card>
+  <Card title="Steps Reference" icon="list-check" href="/steps-reference">
+    Every step type explained with examples.
+  </Card>
+  <Card title="Themes" icon="palette" href="/themes">
+    Browse and customize terminal color themes.
+  </Card>
+  <Card title="Presets" icon="wand-magic-sparkles" href="/presets">
+    Pre-configured bundles for common recording styles.
+  </Card>
+</CardGroup>
