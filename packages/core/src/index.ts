@@ -2,6 +2,7 @@ export const VERSION = "0.0.1";
 
 export * from "./config/index.js";
 export * from "./ffmpeg/index.js";
+export { Logger, LogLevel, createLogger } from "./logger.js";
 export { PRESET_NAMES } from "./presets/index.js";
 export type { PresetName } from "./presets/index.js";
 export { compose } from "./compositor.js";
