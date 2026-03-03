@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 4 of 6 (Overlay System)
-Plan: 1 of 4
+Plan: 2 of 4
 Status: In progress
-Last activity: 2026-03-03 - Completed 04-01-PLAN.md (interaction timeline data structure + serialization)
-Progress: ███████████░░░░░░░░░░ 52% (11/21 plans)
+Last activity: 2026-03-03 - Completed 04-02-PLAN.md (cursor Bezier motion + renderer)
+Progress: ████████████░░░░░░░░░ 57% (12/21 plans)
 
 ## Current Phase
 
-Phase 4: Overlay System — In progress (1/4 plans complete)
+Phase 4: Overlay System — In progress (2/4 plans complete)
 
 ## Project Reference
 
@@ -25,7 +25,7 @@ Current focus: Building overlay system foundations (timeline contract complete, 
 | 1 | Foundation | ● Complete | 100% |
 | 2 | Core Pipeline | ● Complete | 100% |
 | 3 | Output Quality | ● Complete | 100% |
-| 4 | Overlay System | ◐ In progress | 25% |
+| 4 | Overlay System | ◐ In progress | 50% |
 | 5 | Sound | ○ Pending | 0% |
 | 6 | Workflow & Polish | ○ Pending | 0% |
 
@@ -65,6 +65,8 @@ Current focus: Building overlay system foundations (timeline contract complete, 
 | 04-01 | Serialize timeline as keyframes plus `frameCount`, and expand to full per-frame states with interpolation via `getFrames()`. | Reduces persisted JSON size while preserving frame-accurate playback semantics for compositing. |
 | 04-01 | Keep timeline persistence synchronous (`save`/`fromFile`) using `writeFileSync`/`readFileSync`. | Timeline handoff happens at phase boundaries where deterministic disk IO is simpler than async orchestration. |
 | 04-01 | Extend Vitest include globs to cover `src/**/__tests__/**/*.test.ts`. | Ensures new timeline contract tests run under the standard package test command. |
+| 04-02 | Keep cursor math helpers internal and export only `computeCursorPath` + `moveDuration` from the Bezier module. | Preserves a narrow overlay motion API while retaining testable implementation detail encapsulation. |
+| 04-02 | Render cursor overlays from SVG to PNG via Sharp, with default circle SVG and drop shadow filter. | Produces alpha-ready compositor assets while keeping cursor visuals configurable through SVG overrides. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -81,6 +83,6 @@ Current focus: Building overlay system foundations (timeline contract complete, 
 
 ## Session Continuity
 
-Last session: 2026-03-03T01:41:42Z
-Stopped at: Completed 04-01-PLAN.md (interaction timeline)
-Resume file: .planning/phases/04-overlay-system/04-02-PLAN.md
+Last session: 2026-03-03T01:51:21Z
+Stopped at: Completed 04-02-PLAN.md (cursor Bezier motion + renderer)
+Resume file: .planning/phases/04-overlay-system/04-03-PLAN.md
