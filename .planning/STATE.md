@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 2 of 6 (Core Pipeline)
-Plan: 1 of 2
-Status: In progress
-Last activity: 2026-03-02 - Completed 02-01-PLAN.md (session wrapper + step executor)
-Progress: ██████░░░░░░░░░░░░░░ 30% (6/20 plans)
+Plan: 2 of 2
+Status: Phase complete
+Last activity: 2026-03-03 - Completed 02-02-PLAN.md (frame capture + ffmpeg + record CLI)
+Progress: ███████░░░░░░░░░░░░░ 35% (7/20 plans)
 
 ## Current Phase
 
-Phase 2: Core Pipeline — In progress (1/2 plans complete)
+Phase 2: Core Pipeline — Complete (2/2 plans complete)
 
 ## Project Reference
 
@@ -23,7 +23,7 @@ Current focus: Completing Phase 2 recording pipeline foundation and MP4 loop.
 | Phase | Name | Status | Progress |
 |-------|------|--------|----------|
 | 1 | Foundation | ● Complete | 100% |
-| 2 | Core Pipeline | ◐ In progress | 50% |
+| 2 | Core Pipeline | ● Complete | 100% |
 | 3 | Output Quality | ○ Pending | 0% |
 | 4 | Overlay System | ○ Pending | 0% |
 | 5 | Sound | ○ Pending | 0% |
@@ -52,6 +52,9 @@ Current focus: Completing Phase 2 recording pipeline foundation and MP4 loop.
 | 02-01 | Keep launch orchestration in `createSession()` and treat `launch` execution as validation/no-op in dispatcher. | Prevents double process spawn while retaining schema-compatible launch steps in the execution pipeline. |
 | 02-01 | Use `writeRaw` + jittered `charDelay` typing instead of tuistory `session.type()`. | Meets human-like typing cadence requirements rather than fixed 1ms per-character input. |
 | 02-01 | Export `Step` as an alias of schema-derived `TuireelStep` in step executor. | Keeps executor dispatch types synchronized with config contract definitions. |
+| 02-02 | Resolve launch command from the first `launch` step while keeping top-level `cols`/`rows` config fields. | Maintains compatibility with established config schema and 02-01 launch semantics. |
+| 02-02 | Render screenshots at fixed row-derived height (`rows * fontSize * lineHeight`). | Prevents renderer content-trim behavior from collapsing viewport height in MP4 output. |
+| 02-02 | Register recorder signal handlers before setup and terminate ffmpeg immediately on interrupt. | Reduces orphan-process risk during SIGINT/SIGTERM shutdown paths. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -68,6 +71,6 @@ Current focus: Completing Phase 2 recording pipeline foundation and MP4 loop.
 
 ## Session Continuity
 
-Last session: 2026-03-02T23:44:58Z
-Stopped at: Completed 02-01-PLAN.md (session wrapper + dispatch loop)
-Resume file: .planning/phases/02-core-pipeline/02-02-PLAN.md
+Last session: 2026-03-03T00:18:18Z
+Stopped at: Completed 02-02-PLAN.md (frame capture + ffmpeg + record CLI)
+Resume file: .planning/phases/03-output-quality/03-01-PLAN.md
