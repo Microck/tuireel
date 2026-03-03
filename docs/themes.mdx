@@ -1,0 +1,229 @@
+---
+title: "Themes"
+description: "Customize terminal colors with built-in or custom themes"
+icon: "palette"
+---
+
+Themes control the visual appearance of your terminal recording — background, foreground, cursor color, and all 16 ANSI colors. Tuireel ships with 8 built-in themes and supports fully custom themes.
+
+## Using a Built-in Theme
+
+Set the `theme` field in your config to any built-in theme name:
+
+```jsonc
+{
+  "theme": "dracula",
+  "output": "demo.mp4",
+  "steps": [...]
+}
+```
+
+## Built-in Themes
+
+### Dracula
+
+Dark theme with vibrant purples, greens, and pinks.
+
+| Field | Color |
+|-------|-------|
+| Background | `#282A36` |
+| Foreground | `#F8F8F2` |
+| Cursor | `#F8F8F2` |
+| Red | `#FF5555` |
+| Green | `#50FA7B` |
+| Yellow | `#F1FA8C` |
+| Blue | `#BD93F9` |
+| Magenta | `#FF79C6` |
+| Cyan | `#8BE9FD` |
+
+### Catppuccin
+
+Warm pastel theme with soft tones. Default theme for the `polished` preset.
+
+| Field | Color |
+|-------|-------|
+| Background | `#1E1E2E` |
+| Foreground | `#CDD6F4` |
+| Cursor | `#F5E0DC` |
+| Red | `#F38BA8` |
+| Green | `#A6E3A1` |
+| Yellow | `#F9E2AF` |
+| Blue | `#89B4FA` |
+| Magenta | `#F5C2E7` |
+| Cyan | `#94E2D5` |
+
+### One Dark
+
+Atom-inspired dark theme with balanced contrast.
+
+| Field | Color |
+|-------|-------|
+| Background | `#282C34` |
+| Foreground | `#ABB2BF` |
+| Cursor | `#528BFF` |
+| Red | `#E06C75` |
+| Green | `#98C379` |
+| Yellow | `#D19A66` |
+| Blue | `#61AFEF` |
+| Magenta | `#C678DD` |
+| Cyan | `#56B6C2` |
+
+### Monokai
+
+Classic Monokai with warm yellows and vivid pinks.
+
+| Field | Color |
+|-------|-------|
+| Background | `#272822` |
+| Foreground | `#F8F8F2` |
+| Cursor | `#F8F8F0` |
+| Red | `#F92672` |
+| Green | `#A6E22E` |
+| Yellow | `#F4BF75` |
+| Blue | `#66D9EF` |
+| Magenta | `#AE81FF` |
+| Cyan | `#A1EFE4` |
+
+### Solarized Dark
+
+Ethan Schoonover's precision-engineered dark palette.
+
+| Field | Color |
+|-------|-------|
+| Background | `#002B36` |
+| Foreground | `#839496` |
+| Cursor | `#93A1A1` |
+| Red | `#DC322F` |
+| Green | `#859900` |
+| Yellow | `#B58900` |
+| Blue | `#268BD2` |
+| Magenta | `#D33682` |
+| Cyan | `#2AA198` |
+
+### Tokyo Night
+
+VSCode-inspired dark theme with cool blues and purples.
+
+| Field | Color |
+|-------|-------|
+| Background | `#1A1B26` |
+| Foreground | `#C0CAF5` |
+| Cursor | `#C0CAF5` |
+| Red | `#F7768E` |
+| Green | `#9ECE6A` |
+| Yellow | `#E0AF68` |
+| Blue | `#7AA2F7` |
+| Magenta | `#BB9AF7` |
+| Cyan | `#7DCFFF` |
+
+### Nord
+
+Arctic-inspired palette with muted, cool tones.
+
+| Field | Color |
+|-------|-------|
+| Background | `#2E3440` |
+| Foreground | `#D8DEE9` |
+| Cursor | `#D8DEE9` |
+| Red | `#BF616A` |
+| Green | `#A3BE8C` |
+| Yellow | `#EBCB8B` |
+| Blue | `#81A1C1` |
+| Magenta | `#B48EAD` |
+| Cyan | `#88C0D0` |
+
+### Gruvbox Dark
+
+Retro groove color scheme with earthy tones.
+
+| Field | Color |
+|-------|-------|
+| Background | `#282828` |
+| Foreground | `#EBDBB2` |
+| Cursor | `#EBDBB2` |
+| Red | `#CC241D` |
+| Green | `#98971A` |
+| Yellow | `#D79921` |
+| Blue | `#458588` |
+| Magenta | `#B16286` |
+| Cyan | `#689D6A` |
+
+## Custom Themes
+
+Instead of a theme name string, pass a full theme object with your own colors:
+
+```jsonc
+{
+  "theme": {
+    "background": "#1a1b26",
+    "foreground": "#c0caf5",
+    "cursor": "#c0caf5",
+    "colors": {
+      "black": "#15161e",
+      "red": "#f7768e",
+      "green": "#9ece6a",
+      "yellow": "#e0af68",
+      "blue": "#7aa2f7",
+      "magenta": "#bb9af7",
+      "cyan": "#7dcfff",
+      "white": "#a9b1d6",
+      "brightBlack": "#414868",
+      "brightRed": "#f7768e",
+      "brightGreen": "#9ece6a",
+      "brightYellow": "#e0af68",
+      "brightBlue": "#7aa2f7",
+      "brightMagenta": "#bb9af7",
+      "brightCyan": "#7dcfff",
+      "brightWhite": "#c0caf5"
+    }
+  },
+  "output": "demo.mp4",
+  "steps": [...]
+}
+```
+
+### Theme Object Shape
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `background` | `string` | Yes | Terminal background color (`#RRGGBB`) |
+| `foreground` | `string` | Yes | Default text color (`#RRGGBB`) |
+| `cursor` | `string` | No | Cursor color (`#RRGGBB`) |
+| `colors` | `object` | Yes | All 16 ANSI colors (see below) |
+| `padding` | `number` | No | Padding around the terminal (px) |
+| `fontFamily` | `string` | No | Font family name |
+| `fontSize` | `number` | No | Font size (px) |
+
+The `colors` object must include all 16 ANSI colors: `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`, and their `bright` variants (`brightBlack`, `brightRed`, etc.). All colors must be in `#RRGGBB` hex format.
+
+### Font Customization
+
+Override the font used in your recording:
+
+```jsonc
+{
+  "theme": {
+    "background": "#282a36",
+    "foreground": "#f8f8f2",
+    "colors": { ... },
+    "fontFamily": "JetBrains Mono",
+    "fontSize": 14,
+    "padding": 16
+  },
+  "steps": [...]
+}
+```
+
+## Theme with Presets
+
+Presets include a default theme, but you can override it:
+
+```jsonc
+{
+  "preset": "polished",
+  "theme": "dracula",
+  "steps": [...]
+}
+```
+
+The `polished` preset defaults to `catppuccin`, but specifying `"theme": "dracula"` overrides just the theme while keeping the preset's other settings (sound, cursor, HUD).

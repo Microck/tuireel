@@ -1,0 +1,125 @@
+---
+title: "Presets"
+description: "Named bundles of presentation defaults for quick, consistent recordings"
+icon: "wand-magic-sparkles"
+---
+
+Presets are named bundles of presentation defaults — theme, sound, cursor, and HUD settings — that you can apply with a single line. They set sensible defaults without locking you in: any setting a preset provides can be overridden in your config.
+
+## Using a Preset
+
+Add the `preset` field to your config:
+
+```jsonc
+{
+  "preset": "polished",
+  "output": "demo.mp4",
+  "steps": [
+    { "type": "launch", "command": "bash" },
+    { "type": "type", "text": "echo 'Hello!'" },
+    { "type": "press", "key": "Enter" },
+    { "type": "pause", "duration": 2 }
+  ]
+}
+```
+
+Presets never control output behavior — they don't set `steps`, `output`, `format`, or `$schema`. They only set visual and audio presentation.
+
+## Built-in Presets
+
+| Preset | Theme | Sound Effects | Cursor | HUD |
+|--------|-------|---------------|--------|-----|
+| `polished` | catppuccin | click + key (variant 1) | visible | visible |
+| `minimal` | tokyo-night | none | visible | hidden |
+| `demo` | dracula | click + key (variant 1) | visible | visible |
+| `silent` | (none) | none | hidden | hidden |
+
+### polished
+
+The go-to preset for professional-looking recordings. Applies a warm Catppuccin color scheme with subtle click and keypress sound effects, a visible cursor, and HUD overlay.
+
+```jsonc
+// Equivalent to:
+{
+  "theme": "catppuccin",
+  "sound": { "effects": { "click": 1, "key": 1 } },
+  "cursor": { "visible": true },
+  "hud": { "visible": true }
+}
+```
+
+### minimal
+
+Clean recordings with a Tokyo Night theme and cursor only. No sound, no HUD — just the terminal and a cursor.
+
+```jsonc
+// Equivalent to:
+{
+  "theme": "tokyo-night",
+  "cursor": { "visible": true },
+  "hud": { "visible": false }
+}
+```
+
+### demo
+
+Similar to `polished` but with the Dracula theme. Good for quick demos where you want a familiar dark look with full audio-visual polish.
+
+```jsonc
+// Equivalent to:
+{
+  "theme": "dracula",
+  "sound": { "effects": { "click": 1, "key": 1 } },
+  "cursor": { "visible": true },
+  "hud": { "visible": true }
+}
+```
+
+### silent
+
+The bare-bones preset: no cursor, no HUD, no sound. Useful when you want a clean terminal recording with no overlays, or as a baseline when you plan to customize everything yourself.
+
+```jsonc
+// Equivalent to:
+{
+  "cursor": { "visible": false },
+  "hud": { "visible": false }
+}
+```
+
+## Overriding Preset Defaults
+
+Preset values are defaults — your config overrides them. For example, the `polished` preset enables sound, but you can turn it off:
+
+```jsonc
+{
+  "preset": "polished",
+  "sound": { "effects": {} },
+  "output": "demo.mp4",
+  "steps": [...]
+}
+```
+
+This keeps the Catppuccin theme, cursor, and HUD from `polished` but disables sound effects.
+
+You can also swap the theme while keeping everything else:
+
+```jsonc
+{
+  "preset": "polished",
+  "theme": "gruvbox-dark",
+  "output": "demo.mp4",
+  "steps": [...]
+}
+```
+
+## Presets in `tuireel init`
+
+When you run `tuireel init` interactively (in a TTY), you're prompted to select a preset:
+
+```bash
+tuireel init
+# ? Select a preset: (polished, minimal, demo, silent)
+```
+
+The chosen preset is written into your generated `.tuireel.jsonc` config. In non-interactive mode (piped input), the preset prompt is skipped.
