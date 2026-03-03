@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 5 of 6 (Sound)
-Plan: 1 of 2
-Status: In progress
-Last activity: 2026-03-03 - Completed 05-01-PLAN.md (sound effects engine)
-Progress: ███████████████░░░░░ 76% (16/21 plans)
+Plan: 2 of 2
+Status: Phase complete
+Last activity: 2026-03-03 - Completed 05-02-PLAN.md (custom audio track mixing + CLI integration)
+Progress: ████████████████░░░░ 81% (17/21 plans)
 
 ## Current Phase
 
-Phase 5: Sound — In progress (1/2 plans complete)
+Phase 5: Sound — Complete (2/2 plans complete)
 
 ## Project Reference
 
@@ -26,7 +26,7 @@ Current focus: Completing Phase 5 by adding custom audio track mixing on top of 
 | 2 | Core Pipeline | ● Complete | 100% |
 | 3 | Output Quality | ● Complete | 100% |
 | 4 | Overlay System | ● Complete | 100% |
-| 5 | Sound | ◐ In progress | 50% |
+| 5 | Sound | ● Complete | 100% |
 | 6 | Workflow & Polish | ○ Pending | 0% |
 
 ## Requirement Coverage
@@ -76,6 +76,8 @@ Current focus: Completing Phase 5 by adding custom audio track mixing on top of 
 | 04-05 | Define and consume shared `CursorImage` overlay contract across cursor renderer and compositor paths. | Removes local type divergence and keeps overlay renderer/compositor contracts aligned under `overlay/types.ts`. |
 | 05-01 | Resolve bundled SFX directory through runtime candidate paths (`__dirname`, workspace, node_modules). | Keeps default sound preset lookups working across ESM/CJS builds and local workspace execution. |
 | 05-01 | Keep sound behavior strictly opt-in via optional `sound.effects` and skip audio mix when SFX config is absent. | Preserves silent-by-default output for existing configs while enabling explicit sound configuration. |
+| 05-02 | Finalize audio using a shared `buildFullAudioArgs` pipeline for effects-only, track-only, and mixed modes. | Consolidates sound branching logic while keeping mp4/webm finalizers format-specific and predictable. |
+| 05-02 | Resolve `sound.track` relative to config file path in both `record` and `composite` commands. | Prevents cwd-dependent custom track failures and keeps CLI behavior stable across invocation locations. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -92,6 +94,6 @@ Current focus: Completing Phase 5 by adding custom audio track mixing on top of 
 
 ## Session Continuity
 
-Last session: 2026-03-03T03:12:30Z
-Stopped at: Completed 05-01-PLAN.md (sound effects engine)
-Resume file: .planning/phases/05-sound/05-02-PLAN.md
+Last session: 2026-03-03T03:29:57Z
+Stopped at: Completed 05-02-PLAN.md (custom audio track mixing + CLI integration)
+Resume file: .planning/phases/06-workflow-polish/06-01-PLAN.md
