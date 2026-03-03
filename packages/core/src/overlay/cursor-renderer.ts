@@ -1,6 +1,5 @@
 import sharp from "sharp";
-
-const DEFAULT_CURSOR_SIZE = 20;
+import { DEFAULT_CURSOR_CONFIG, type CursorConfig, type CursorImage } from "./types.js";
 
 function defaultCursorSvg(size: number): string {
   const center = size / 2;
@@ -20,18 +19,13 @@ function defaultCursorSvg(size: number): string {
 `.trim();
 }
 
-export interface RenderCursorOptions {
-  svg?: string;
-  size?: number;
-}
-
 export async function renderCursor(
-  options: RenderCursorOptions = {},
-): Promise<{ buffer: Buffer; width: number; height: number }> {
-  const requestedSize = options.size ?? DEFAULT_CURSOR_SIZE;
+  options: CursorConfig = {},
+): Promise<CursorImage> {
+  const requestedSize = options.size ?? DEFAULT_CURSOR_CONFIG.size;
   const size = Number.isFinite(requestedSize) && requestedSize > 0
     ? Math.round(requestedSize)
-    : DEFAULT_CURSOR_SIZE;
+    : DEFAULT_CURSOR_CONFIG.size;
   const svg = options.svg ?? defaultCursorSvg(size);
 
   const buffer = await sharp(Buffer.from(svg)).resize(size, size).png().toBuffer();

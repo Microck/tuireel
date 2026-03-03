@@ -4,6 +4,12 @@ export interface OverlayImage {
   y: number;
 }
 
+export interface CursorImage {
+  buffer: Buffer;
+  width: number;
+  height: number;
+}
+
 export interface CursorConfig {
   svg?: string;
   size?: number;

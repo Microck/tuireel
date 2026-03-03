@@ -12,7 +12,7 @@ import { encodeGifTwoPass } from "./encoding/gif-encoder.js";
 import { ensureFfmpeg } from "./ffmpeg/downloader.js";
 import { renderCursor } from "./overlay/cursor-renderer.js";
 import { renderHud } from "./overlay/hud-renderer.js";
-import type { CursorConfig, HudConfig, OverlayImage } from "./overlay/types.js";
+import type { CursorConfig, CursorImage, HudConfig, OverlayImage } from "./overlay/types.js";
 import { InteractionTimeline } from "./timeline/interaction-timeline.js";
 import type { FrameData, TimelineData } from "./timeline/types.js";
 
@@ -36,12 +36,6 @@ interface EncodeFramesOptions {
   fps: number;
   format: OutputFormat;
   tempDirectory: string;
-}
-
-interface CursorCache {
-  buffer: Buffer;
-  width: number;
-  height: number;
 }
 
 function getErrorStderr(error: unknown): string {
@@ -230,7 +224,7 @@ export async function compose(
     const frameFiles = await loadFrameFileNames(decodedFramesDirectory);
 
     const cursorEnabled = options.cursorConfig?.visible ?? true;
-    let cursorCache: CursorCache | null = null;
+    let cursorCache: CursorImage | null = null;
     let hudCache: OverlayImage | null = null;
     let lastHudKey: string | null = null;
 
