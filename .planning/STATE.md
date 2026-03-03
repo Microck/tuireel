@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 4 of 6 (Overlay System)
-Plan: 4 of 4
+Plan: 5 of 5
 Status: Phase complete
-Last activity: 2026-03-03 - Completed 04-04-PLAN.md (compositor + composite CLI)
-Progress: █████████████░░░░░░░ 67% (14/21 plans)
+Last activity: 2026-03-03 - Completed 04-05-PLAN.md (overlay gap closure)
+Progress: ██████████████░░░░░░ 71% (15/21 plans)
 
 ## Current Phase
 
-Phase 4: Overlay System — Complete (4/4 plans complete)
+Phase 4: Overlay System — Complete (5/5 plans complete)
 
 ## Project Reference
 
@@ -72,6 +72,8 @@ Current focus: Transitioning into Phase 5 to map timeline events into synchroniz
 | 04-04 | Implement `compose()` as ffmpeg frame decode + Sharp overlay + profile-based re-encode, including GIF two-pass finalize. | Reuses established encoder behavior while adding per-frame overlay compositing without changing format contracts. |
 | 04-04 | Persist `.tuireel/raw/{name}.mp4` and `.tuireel/timelines/{name}.timeline.json` during record, then compose final output from those artifacts. | Delivers true two-pass flow and enables re-compositing with new overlay settings without re-recording steps. |
 | 04-04 | Handle `--no-hud` by stripping HUD state in CLI input and `--no-cursor` via cursor visibility override. | Keeps compositor API focused on rendering while exposing user-facing overlay toggles in `tuireel composite`. |
+| 04-05 | Scale cursor micro-jitter with a distance ramp plus long-move boost so long travel reaches visible 1-2px amplitude while endpoints stay subtle. | Closes OVR-01 verification gap without changing path/duration APIs or endpoint exactness guarantees. |
+| 04-05 | Define and consume shared `CursorImage` overlay contract across cursor renderer and compositor paths. | Removes local type divergence and keeps overlay renderer/compositor contracts aligned under `overlay/types.ts`. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -88,6 +90,6 @@ Current focus: Transitioning into Phase 5 to map timeline events into synchroniz
 
 ## Session Continuity
 
-Last session: 2026-03-03T02:21:44Z
-Stopped at: Completed 04-04-PLAN.md (compositor + composite CLI)
+Last session: 2026-03-03T02:46:51Z
+Stopped at: Completed 04-05-PLAN.md (overlay gap closure)
 Resume file: .planning/phases/05-sound/05-01-PLAN.md
