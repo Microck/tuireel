@@ -10,17 +10,17 @@ See: `.planning/PROJECT.md` (updated 2026-07-16)
 
 Phase: 8 of 12 (Presets & Reliability)
 Plan: 4 of 4 in current phase
-Status: In progress
-Last activity: 2026-03-03 — Completed 08-04-PLAN.md (defaultWaitTimeout Wiring + Session Error Context)
+Status: Phase complete
+Last activity: 2026-03-03 — Completed 08-03-PLAN.md (Preset Wiring + Init Prompt + Cursor/HUD Passthrough)
 
-Progress: [█████████████████████████████░] Phase 8: 3/4 summaries
+Progress: [██████████████████████████████] Phase 8: 4/4 summaries
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12 | 8/10+ | In progress (Phase 8 in progress) | — |
+| v1.1 Branding, Docs & Hardening | 7-12 | 9/10+ | In progress (Phase 8 complete) | — |
 
 ## Performance Metrics
 
@@ -29,7 +29,7 @@ Progress: [███████████████████████
 - 6 phases, 50 tasks
 - Shipped in <1 day
 
-**v1.1:** 8 plans completed. Phase 7 complete (5 plans). Phase 8: 08-01 complete (3 min), 08-02 complete (2 min), 08-04 complete (2 min).
+**v1.1:** 9 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min).
 
 ## Accumulated Context
 
@@ -64,9 +64,12 @@ Phase 8 decisions:
 - Timeout cascade: per-step timeout > defaultWaitTimeout > no timeout
 - Session error wrapping with context + cause preservation for debugging
 
+  - Preset resolution runs before Zod validation in both loading paths
+  - Init preset prompt only shows in TTY mode (non-interactive skips)
+
 ### Blockers/Concerns
 
-- None. Phase 8 in progress.
+- None. Phase 8 complete.
 
 ### Key Risks
 
@@ -80,5 +83,5 @@ Phase 8 decisions:
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 08-04-PLAN.md (defaultWaitTimeout Wiring + Session Error Context)
-Resume: Continue Phase 8 — 08-03 remaining (may be done by parallel agent)
+Stopped at: Completed 08-03-PLAN.md — Phase 8 complete
+Resume: Phase 9 — next phase
