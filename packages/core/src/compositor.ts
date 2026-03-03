@@ -210,6 +210,23 @@ export async function compose(
   outputPath: string,
   options: ComposeOptions = {},
 ): Promise<void> {
+  const signals: NodeJS.Signals[] = ["SIGINT", "SIGTERM"];
+  let interrupted = false;
+
+  const handleSignal = (): void => {
+    interrupted = true;
+  };
+
+  for (const signal of signals) {
+    process.once(signal, handleSignal);
+  }
+
+  const throwIfInterrupted = (): void => {
+    if (interrupted) {
+      throw new Error("Compositing interrupted by signal");
+    }
+  };
+
   const ffmpegPath = await ensureFfmpeg();
   const format = resolveFormat(outputPath, options.format);
   const fps = resolveFps(timelineData.fps);
@@ -232,12 +249,18 @@ export async function compose(
     await decodeRawFrames(ffmpegPath, rawVideoPath, decodedFramesDirectory);
     const frameFiles = await loadFrameFileNames(decodedFramesDirectory);
 
+    throwIfInterrupted();
+
     const cursorEnabled = options.cursorConfig?.visible ?? true;
     let cursorCache: CursorImage | null = null;
     let hudCache: OverlayImage | null = null;
     let lastHudKey: string | null = null;
 
     for (const [frameIndex, frameFile] of frameFiles.entries()) {
+      if (frameIndex % 100 === 0) {
+        throwIfInterrupted();
+      }
+
       const frameState = resolveFrameState(expandedFrames, frameIndex);
       const overlays: sharp.OverlayOptions[] = [];
 
@@ -294,6 +317,8 @@ export async function compose(
         .toFile(outputFramePath);
     }
 
+    throwIfInterrupted();
+
     await encodeFrames({
       ffmpegPath,
       framesDirectory: compositedFramesDirectory,
@@ -331,6 +356,16 @@ export async function compose(
       options.sound,
     );
   } finally {
+    for (const signal of signals) {
+      process.off(signal, handleSignal);
+    }
+
+    if (interrupted) {
+      await rm(outputPath, { force: true }).catch(() => {
+        // Best-effort partial output cleanup
+      });
+    }
+
     await rm(tempDirectory, { recursive: true, force: true });
   }
 }
