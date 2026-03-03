@@ -65,6 +65,21 @@ export async function executeSteps(
           await pauseStep(step.duration);
           break;
         }
+        case "scroll": {
+          break;
+        }
+        case "click": {
+          break;
+        }
+        case "screenshot": {
+          break;
+        }
+        case "resize": {
+          break;
+        }
+        case "set-env": {
+          break;
+        }
         default: {
           assertNever(step);
         }

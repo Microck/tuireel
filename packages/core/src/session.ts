@@ -112,9 +112,12 @@ export class TuireelSession {
 
   private readonly theme?: ThemeConfig;
 
-  constructor(session: Session, theme?: ThemeConfig) {
+  readonly env: Record<string, string | undefined>;
+
+  constructor(session: Session, theme?: ThemeConfig, env: Record<string, string | undefined> = {}) {
     this.session = session;
     this.theme = theme;
+    this.env = { ...env };
   }
 
   async screenshot(format: ScreenshotFormat = "jpeg"): Promise<Buffer> {
@@ -159,6 +162,29 @@ export class TuireelSession {
     return this.session.waitForText(pattern, options);
   }
 
+  async scroll(direction: "up" | "down", amount: number): Promise<void> {
+    const scrollAmount = Math.max(1, Math.floor(amount));
+    const mouseSession = this.session as unknown as {
+      scrollUp(lines?: number): Promise<void>;
+      scrollDown(lines?: number): Promise<void>;
+    };
+
+    if (direction === "up") {
+      await mouseSession.scrollUp(scrollAmount);
+      return;
+    }
+
+    await mouseSession.scrollDown(scrollAmount);
+  }
+
+  clickText(pattern: string): Promise<void> {
+    const mouseSession = this.session as unknown as {
+      click(pattern: string, options?: { first?: boolean }): Promise<void>;
+    };
+
+    return mouseSession.click(pattern, { first: true });
+  }
+
   resize(options: { cols: number; rows: number }): void {
     this.session.resize(options);
   }
@@ -172,7 +198,7 @@ export async function createSession(config: SessionConfig): Promise<TuireelSessi
     env: config.env,
   });
 
-  const tuireelSession = new TuireelSession(session, config.theme);
+  const tuireelSession = new TuireelSession(session, config.theme, config.env);
 
   if (config.theme) {
     await tuireelSession.applyTheme(config.theme);

@@ -2,7 +2,18 @@ import { z } from "zod";
 
 import { themeSchema } from "../themes/schema.js";
 
-const stepTypes = ["launch", "type", "press", "wait", "pause"] as const;
+const stepTypes = [
+  "launch",
+  "type",
+  "press",
+  "wait",
+  "pause",
+  "scroll",
+  "click",
+  "screenshot",
+  "resize",
+  "set-env",
+] as const;
 const outputFormats = ["mp4", "webm", "gif"] as const;
 const soundEffectSchema = z.union([
   z.literal(1),
@@ -56,12 +67,45 @@ const pauseStepSchema = z.object({
   duration: z.number().nonnegative(),
 });
 
+const scrollStepSchema = z.object({
+  type: z.literal("scroll"),
+  direction: z.enum(["up", "down"]),
+  amount: z.number().int().positive().default(3),
+});
+
+const clickStepSchema = z.object({
+  type: z.literal("click"),
+  pattern: z.string().min(1),
+});
+
+const screenshotStepSchema = z.object({
+  type: z.literal("screenshot"),
+  output: z.string().min(1),
+});
+
+const resizeStepSchema = z.object({
+  type: z.literal("resize"),
+  cols: z.number().int().positive(),
+  rows: z.number().int().positive(),
+});
+
+const setEnvStepSchema = z.object({
+  type: z.literal("set-env"),
+  key: z.string().min(1),
+  value: z.string(),
+});
+
 export const stepSchema = z.discriminatedUnion("type", [
   launchStepSchema,
   typeStepSchema,
   pressStepSchema,
   waitStepSchema,
   pauseStepSchema,
+  scrollStepSchema,
+  clickStepSchema,
+  screenshotStepSchema,
+  resizeStepSchema,
+  setEnvStepSchema,
 ]);
 
 export const configSchema = z.object({

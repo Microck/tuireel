@@ -38,6 +38,11 @@ const STEP_TYPE_CURSOR_OFFSET: Record<StepType, number> = {
   press: 2,
   wait: 3,
   pause: 4,
+  scroll: 5,
+  click: 6,
+  screenshot: 7,
+  resize: 8,
+  "set-env": 9,
 };
 
 type LaunchStep = Extract<TuireelStep, { type: "launch" }>;
