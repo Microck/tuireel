@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Tuireel is a scripted TUI demo recorder. You define a sequence of terminal interactions in a declarative JSON config — launch a command, type text, press keys, wait for output — and Tuireel drives the TUI app in a virtual terminal, captures pixel-perfect frames, and produces polished video output (MP4, WebM, GIF). It's webreel but for terminal user interfaces: automated, repeatable, production-quality demo videos for CLI/TUI tools.
+Tuireel is a scripted TUI demo recorder. Authors define terminal interactions in declarative JSONC, and Tuireel executes the flow in a virtual PTY, captures pixel-perfect terminal frames, and produces polished demo output (MP4, WebM, GIF). v1.0 shipped with optional overlays, optional sound, and workflow tooling for preview, watch mode, multi-video configs, and include reuse.
 
 ## Core Value
 
@@ -12,70 +12,79 @@ TUI tool authors can produce polished demo videos from a declarative script, wit
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Declarative JSONC config defining video steps (launch, type, press, wait, pause, scroll, click) — v1.0
+- [x] CLI commands: `init`, `record`, `preview`, `composite`, `validate` — v1.0
+- [x] Pixel-perfect terminal frame capture via tuistory screenshot rendering — v1.0
+- [x] Video encoding via ffmpeg (MP4, WebM, GIF output formats) — v1.0
+- [x] Two-pass pipeline: clean capture pass + overlay compositing pass — v1.0
+- [x] Optional cursor overlay (animated, human-like movement) — v1.0
+- [x] Optional keystroke HUD overlay (shows keys being pressed) — v1.0
+- [x] Sound effects synced to actions (click/key sounds) — v1.0
+- [x] Preview mode: run script in visible terminal without recording — v1.0
+- [x] Watch mode: re-record on config changes — v1.0
+- [x] Multi-video configs: one config file defines multiple videos — v1.0
+- [x] Shared step includes: reusable step sequences across videos — v1.0
+- [x] Terminal theming with built-in and custom themes — v1.0
+- [x] JSON Schema for config files with IDE autocompletion — v1.0
+- [x] Auto-download ffmpeg to `~/.tuireel` on first use — v1.0
+- [x] Installation via npm (`npx tuireel`) and Bun (`bunx tuireel`) — v1.0
 
 ### Active
 
-- [ ] Declarative JSONC config defining video steps (launch, type, press, wait, pause, scroll, click)
-- [ ] CLI commands: `init`, `record`, `preview`, `composite`, `validate`
-- [ ] Pixel-perfect terminal frame capture via tuistory screenshot rendering
-- [ ] Video encoding via ffmpeg (MP4, WebM, GIF output formats)
-- [ ] Two-pass pipeline: clean capture pass + overlay compositing pass
-- [ ] Optional cursor overlay (animated, human-like movement)
-- [ ] Optional keystroke HUD overlay (shows keys being pressed)
-- [ ] Sound effects synced to actions (click/key sounds)
-- [ ] Preview mode: run script in visible terminal without recording
-- [ ] Watch mode: re-record on config changes
-- [ ] Multi-video configs: one config file defines multiple videos
-- [ ] Shared step includes: reusable step sequences across videos
-- [ ] Terminal theming: built-in themes (Dracula, Catppuccin, One Dark, etc.) + full custom theme support (colors, font, padding, background)
-- [ ] JSON Schema for config files with IDE autocompletion
-- [ ] Auto-download ffmpeg to `~/.tuireel` on first use
-- [ ] Installation via npm (`npx tuireel`) and Bun (`bunx tuireel`)
+- [ ] Reliability hardening for long-running recordings and watch sessions
+- [ ] Performance profiling and optimization for compositing throughput
+- [ ] Release automation for package publishing and tagging workflow
+- [ ] CI pipeline for regression suites across MP4/WebM/GIF outputs
+- [ ] Better diagnostics for ffmpeg and tuistory runtime failures
+- [ ] User-facing presets for polished overlays/audio combinations
 
 ### Out of Scope
 
-- Web browser recording — webreel already does this
+- Browser recording — webreel already does this
 - Live streaming — asciinema's domain
 - asciicast/text-based recording format — video output only
 - GUI terminal emulator integration — uses virtual PTY, not a visible terminal app
 - Windows support — tuistory is Unix-only (PTY), same constraint applies
+- Built-in video editor — produce files; use external tools to edit
 
 ## Context
 
-**Prior art and positioning:**
-- **webreel** (Vercel Labs) — scripted browser recorder. Same concept but for web. Key patterns to replicate: declarative JSON config, two-pass pipeline (clean + composite), ffmpeg encoding, human-like cursor, keystroke HUD, preview mode, watch mode, JSON Schema config.
-- **tuistory** (remorses) — "Playwright for terminals." Handles PTY spawning, key encoding, idle detection, text/screenshot capture. Used as the terminal automation engine (dependency).
-- **asciinema** — terminal recorder producing text-based .cast files. Different output format and use case (lightweight replay vs polished video).
+**Current shipped state (v1.0):**
+- Core stack: TypeScript monorepo (`@tuireel/core` + `tuireel` CLI), Bun runtime compatibility, pnpm workspace tooling.
+- Capture/encode stack: tuistory automation + ffmpeg pipelines + Sharp compositing.
+- Milestone output: 6 phases, 23 plans, 50 tasks completed.
+- Delivery velocity: v1.0 shipped in a single execution window (2026-03-02 to 2026-03-03).
 
-**Architecture approach:**
-- Monorepo: `@tuireel/core` (engine) + `tuireel` (CLI), pnpm workspaces
-- TypeScript, runs on Bun
-- tuistory as dependency for terminal automation (session management, PTY, screenshots)
-- ffmpeg for video encoding (auto-downloaded)
-- Sharp (or similar) for per-frame overlay compositing
-- Two-pass pipeline mirroring webreel: record clean frames with interaction timeline, then composite overlays in a separate pass
+**Positioning:**
+- webreel-equivalent workflow for terminal products.
+- Focus on repeatable scripted output, not live recording.
 
-**Target audience:** TUI library/tool authors who need demo GIFs/videos for READMEs, landing pages, documentation, and social media.
+**Known follow-up themes:**
+- Stabilize edge-case capture/encode behavior.
+- Improve release confidence with broader automated verification.
 
 ## Constraints
 
-- **Runtime**: Bun primary, but npm/npx must also work for installation
-- **Dependency**: tuistory as terminal automation engine — inherits its platform support (Linux, macOS)
-- **Video encoding**: ffmpeg required — auto-downloaded, not bundled
-- **Terminal rendering**: tuistory's ghostty-opentui for pixel-perfect frame rendering
-- **Feature scope**: Parity with webreel's feature set, adapted for terminal context
+- **Runtime**: Bun primary; npm/npx and bunx execution must remain supported.
+- **Dependency**: tuistory remains the terminal automation engine.
+- **Video encoding**: ffmpeg is required and auto-downloaded.
+- **Platform**: macOS + Linux (Windows unsupported due to PTY constraints).
+- **Scope**: keep authoring model simple and declarative (JSONC + schema tooling).
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Use tuistory as dependency | Avoids rebuilding PTY handling, key encoding, idle detection, screenshot rendering. Focus on the recording/compositing pipeline instead. | — Pending |
-| Monorepo (@tuireel/core + tuireel) | Clean separation between engine (library) and CLI. Allows programmatic use of the engine. | — Pending |
-| Two-pass pipeline (clean + composite) | Decouples recording from overlay rendering. Allows re-compositing without re-recording. Proven pattern from webreel. | — Pending |
-| Declarative JSONC config | Accessible to non-developers, IDE-completable via JSON Schema, proven pattern from webreel. | — Pending |
-| Bun as primary runtime | Matches tuistory's runtime, fast startup, modern TS support. | — Pending |
-| Auto-download ffmpeg | Zero-install experience (besides npm/bun). Proven pattern from webreel. | — Pending |
+| Use tuistory as dependency | Avoid rebuilding PTY and screenshot internals. | ✓ Good |
+| Monorepo split (`@tuireel/core` + CLI) | Keep engine and command surface cleanly separated. | ✓ Good |
+| Two-pass pipeline (`record` then `composite`) | Enable overlay re-renders without replaying scripts. | ✓ Good |
+| JSONC + JSON Schema contract | Keep config readable and IDE-toolable. | ✓ Good |
+| ffmpeg auto-download to local cache | Reduce setup friction and keep runtime explicit. | ✓ Good |
+| Regex wait support in config contract | Unblock realistic script synchronization patterns. | ✓ Good |
+| Shared overlay type contracts | Prevent cursor/HUD/compositor type drift. | ✓ Good |
+| Sound is opt-in by config | Preserve silent-default behavior for existing users. | ✓ Good |
+| Split authoring loader vs runtime loader | Support multi-video authoring without runtime ambiguity. | ✓ Good |
+| Runtime `set-env` via shell export + idle wait | Make env mutation observable and deterministic in-session. | ✓ Good |
 
 ---
-*Last updated: 2025-07-26 after initialization*
+*Last updated: 2026-03-03 after v1.0 milestone completion*
