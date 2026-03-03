@@ -1,11 +1,44 @@
+import { mkdir } from "node:fs/promises";
+import { basename, extname, join, resolve } from "node:path";
+
+import sharp from "sharp";
+
 import type { TuireelConfig, TuireelStep } from "./config/schema.js";
+import { compose } from "./compositor.js";
 import { executeSteps } from "./executor/step-executor.js";
 import { ensureFfmpeg } from "./ffmpeg/downloader.js";
 import { FrameCapturer } from "./capture/frame-capturer.js";
 import { FfmpegEncoder } from "./encoding/encoder.js";
+import { computeCursorPath } from "./overlay/bezier.js";
 import { resolveTheme } from "./themes/resolve.js";
+import { InteractionTimeline } from "./timeline/interaction-timeline.js";
 
 const DEFAULT_FPS = 30;
+const RECORDING_ROOT_DIR = ".tuireel";
+const RAW_RECORDING_DIR = "raw";
+const TIMELINE_RECORDING_DIR = "timelines";
+const DEFAULT_FRAME_WIDTH = 1280;
+const DEFAULT_FRAME_HEIGHT = 720;
+const CURSOR_MARGIN = 24;
+
+const CURSOR_ANCHORS = [
+  { x: 0.18, y: 0.2 },
+  { x: 0.5, y: 0.18 },
+  { x: 0.82, y: 0.24 },
+  { x: 0.22, y: 0.56 },
+  { x: 0.5, y: 0.52 },
+  { x: 0.8, y: 0.62 },
+  { x: 0.5, y: 0.82 },
+] as const;
+
+type StepType = TuireelStep["type"];
+const STEP_TYPE_CURSOR_OFFSET: Record<StepType, number> = {
+  launch: 0,
+  type: 1,
+  press: 2,
+  wait: 3,
+  pause: 4,
+};
 
 type LaunchStep = Extract<TuireelStep, { type: "launch" }>;
 
@@ -20,6 +53,116 @@ function getLaunchCommand(config: TuireelConfig): string {
   }
 
   return launchStep.command;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+function recordingNameFromOutput(outputPath: string): string {
+  const baseName = basename(outputPath, extname(outputPath));
+  const normalized = baseName.replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/^-+|-+$/g, "");
+
+  return normalized.length > 0 ? normalized : "recording";
+}
+
+function resolveRecordingArtifacts(recordingName: string): {
+  rawDirectory: string;
+  timelineDirectory: string;
+  rawVideoPath: string;
+  timelinePath: string;
+} {
+  const root = resolve(process.cwd(), RECORDING_ROOT_DIR);
+  const rawDirectory = join(root, RAW_RECORDING_DIR);
+  const timelineDirectory = join(root, TIMELINE_RECORDING_DIR);
+
+  return {
+    rawDirectory,
+    timelineDirectory,
+    rawVideoPath: join(rawDirectory, `${recordingName}.mp4`),
+    timelinePath: join(timelineDirectory, `${recordingName}.timeline.json`),
+  };
+}
+
+function formatKeyLabel(raw: string): string {
+  const trimmed = raw.trim();
+  if (trimmed.length === 0) {
+    return "";
+  }
+
+  if (trimmed.length === 1) {
+    return trimmed.toUpperCase();
+  }
+
+  return `${trimmed[0]?.toUpperCase() ?? ""}${trimmed.slice(1)}`;
+}
+
+function hudLabelsForStep(step: TuireelStep): string[] {
+  if (step.type === "type") {
+    const compact = step.text.replace(/\s+/g, " ").trim();
+    if (compact.length === 0) {
+      return ["Space"];
+    }
+
+    if (compact.length <= 12) {
+      return [compact];
+    }
+
+    return [`${compact.slice(0, 12)}...`];
+  }
+
+  if (step.type === "press") {
+    return step.key
+      .split("+")
+      .map(formatKeyLabel)
+      .filter((label) => label.length > 0)
+      .slice(0, 4);
+  }
+
+  return [];
+}
+
+function resolveCursorTarget(
+  step: TuireelStep,
+  index: number,
+  width: number,
+  height: number,
+): { x: number; y: number } {
+  const cursorOffset = STEP_TYPE_CURSOR_OFFSET[step.type] ?? 0;
+  const anchorIndex = (index + cursorOffset) % CURSOR_ANCHORS.length;
+  const anchor = CURSOR_ANCHORS[anchorIndex] ?? CURSOR_ANCHORS[0];
+
+  const marginX = Math.min(CURSOR_MARGIN, Math.floor(width / 2));
+  const marginY = Math.min(CURSOR_MARGIN, Math.floor(height / 2));
+
+  const x = clamp(
+    Math.round(width * anchor.x),
+    marginX,
+    Math.max(marginX, width - marginX),
+  );
+  const y = clamp(
+    Math.round(height * anchor.y),
+    marginY,
+    Math.max(marginY, height - marginY),
+  );
+
+  return { x, y };
+}
+
+async function resolveFrameDimensions(
+  initialFrame: Buffer,
+  fallbackCols: number,
+  fallbackRows: number,
+): Promise<{ width: number; height: number }> {
+  const metadata = await sharp(initialFrame).metadata();
+
+  const fallbackWidth = Math.max(DEFAULT_FRAME_WIDTH, Math.round(fallbackCols * 10));
+  const fallbackHeight = Math.max(DEFAULT_FRAME_HEIGHT, Math.round(fallbackRows * 21));
+
+  return {
+    width: metadata.width ?? fallbackWidth,
+    height: metadata.height ?? fallbackHeight,
+  };
 }
 
 export async function record(config: TuireelConfig): Promise<void> {
@@ -85,6 +228,12 @@ export async function record(config: TuireelConfig): Promise<void> {
     const launchCommand = getLaunchCommand(config);
     const resolvedTheme = config.theme ? resolveTheme(config.theme) : undefined;
 
+    const recordingName = recordingNameFromOutput(config.output);
+    const artifacts = resolveRecordingArtifacts(recordingName);
+
+    await mkdir(artifacts.rawDirectory, { recursive: true });
+    await mkdir(artifacts.timelineDirectory, { recursive: true });
+
     session = await createSession({
       command: launchCommand,
       cols: config.cols,
@@ -93,11 +242,28 @@ export async function record(config: TuireelConfig): Promise<void> {
     });
     throwIfInterrupted();
 
+    const firstFrame = await session.screenshot();
+    const frameDimensions = await resolveFrameDimensions(firstFrame, config.cols, config.rows);
+
+    const timeline = new InteractionTimeline(frameDimensions.width, frameDimensions.height, {
+      fps,
+      initialCursor: {
+        x: Math.round(frameDimensions.width / 2),
+        y: Math.round(frameDimensions.height / 2),
+        visible: true,
+      },
+    });
+
+    let currentCursor = {
+      x: Math.round(frameDimensions.width / 2),
+      y: Math.round(frameDimensions.height / 2),
+    };
+
     encoder = new FfmpegEncoder({
       ffmpegPath,
       fps,
-      format: config.format,
-      outputPath: config.output,
+      format: "mp4",
+      outputPath: artifacts.rawVideoPath,
     });
     throwIfInterrupted();
 
@@ -105,11 +271,37 @@ export async function record(config: TuireelConfig): Promise<void> {
       session,
       encoder,
       fps,
+      onFrame: () => {
+        timeline.tick();
+      },
     });
 
     const runSteps = (async () => {
       capturer.start();
-      await executeSteps(session, config.steps);
+      await executeSteps(session, config.steps, {
+        onStepStart: (step, index) => {
+          if (step.type !== "launch") {
+            const target = resolveCursorTarget(step, index, frameDimensions.width, frameDimensions.height);
+            timeline.setCursorPath(
+              computeCursorPath(currentCursor.x, currentCursor.y, target.x, target.y, fps),
+            );
+            currentCursor = target;
+          }
+
+          const labels = hudLabelsForStep(step);
+          if (labels.length > 0) {
+            timeline.showHud(labels);
+            timeline.addEvent("key");
+          } else {
+            timeline.hideHud();
+          }
+        },
+        onStepComplete: (step) => {
+          if (step.type === "type" || step.type === "press") {
+            timeline.hideHud();
+          }
+        },
+      });
       await session.waitIdle();
     })();
 
@@ -129,6 +321,12 @@ export async function record(config: TuireelConfig): Promise<void> {
 
     await capturer.stop();
     await encoder.finalize();
+
+    timeline.save(artifacts.timelinePath);
+
+    await compose(artifacts.rawVideoPath, timeline.toJSON(), config.output, {
+      format: config.format,
+    });
   } catch (error) {
     await cleanup();
 

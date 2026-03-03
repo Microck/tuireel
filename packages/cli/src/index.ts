@@ -3,6 +3,7 @@ import { pathToFileURL } from "node:url";
 import { Command } from "commander";
 import { VERSION } from "@tuireel/core";
 
+import { registerCompositeCommand } from "./commands/composite.js";
 import { registerInitCommand } from "./commands/init.js";
 import { registerRecordCommand } from "./commands/record.js";
 import { registerStubCommands } from "./commands/stubs.js";
@@ -29,6 +30,7 @@ export function createProgram(): Command {
   registerInitCommand(program);
   registerValidateCommand(program);
   registerRecordCommand(program);
+  registerCompositeCommand(program);
   registerStubCommands(program);
 
   return program;

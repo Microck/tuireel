@@ -6,11 +6,6 @@ const STUB_COMMANDS = [
     phase: 6,
     description: "Run steps in a visible terminal without recording",
   },
-  {
-    name: "composite",
-    phase: 4,
-    description: "Composite overlays onto an existing recording",
-  },
 ] as const;
 
 export function registerStubCommands(program: Command): void {
