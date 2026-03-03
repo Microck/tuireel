@@ -1,248 +1,188 @@
-# Architecture Research: Tuireel
+# Architecture Research: Tuireel v1.1 — Integration Plan
 
-## System Overview
+**Domain:** Integrating branding, docs, CI, release automation, reliability hardening into existing monorepo
+**Researched:** 2026-07-16
+**Confidence:** HIGH
 
-Tuireel is structured as a monorepo with two packages:
+---
 
-- **@tuireel/core** — The recording engine. Handles config parsing, step execution, frame capture, overlay compositing, and video encoding. Usable as a library.
-- **tuireel** — The CLI wrapper. Provides `init`, `record`, `preview`, `composite`, `validate` commands. Thin layer over @tuireel/core.
+## 1. New Directory Structure
 
-The system follows webreel's proven two-pass architecture adapted for terminal context:
-1. **Pass 1 (Record):** Drive TUI via tuistory → capture clean terminal screenshots → pipe to ffmpeg → intermediate video. Simultaneously build an InteractionTimeline logging cursor position, keystrokes, and sound events per frame.
-2. **Pass 2 (Composite):** Read InteractionTimeline → render per-frame PNG overlays (cursor + HUD) via Sharp → composite onto intermediate video via ffmpeg overlay filter → final output with optional audio.
-
-## Component Map
-
-### @tuireel/core (Engine)
-
-```
-@tuireel/core/
-├── config/
-│   ├── parser.ts          — JSONC parsing + schema validation
-│   ├── schema.ts          — Zod schema defining config structure
-│   ├── resolver.ts        — Resolve includes, multi-video, defaults
-│   └── types.ts           — TypeScript types for config
-├── executor/
-│   ├── step-executor.ts   — Drives tuistory session through steps
-│   ├── steps/             — Individual step implementations
-│   │   ├── type.ts        — Character-by-character typing
-│   │   ├── press.ts       — Key/chord press
-│   │   ├── wait.ts        — Wait for text/pattern
-│   │   ├── pause.ts       — Fixed delay
-│   │   ├── launch.ts      — Start command in PTY
-│   │   ├── scroll.ts      — Mouse scroll
-│   │   ├── click.ts       — Click on text
-│   │   └── screenshot.ts  — Capture PNG at point
-│   └── timing.ts          — Human-like timing (typing speed, pause jitter)
-├── capture/
-│   ├── frame-capturer.ts  — Screenshot loop, frame timing, pipe to ffmpeg
-│   ├── timeline.ts        — InteractionTimeline data structure
-│   └── frame-buffer.ts    — Frame deduplication, timing normalization
-├── overlay/
-│   ├── compositor.ts      — Orchestrates overlay pass
-│   ├── cursor.ts          — Cursor overlay rendering (Sharp)
-│   ├── hud.ts             — Keystroke HUD rendering (Sharp)
-│   ├── window-chrome.ts   — Optional window frame rendering
-│   └── easing.ts          — Bézier + Fitts's law cursor movement
-├── encoding/
-│   ├── encoder.ts         — ffmpeg process management
-│   ├── formats.ts         — MP4/WebM/GIF encoding profiles
-│   ├── audio-mixer.ts     — Sound effect synchronization
-│   └── ffmpeg-download.ts — Auto-download ffmpeg binary
-├── theme/
-│   ├── themes.ts          — Built-in theme definitions
-│   ├── custom-theme.ts    — Custom theme resolution
-│   └── types.ts           — Theme type definitions
-├── recorder.ts            — Main orchestrator: config → pass 1 → pass 2 → output
-├── previewer.ts           — Preview mode: execute steps without capture
-└── index.ts               — Public API exports
-```
-
-### tuireel (CLI)
+After v1.1, the monorepo root looks like:
 
 ```
 tuireel/
-├── commands/
-│   ├── init.ts            — Scaffold config file
-│   ├── record.ts          — Full recording pipeline
-│   ├── preview.ts         — Preview mode
-│   ├── composite.ts       — Re-composite from saved timeline
-│   └── validate.ts        — Validate config
-├── watcher.ts             — Watch mode (chokidar → re-record)
-├── cli.ts                 — Commander.js setup, argument parsing
-└── index.ts               — Entry point (bin)
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml                — Lint, type-check, build, test (on PR + push)
+│   │   ├── release.yml           — Changesets version PR + npm publish
+│   │   └── video-regression.yml  — ffmpeg-dependent video output tests (matrix)
+│   ├── ISSUE_TEMPLATE/           — Bug report + feature request templates
+│   └── PULL_REQUEST_TEMPLATE.md
+├── assets/
+│   └── branding/
+│       ├── logo.svg              — Primary logo (source of truth)
+│       ├── logo-dark.svg         — Dark variant
+│       ├── banner.png            — README/social banner (generated from SVG)
+│       ├── og-image.png          — Social card for docs/GitHub
+│       └── favicon.ico           — For docs site
+├── docs/
+│   ├── docs.json                 — Mintlify config (navigation, theme, branding)
+│   ├── introduction.mdx          — Landing page
+│   ├── quickstart.mdx            — Getting started guide
+│   ├── guides/
+│   │   ├── recording.mdx         — How to record demos
+│   │   ├── overlays.mdx          — Cursor, HUD, sound configuration
+│   │   ├── themes.mdx            — Terminal theming
+│   │   ├── presets.mdx           — Using built-in presets
+│   │   ├── multi-video.mdx       — Multi-video configs + includes
+│   │   └── watch-mode.mdx        — Watch + preview workflow
+│   ├── reference/
+│   │   ├── config.mdx            — Full config schema reference
+│   │   ├── cli.mdx               — CLI commands reference
+│   │   └── api.mdx               — @tuireel/core programmatic API
+│   └── examples/
+│       └── basic.mdx             — Example configs and output
+├── packages/
+│   ├── core/                     — @tuireel/core (unchanged structure)
+│   └── cli/                      — tuireel CLI (unchanged structure)
+├── .changeset/
+│   └── config.json               — Changesets config (linked versioning)
+├── README.md                     — NEW: project README with branding
+├── CONTRIBUTING.md               — NEW: contributor guide
+├── LICENSE                       — NEW: Apache 2.0
+├── CHANGELOG.md                  — NEW: auto-generated by changesets (root)
+├── package.json                  — Updated: add lint/format scripts, changeset scripts
+├── pnpm-workspace.yaml           — Unchanged (docs/ is NOT a workspace member)
+├── turbo.json                    — Updated: add lint task
+└── tsconfig.base.json            — Unchanged
 ```
 
-## Data Flow
+**Key decisions:**
+- `docs/` is NOT a pnpm workspace member (Mintlify is hosted, no build step needed locally)
+- `assets/branding/` lives at root (shared across README, docs, npm)
+- `.changeset/` at root (standard location for changesets)
+- `.github/workflows/` separate files per concern (not one mega-workflow)
 
-### Full Recording Pipeline
+## 2. Integration Points
+
+### Branding → README + Docs + npm
+- Logo SVG at `assets/branding/logo.svg` is source of truth
+- README references `assets/branding/banner.png` via relative path
+- `docs/docs.json` references logo for Mintlify sidebar/navbar
+- npm package metadata (`description`, `keywords`) updated to match branding copy
+- GitHub repo settings (description, topics, social preview) updated
+
+### Mintlify Docs → Existing Config Schema
+- Config reference page (`docs/reference/config.mdx`) generated from or mirrors the zod schema in `packages/core/config/schema.ts`
+- CLI reference page mirrors commander command definitions
+- Guides reference real config examples (can include JSONC snippets)
+- No build step needed — Mintlify fetches from GitHub on deploy
+
+### CI → Existing Build Pipeline
+- `ci.yml` runs: `pnpm install` → `turbo run lint` → `turbo run build` → `turbo run test`
+- New `lint` task added to turbo pipeline (eslint + prettier check)
+- Video regression in separate workflow (needs ffmpeg, heavier runner, longer timeout)
+- Video regression uses `vitest` with custom test fixtures that run `record` → compare output metadata
+
+### Release Automation → Package Publishing
+- Changesets manages versioning for both `@tuireel/core` and `tuireel`
+- Linked versioning: both packages bump together (they share lifecycle)
+- `workspace:*` in `tuireel`'s dependency on `@tuireel/core` gets rewritten to exact version at publish time by changesets
+- GitHub Action: PR merge → changesets creates "Version Packages" PR → merge that → auto-publish to npm
+- `publishConfig.access: "public"` needed in both package.json files
+
+### Presets → Core Config System
+- Presets live in `packages/core/config/presets.ts`
+- Each preset is a partial config object (theme + cursor + HUD + sound settings)
+- Config resolver merges preset defaults under user overrides
+- Schema updated: new optional `preset` field (enum of preset names)
+- CLI `init` command updated to offer preset selection
+
+### Reliability Hardening → Core Pipeline
+- **Signal handling:** Wrap recorder.ts and compositor.ts main loops with AbortController + cleanup
+- **Timeout guards:** Add configurable timeouts to tuistory wait steps and ffmpeg spawns
+- **Error boundaries:** Wrap ffmpeg spawn, Sharp operations, tuistory calls with structured error types
+- **Diagnostics:** Add `--verbose` / `--debug` flag to CLI, pipe through to core logger
+- **Process cleanup:** Ensure child processes (ffmpeg, tuistory/ghostty) are killed on abort/error
+
+### Performance → Compositing Pipeline
+- Profile first: identify bottleneck (likely Sharp per-frame PNG overlay rendering)
+- Potential optimizations: batch Sharp operations, skip unchanged overlay frames, worker threads
+- Add benchmark script (`scripts/benchmark.ts`) that records a standard fixture and reports timing
+
+## 3. Dependency Flow
 
 ```
-tuireel.config.jsonc
-        │
-        ▼
-┌─────────────────┐
-│  Config Parser   │  jsonc-parser → zod validation → resolve includes
-└────────┬────────┘
-         │ ValidatedConfig
-         ▼
-┌─────────────────┐     ┌──────────────┐
-│  Step Executor   │────▶│   tuistory   │  Launch PTY, type, press, wait
-└────────┬────────┘     │   session    │
-         │              └──────┬───────┘
-         │                     │ terminal state changes
-         ▼                     ▼
-┌─────────────────┐     ┌──────────────┐
-│ Frame Capturer   │◀───│  tuistory    │  Screenshot (ghostty-opentui)
-│                  │    │  .screenshot │
-│ - capture loop   │    └──────────────┘
-│ - JPEG convert   │
-│ - pipe to ffmpeg │
-│ - build timeline │
-└────────┬────────┘
-         │
-         ├──▶ InteractionTimeline (JSON, saved to disk)
-         │
-         ▼
-┌─────────────────┐
-│  ffmpeg Pass 1   │  image2pipe stdin → libx264 ultrafast → intermediate.mp4
-└────────┬────────┘
-         │ intermediate.mp4
-         ▼
-┌─────────────────┐
-│  Overlay Pass    │  Timeline → Sharp renders per-frame PNG overlays
-│  (Compositor)    │  (cursor position + HUD state)
-└────────┬────────┘
-         │ overlay stream
-         ▼
-┌─────────────────┐
-│  ffmpeg Pass 2   │  intermediate.mp4 + overlay + audio → final output
-│  (overlay filter)│
-└────────┬────────┘
-         │
-         ▼
-    output.mp4 / output.webm / output.gif
+Branding (logo, colors)
+  ↓
+README + LICENSE + CONTRIBUTING ←── depends on branding assets
+  ↓
+Mintlify Docs ←── depends on branding (theme) + README content
+  ↓
+Presets ←── independent of docs, but docs should reference them
+  ↓
+Reliability Hardening ←── independent, touches core pipeline
+  ↓
+CI Workflows ←── depends on lint setup, test infrastructure
+  ↓
+Release Automation ←── depends on CI passing, license set, publishConfig
+  ↓
+Performance ←── depends on reliability (stable pipeline to profile)
 ```
 
-### Pass 1: Recording (Detail)
+**Build order implications:**
+1. Branding + repo polish (LICENSE, README, CONTRIBUTING) — no code dependencies
+2. Presets + reliability hardening — touches core, independent of each other
+3. Mintlify docs — needs branding, benefits from presets being defined
+4. CI workflows — needs lint setup, tests passing
+5. Release automation — needs CI, license, publishConfig
+6. Performance — needs stable pipeline (after reliability), needs CI (to catch regressions)
 
-1. **Config loaded** → validated → resolved (includes, defaults, theme)
-2. **tuistory session launched** with configured command, cols, rows
-3. **Step executor iterates steps:**
-   - For each step: execute via tuistory API (type, press, wait, etc.)
-   - After each step: wait for idle (tuistory's 60ms debounce)
-   - During execution: frame capture loop runs concurrently
-4. **Frame capture loop:**
-   - Runs at target FPS (default 30)
-   - Calls `tuistory.screenshot()` → JPEG buffer (via Sharp)
-   - Pipes JPEG to ffmpeg stdin (image2pipe)
-   - Records frame metadata in InteractionTimeline:
-     - Frame number, timestamp
-     - Cursor position (from terminal state)
-     - Active keystrokes (what keys are being pressed)
-     - Sound events (click/key triggers)
-5. **On completion:**
-   - Close tuistory session
-   - Close ffmpeg stdin → intermediate video written
-   - Save InteractionTimeline to disk (JSON)
+## 4. Modified Components
 
-### Pass 2: Compositing (Detail)
+### Existing files that need changes:
 
-1. **Load InteractionTimeline** from disk
-2. **For each frame in timeline:**
-   - Compute cursor overlay position (Bézier easing from previous to current)
-   - Compute HUD state (which keys to show, fade animations)
-   - Render transparent PNG overlay via Sharp (cursor + HUD composited)
-3. **Pipe overlays to ffmpeg:**
-   - Input 1: intermediate.mp4
-   - Input 2: overlay PNG stream (image2pipe)
-   - Filter: `overlay=0:0` (composite overlay on top)
-   - Optional: audio tracks mixed via `amix`/`amerge`
-4. **Output:** Final video in requested format(s)
+| File | Change | Reason |
+|------|--------|--------|
+| `packages/core/package.json` | Add `license: "Apache-2.0"`, `publishConfig.access: "public"` | Release readiness |
+| `packages/cli/package.json` | Add `license: "Apache-2.0"`, `publishConfig.access: "public"`, update description | Release readiness |
+| `package.json` (root) | Add `lint`, `format`, `changeset` scripts | CI and release workflow |
+| `turbo.json` | Add `lint` task to pipeline | Turbo-managed linting |
+| `packages/core/config/schema.ts` | Add `preset` field to config schema | Preset support |
+| `packages/core/config/resolver.ts` | Merge preset defaults before user config | Preset support |
+| `packages/cli/src/commands/init.ts` | Offer preset selection during init | Better onboarding |
+| `packages/core/executor/step-executor.ts` | Add AbortController, timeout guards | Reliability |
+| `packages/core/encoder/*.ts` | Add error boundaries, process cleanup | Reliability |
+| `packages/core/compositor/*.ts` | Add error boundaries, abort support | Reliability |
+| `packages/cli/src/index.ts` | Add `--verbose`/`--debug` global flags | Diagnostics |
 
-## Component Boundaries
+### New files:
 
-| Component | Inputs | Outputs | Talks To |
-|-----------|--------|---------|----------|
-| Config Parser | JSONC file | ValidatedConfig | Step Executor, Frame Capturer |
-| Step Executor | ValidatedConfig | Step events | tuistory session, Frame Capturer |
-| tuistory session | Commands (type/press/etc.) | Terminal state, screenshots | Frame Capturer |
-| Frame Capturer | Screenshots, step events | JPEG stream, InteractionTimeline | ffmpeg (Pass 1) |
-| ffmpeg Pass 1 | JPEG stream | Intermediate video | — |
-| Compositor | InteractionTimeline | Overlay PNG stream | ffmpeg (Pass 2) |
-| ffmpeg Pass 2 | Intermediate video, overlays, audio | Final video | — |
-| Previewer | ValidatedConfig | Visual terminal output | tuistory session (no capture) |
-| Watcher | File system events | Re-trigger pipeline | Recorder |
+| File | Purpose |
+|------|---------|
+| `README.md` | Project README |
+| `LICENSE` | Apache 2.0 license text |
+| `CONTRIBUTING.md` | Contributor guide |
+| `.changeset/config.json` | Changesets configuration |
+| `assets/branding/*` | Logo, banner, OG image |
+| `docs/**` | Mintlify documentation site |
+| `.github/workflows/*.yml` | CI + release workflows |
+| `packages/core/config/presets.ts` | Built-in preset definitions |
+| `packages/core/utils/logger.ts` | Structured logging (verbose/debug) |
+| `scripts/benchmark.ts` | Performance benchmark runner |
 
-**Key interface: tuistory session API**
-```typescript
-// What we need from tuistory:
-session.launch(command, { cols, rows })  // Start PTY
-session.type(text)                        // Type characters
-session.press(key)                        // Press key/chord
-session.waitForText(pattern, timeout)     // Wait for output
-session.screenshot({ format, theme })     // Capture frame
-session.text()                            // Get terminal text
-session.close()                           // End session
-```
+## 5. Build Order Recommendation
 
-## Build Order
+For the roadmapper — recommended phase sequence:
 
-**Phase 1: Foundation** (must exist first)
-1. Monorepo setup (pnpm + turborepo + packages)
-2. Config schema + parser (JSONC → validated config)
-3. ffmpeg auto-download
+| Phase | Focus | Dependencies | New Files |
+|-------|-------|--------------|-----------|
+| 7 | Branding + Repo Polish | None | LICENSE, README.md, CONTRIBUTING.md, assets/branding/* |
+| 8 | Presets + Reliability | Branding (for README references) | presets.ts, logger.ts, error types |
+| 9 | Mintlify Docs | Branding + presets (to document) | docs/** |
+| 10 | CI + Linting | Build pipeline working | .github/workflows/*, eslint config |
+| 11 | Release Automation | CI passing, license set | .changeset/*, release workflow |
+| 12 | Performance | Reliability stable, CI catching regressions | benchmark script, optimizations |
 
-**Phase 2: Core Pipeline** (basic recording works)
-4. Step executor (drives tuistory through steps)
-5. Frame capture loop (screenshot → JPEG → ffmpeg pipe)
-6. Basic video encoding (MP4 output)
-
-**Phase 3: Output Quality** (production-quality output)
-7. GIF encoding (palette generation, optimization)
-8. WebM encoding
-9. Terminal theming (built-in + custom)
-10. Frame timing refinement (deduplication, smooth playback)
-
-**Phase 4: Overlay System** (the differentiator)
-11. InteractionTimeline data structure
-12. Cursor overlay renderer (Sharp)
-13. Keystroke HUD renderer (Sharp)
-14. Two-pass compositing pipeline
-15. `composite` CLI command
-
-**Phase 5: Sound** (audio mixing)
-16. Sound effect assets
-17. Sound timeline from InteractionTimeline
-18. ffmpeg audio mixing
-
-**Phase 6: Workflow** (developer experience)
-19. Preview mode
-20. Watch mode
-21. Multi-video configs
-22. Shared step includes
-23. CLI polish (init, validate)
-
-## Key Patterns from webreel
-
-### Replicate Directly
-- **Two-pass pipeline** — Clean capture + overlay compositing. This is the core architectural insight.
-- **InteractionTimeline** — Frame-by-frame log of cursor/key/sound state. Enables re-compositing.
-- **image2pipe to ffmpeg** — JPEG frames piped to stdin, not written to disk. Memory efficient.
-- **Fitts's law cursor easing** — `180 + 16 * sqrt(distance)` ms duration, asymmetric Bézier, micro-jitter.
-- **Frame timing normalization** — Duplicate frames based on elapsed time to maintain correct timing when capture is slow.
-- **JSON Schema for IDE autocompletion** — `$schema` reference in config.
-- **Auto-download dependencies** — ffmpeg downloaded on first use, cached in ~/.tuireel.
-
-### Adapt for Terminal
-- **CDP → tuistory** — webreel uses Chrome DevTools Protocol. We use tuistory's session API.
-- **Browser screenshots → terminal screenshots** — webreel calls CDP `Page.captureScreenshot`. We call `tuistory.screenshot()`.
-- **Mouse cursor → terminal cursor** — Web cursor is a pointer moving between elements. Terminal cursor is a blinking block/beam at a text position. Different rendering needed.
-- **Click targets → text patterns** — webreel clicks by visible text in DOM. We click by text pattern in terminal (tuistory already supports this).
-- **DOM readiness → idle detection** — webreel uses Chrome's frame control flags for deterministic rendering. We use tuistory's 60ms idle debounce. May need tuning for recording use case.
-- **Viewport pixels → terminal cols/rows** — Web viewport is pixel-based. Terminal viewport is character-based. Frame pixel size comes from cols×rows × font metrics.
-
-### Don't Replicate
-- **Chrome binary management** — webreel downloads Chrome for Testing. We don't need a browser.
-- **Dual-layer input dispatch** — webreel's CDP + synthetic JS events hack. tuistory handles input encoding correctly.
-- **begin-frame-control** — Chrome-specific deterministic frame timing flag. Not applicable to terminal screenshots.
+**Rationale:** Branding first because everything else references it. Presets + reliability are core changes needed before docs can accurately document behavior. CI validates everything. Release requires CI. Performance is last because it needs a stable, tested pipeline to measure against.
