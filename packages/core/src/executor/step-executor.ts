@@ -8,6 +8,7 @@ import { typeStep } from "./steps/type.js";
 import { waitStep } from "./steps/wait.js";
 
 export type Step = TuireelStep;
+type WaitPattern = Extract<Step, { type: "wait" }>["pattern"];
 
 export interface ExecuteStepsCallbacks {
   onStepStart?: (step: Step, index: number) => void | Promise<void>;
@@ -24,6 +25,14 @@ function errorMessage(error: unknown): string {
 
 function assertNever(step: never): never {
   throw new Error(`Unsupported step type: ${JSON.stringify(step)}`);
+}
+
+function compileWaitPattern(pattern: WaitPattern): string | RegExp {
+  if (typeof pattern === "string") {
+    return pattern;
+  }
+
+  return new RegExp(pattern.regex, pattern.flags);
 }
 
 export async function executeSteps(
@@ -49,7 +58,7 @@ export async function executeSteps(
           break;
         }
         case "wait": {
-          await waitStep(session, step.pattern, step.timeout);
+          await waitStep(session, compileWaitPattern(step.pattern), step.timeout);
           break;
         }
         case "pause": {
