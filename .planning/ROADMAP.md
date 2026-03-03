@@ -28,7 +28,7 @@ Archive:
 - Decimal phases (e.g. 8.1): Urgent insertions (marked with INSERTED)
 
 - [x] **Phase 7: Branding & Repo Polish** - Visual identity and repository community assets (completed 2026-03-03)
-- [ ] **Phase 8: Presets & Reliability** - User-facing presets and pipeline hardening
+- [x] **Phase 8: Presets & Reliability** - User-facing presets and pipeline hardening (completed 2026-03-03)
 - [ ] **Phase 9: Diagnostics** - Verbose/debug CLI modes and actionable error guidance
 - [ ] **Phase 10: Documentation** - Mintlify docs site with guides and references
 - [ ] **Phase 11: CI & Linting** - GitHub Actions pipeline and code quality enforcement
@@ -68,10 +68,10 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 08-01-PLAN.md — Schema extensions + preset definitions + tested resolution logic (TDD)
-- [ ] 08-02-PLAN.md — Compositor signal handling + ffmpeg error enhancement
-- [ ] 08-03-PLAN.md — Preset wiring into loader + init command preset prompt + cursor/hud passthrough
-- [ ] 08-04-PLAN.md — defaultWaitTimeout wiring + tuistory error context + long recording verification
+- [x] 08-01-PLAN.md — Schema extensions + preset definitions + tested resolution logic (TDD)
+- [x] 08-02-PLAN.md — Compositor signal handling + ffmpeg error enhancement
+- [x] 08-03-PLAN.md — Preset wiring into loader + init command preset prompt + cursor/hud passthrough
+- [x] 08-04-PLAN.md — defaultWaitTimeout wiring + tuistory error context + long recording verification
 
 ### Phase 9: Diagnostics
 **Goal**: Users can diagnose pipeline failures with verbose/debug output and every error message tells them what to do.
@@ -125,7 +125,7 @@ Plans:
 |-------|-----------|----------------|--------|-----------|
 | 1-6 | v1.0 MVP | 23/23 | Complete | 2026-03-03 |
 | 7. Branding & Repo Polish | v1.1 | 5/5 | Complete | 2026-03-03 |
-| 8. Presets & Reliability | v1.1 | 0/4 | Planned | - |
+| 8. Presets & Reliability | v1.1 | 4/4 | Complete | 2026-03-03 |
 | 9. Diagnostics | v1.1 | 0/TBD | Not started | - |
 | 10. Documentation | v1.1 | 0/TBD | Not started | - |
 | 11. CI & Linting | v1.1 | 0/TBD | Not started | - |
