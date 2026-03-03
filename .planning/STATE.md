@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 6 of 6 (Workflow & Polish)
-Plan: 1 of 5
+Plan: 2 of 5
 Status: In progress
-Last activity: 2026-03-03 - Completed 06-01-PLAN.md (advanced step types)
-Progress: █████████████████░░░ 86% (18/21 plans)
+Last activity: 2026-03-03 - Completed 06-02-PLAN.md (preview mode)
+Progress: ██████████████████░░ 90% (19/21 plans)
 
 ## Current Phase
 
-Phase 6: Workflow & Polish — In progress (1/5 plans complete)
+Phase 6: Workflow & Polish — In progress (2/5 plans complete)
 
 ## Project Reference
 
@@ -27,7 +27,7 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 | 3 | Output Quality | ● Complete | 100% |
 | 4 | Overlay System | ● Complete | 100% |
 | 5 | Sound | ● Complete | 100% |
-| 6 | Workflow & Polish | ◐ In progress | 20% |
+| 6 | Workflow & Polish | ◐ In progress | 40% |
 
 ## Requirement Coverage
 
@@ -80,6 +80,8 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 | 05-02 | Resolve `sound.track` relative to config file path in both `record` and `composite` commands. | Prevents cwd-dependent custom track failures and keeps CLI behavior stable across invocation locations. |
 | 06-01 | Extend `TuireelSession` with `scroll`/`clickText` helpers plus mutable `env` state. | Keeps advanced step handlers decoupled from tuistory internals while supporting set-env updates. |
 | 06-01 | Skip global idle waits after `screenshot` and `set-env` dispatch cases. | Avoids unnecessary settle delays for steps that do not mutate terminal render state. |
+| 06-02 | Implement preview runtime by reusing `executeSteps` callbacks for per-step logging, with no capture/encode pipeline. | Keeps preview behavior aligned with record step semantics while remaining fast and output-free. |
+| 06-02 | Register `preview` as a first-class CLI command and stop stub command registration. | Prevents duplicate command wiring and exposes production preview UX via commander. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -96,6 +98,6 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 
 ## Session Continuity
 
-Last session: 2026-03-03T03:54:19Z
-Stopped at: Completed 06-01-PLAN.md (advanced step types)
-Resume file: .planning/phases/06-workflow-polish/06-02-PLAN.md
+Last session: 2026-03-03T04:04:43Z
+Stopped at: Completed 06-02-PLAN.md (preview mode)
+Resume file: .planning/phases/06-workflow-polish/06-03-PLAN.md
