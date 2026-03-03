@@ -5,4 +5,11 @@ export {
   validateConfig,
   type ConfigIssue,
 } from "./parser.js";
-export { configSchema, stepSchema, type TuireelConfig, type TuireelStep } from "./schema.js";
+export {
+  OUTPUT_FORMATS,
+  configSchema,
+  stepSchema,
+  type OutputFormat,
+  type TuireelConfig,
+  type TuireelStep,
+} from "./schema.js";

@@ -93,6 +93,7 @@ export async function record(config: TuireelConfig): Promise<void> {
     encoder = new FfmpegEncoder({
       ffmpegPath,
       fps,
+      format: config.format,
       outputPath: config.output,
     });
     throwIfInterrupted();

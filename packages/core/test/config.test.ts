@@ -165,10 +165,22 @@ describe("config parser", () => {
   it("applies config defaults for output, fps, cols, and rows", () => {
     const config = validateConfig(VALID_MINIMAL_CONFIG);
 
+    expect(config.format).toBe("mp4");
     expect(config.output).toBe("output.mp4");
     expect(config.fps).toBe(30);
     expect(config.cols).toBe(80);
     expect(config.rows).toBe(24);
+  });
+
+  it("accepts explicit output format", () => {
+    const config = validateConfig(`{
+      "format": "webm",
+      "output": "demo.webm",
+      "steps": [{ "type": "launch", "command": "echo ok" }]
+    }`);
+
+    expect(config.format).toBe("webm");
+    expect(config.output).toBe("demo.webm");
   });
 
   it("generates JSON Schema with config fields and step variants", () => {
@@ -184,6 +196,7 @@ describe("config parser", () => {
     expect(jsonSchema.type).toBe("object");
     expect(jsonSchema.properties).toEqual(
       expect.objectContaining({
+        format: expect.any(Object),
         output: expect.any(Object),
         fps: expect.any(Object),
         cols: expect.any(Object),

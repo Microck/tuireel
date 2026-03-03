@@ -96,6 +96,7 @@ describe("cli commands", () => {
       expect(parsedSchema.type).toBe("object");
       expect(parsedSchema.properties).toEqual(
         expect.objectContaining({
+          format: expect.any(Object),
           output: expect.any(Object),
           fps: expect.any(Object),
           cols: expect.any(Object),

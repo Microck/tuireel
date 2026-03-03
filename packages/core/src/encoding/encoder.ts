@@ -1,10 +1,29 @@
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 
+import type { OutputFormat } from "../config/schema.js";
+import { ENCODER_PROFILES } from "./encoder-profiles.js";
+
 export interface FfmpegEncoderOptions {
   ffmpegPath: string;
   fps: number;
   outputPath: string;
+  format: OutputFormat;
   crf?: number | string;
+}
+
+function applyCrfOverride(args: readonly string[], crf?: number | string): string[] {
+  if (crf === undefined) {
+    return [...args];
+  }
+
+  const crfIndex = args.indexOf("-crf");
+  if (crfIndex === -1 || crfIndex + 1 >= args.length) {
+    return [...args];
+  }
+
+  const updatedArgs = [...args];
+  updatedArgs[crfIndex + 1] = String(crf);
+  return updatedArgs;
 }
 
 function formatStderr(stderrChunks: string[]): string {
@@ -32,7 +51,9 @@ export class FfmpegEncoder {
   private finalized = false;
 
   constructor(options: FfmpegEncoderOptions) {
-    const crf = options.crf ?? "23";
+    const profile = ENCODER_PROFILES[options.format];
+    const outputFps = profile.outputFps ?? options.fps;
+    const profileArgs = applyCrfOverride(profile.args, options.crf);
 
     const args = [
       "-y",
@@ -44,20 +65,9 @@ export class FfmpegEncoder {
       "mjpeg",
       "-i",
       "pipe:0",
-      "-c:v",
-      "libx264",
-      "-preset",
-      "fast",
-      "-crf",
-      String(crf),
-      "-pix_fmt",
-      "yuv420p",
-      "-vf",
-      "pad=ceil(iw/2)*2:ceil(ih/2)*2",
-      "-movflags",
-      "+faststart",
+      ...profileArgs,
       "-r",
-      String(options.fps),
+      String(outputFps),
       options.outputPath,
     ];
 

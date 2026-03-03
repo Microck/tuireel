@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 const stepTypes = ["launch", "type", "press", "wait", "pause"] as const;
+const outputFormats = ["mp4", "webm", "gif"] as const;
 
 const launchStepSchema = z.object({
   type: z.literal("launch"),
@@ -56,6 +57,7 @@ export const stepSchema = z.discriminatedUnion("type", [
 
 export const configSchema = z.object({
   $schema: z.string().optional(),
+  format: z.enum(outputFormats).default("mp4"),
   output: z.string().default("output.mp4"),
   fps: z.number().int().positive().default(30),
   cols: z.number().int().positive().default(80),
@@ -65,4 +67,6 @@ export const configSchema = z.object({
 
 export type TuireelConfig = z.infer<typeof configSchema>;
 export type TuireelStep = z.infer<typeof stepSchema>;
+export type OutputFormat = (typeof outputFormats)[number];
 export const STEP_TYPES = stepTypes;
+export const OUTPUT_FORMATS = outputFormats;
