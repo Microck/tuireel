@@ -3,20 +3,20 @@
 ## Current Position
 
 Phase: 4 of 6 (Overlay System)
-Plan: 2 of 4
+Plan: 3 of 4
 Status: In progress
-Last activity: 2026-03-03 - Completed 04-02-PLAN.md (cursor Bezier motion + renderer)
-Progress: ████████████░░░░░░░░░ 57% (12/21 plans)
+Last activity: 2026-03-03 - Completed 04-03-PLAN.md (keystroke HUD renderer)
+Progress: █████████████░░░░░░░░ 62% (13/21 plans)
 
 ## Current Phase
 
-Phase 4: Overlay System — In progress (2/4 plans complete)
+Phase 4: Overlay System — In progress (3/4 plans complete)
 
 ## Project Reference
 
 See: `.planning/PROJECT.md` (updated 2025-07-26)
 Core value: TUI tool authors can produce polished demo videos from a declarative script.
-Current focus: Building overlay system foundations (timeline contract complete, cursor/HUD rendering next).
+Current focus: Integrating overlay renderers into the composite pass (cursor + HUD foundations complete).
 
 ## Phase Progress
 
@@ -25,7 +25,7 @@ Current focus: Building overlay system foundations (timeline contract complete, 
 | 1 | Foundation | ● Complete | 100% |
 | 2 | Core Pipeline | ● Complete | 100% |
 | 3 | Output Quality | ● Complete | 100% |
-| 4 | Overlay System | ◐ In progress | 50% |
+| 4 | Overlay System | ◐ In progress | 75% |
 | 5 | Sound | ○ Pending | 0% |
 | 6 | Workflow & Polish | ○ Pending | 0% |
 
@@ -67,6 +67,8 @@ Current focus: Building overlay system foundations (timeline contract complete, 
 | 04-01 | Extend Vitest include globs to cover `src/**/__tests__/**/*.test.ts`. | Ensures new timeline contract tests run under the standard package test command. |
 | 04-02 | Keep cursor math helpers internal and export only `computeCursorPath` + `moveDuration` from the Bezier module. | Preserves a narrow overlay motion API while retaining testable implementation detail encapsulation. |
 | 04-02 | Render cursor overlays from SVG to PNG via Sharp, with default circle SVG and drop shadow filter. | Produces alpha-ready compositor assets while keeping cursor visuals configurable through SVG overrides. |
+| 04-03 | Define shared overlay contracts in `overlay/types.ts` (`OverlayImage`, `CursorConfig`, `HudConfig`) with exported defaults. | Keeps cursor and HUD renderers aligned on config and compositing payload structure before compositor integration. |
+| 04-03 | Render keystroke HUD badges as SVG and rasterize through Sharp with group-level opacity control. | Produces alpha-safe, frame-positioned overlays that support multi-key labels and fade animation in a single render step. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -83,6 +85,6 @@ Current focus: Building overlay system foundations (timeline contract complete, 
 
 ## Session Continuity
 
-Last session: 2026-03-03T01:51:21Z
-Stopped at: Completed 04-02-PLAN.md (cursor Bezier motion + renderer)
-Resume file: .planning/phases/04-overlay-system/04-03-PLAN.md
+Last session: 2026-03-03T02:00:42Z
+Stopped at: Completed 04-03-PLAN.md (keystroke HUD renderer)
+Resume file: .planning/phases/04-overlay-system/04-04-PLAN.md
