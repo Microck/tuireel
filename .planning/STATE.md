@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 6 of 6 (Workflow & Polish)
-Plan: 3 of 5
+Plan: 4 of 5
 Status: In progress
-Last activity: 2026-03-03 - Completed 06-03-PLAN.md (multi-video config + includes)
-Progress: ███████████████████░ 95% (20/21 plans)
+Last activity: 2026-03-03 - Completed 06-04-PLAN.md (watch mode)
+Progress: ███████████████████░ 95% (21/22 plans)
 
 ## Current Phase
 
-Phase 6: Workflow & Polish — In progress (3/5 plans complete)
+Phase 6: Workflow & Polish — In progress (4/5 plans complete)
 
 ## Project Reference
 
@@ -27,7 +27,7 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 | 3 | Output Quality | ● Complete | 100% |
 | 4 | Overlay System | ● Complete | 100% |
 | 5 | Sound | ● Complete | 100% |
-| 6 | Workflow & Polish | ◐ In progress | 60% |
+| 6 | Workflow & Polish | ◐ In progress | 80% |
 
 ## Requirement Coverage
 
@@ -84,6 +84,8 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 | 06-02 | Register `preview` as a first-class CLI command and stop stub command registration. | Prevents duplicate command wiring and exposes production preview UX via commander. |
 | 06-03 | Separate authoring-time config validation (`configInputSchema`) from runtime single-video config validation (`configSchema`). | Enables multi-video + `$include` authoring without forcing recorder/executor consumers to handle unresolved config shapes. |
 | 06-03 | Normalize `loadConfig()` to always return `TuireelConfig[]` and add `loadSingleConfig()` for single-video commands. | Supports one-invocation multi-video record while keeping preview/composite deterministic and backward compatible. |
+| 06-04 | Implement watch mode as core `watchAndRecord()` plus CLI `record --watch` routing. | Keeps watch/re-record behavior reusable in core while keeping CLI command logic minimal. |
+| 06-04 | Reuse record-cycle config normalization (format override + relative sound track resolution) inside watch mode runs. | Preserves output parity between one-shot `record` and watch-triggered re-record cycles. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -100,6 +102,6 @@ Current focus: Expanding workflow ergonomics with advanced steps, then preview/w
 
 ## Session Continuity
 
-Last session: 2026-03-03T04:24:06Z
-Stopped at: Completed 06-03-PLAN.md (multi-video config + includes)
-Resume file: .planning/phases/06-workflow-polish/06-04-PLAN.md
+Last session: 2026-03-03T04:33:21Z
+Stopped at: Completed 06-04-PLAN.md (watch mode)
+Resume file: .planning/phases/06-workflow-polish/06-05-PLAN.md
