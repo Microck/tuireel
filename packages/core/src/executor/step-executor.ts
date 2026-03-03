@@ -4,6 +4,11 @@ import type { TuireelSession } from "../session.js";
 import { launchStep } from "./steps/launch.js";
 import { pauseStep } from "./steps/pause.js";
 import { pressStep } from "./steps/press.js";
+import { clickStep } from "./steps/click.js";
+import { resizeStep } from "./steps/resize.js";
+import { screenshotStep } from "./steps/screenshot.js";
+import { scrollStep } from "./steps/scroll.js";
+import { setEnvStep } from "./steps/set-env.js";
 import { typeStep } from "./steps/type.js";
 import { waitStep } from "./steps/wait.js";
 
@@ -66,18 +71,23 @@ export async function executeSteps(
           break;
         }
         case "scroll": {
+          await scrollStep(session, step);
           break;
         }
         case "click": {
+          await clickStep(session, step);
           break;
         }
         case "screenshot": {
+          await screenshotStep(session, step);
           break;
         }
         case "resize": {
+          await resizeStep(session, step);
           break;
         }
         case "set-env": {
+          setEnvStep(session, step);
           break;
         }
         default: {
@@ -90,7 +100,9 @@ export async function executeSteps(
       });
     }
 
-    await session.waitIdle();
+    if (step.type !== "screenshot" && step.type !== "set-env") {
+      await session.waitIdle();
+    }
     await callbacks.onStepComplete?.(step, index);
   }
 }

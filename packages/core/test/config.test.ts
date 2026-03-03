@@ -330,6 +330,44 @@ describe("config parser", () => {
           }),
           required: expect.arrayContaining(["type", "duration"]),
         }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            type: expect.objectContaining({ const: "scroll" }),
+            direction: expect.any(Object),
+            amount: expect.any(Object),
+          }),
+          required: expect.arrayContaining(["type", "direction"]),
+        }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            type: expect.objectContaining({ const: "click" }),
+            pattern: expect.any(Object),
+          }),
+          required: expect.arrayContaining(["type", "pattern"]),
+        }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            type: expect.objectContaining({ const: "screenshot" }),
+            output: expect.any(Object),
+          }),
+          required: expect.arrayContaining(["type", "output"]),
+        }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            type: expect.objectContaining({ const: "resize" }),
+            cols: expect.any(Object),
+            rows: expect.any(Object),
+          }),
+          required: expect.arrayContaining(["type", "cols", "rows"]),
+        }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            type: expect.objectContaining({ const: "set-env" }),
+            key: expect.any(Object),
+            value: expect.any(Object),
+          }),
+          required: expect.arrayContaining(["type", "key", "value"]),
+        }),
       ]),
     );
 
