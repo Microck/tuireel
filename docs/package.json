@@ -1,0 +1,10 @@
+{
+  "name": "tuireel-docs",
+  "private": true,
+  "scripts": {
+    "dev": "mintlify dev"
+  },
+  "devDependencies": {
+    "mintlify": "latest"
+  }
+}

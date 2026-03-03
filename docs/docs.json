@@ -1,0 +1,57 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Tuireel",
+  "colors": {
+    "primary": "#06B6D4",
+    "light": "#06B6D4",
+    "dark": "#0F172A"
+  },
+  "favicon": "/images/favicon.svg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["introduction", "quickstart"]
+          },
+          {
+            "group": "Configuration",
+            "pages": ["config-reference", "steps-reference", "cli-reference"]
+          },
+          {
+            "group": "Features",
+            "pages": ["themes", "presets", "sound", "multi-video"]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "GitHub",
+          "href": "https://github.com/nicholasgriffintn/tuireel",
+          "icon": "github"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/images/logo-light.svg",
+    "dark": "/images/logo-dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/nicholasgriffintn/tuireel"
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/nicholasgriffintn/tuireel"
+    }
+  }
+}
