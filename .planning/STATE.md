@@ -1,52 +1,61 @@
 # Project State: Tuireel
 
-## Current Position
-
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-07-16 — Milestone v1.1 started
-Progress: ░░░░░░░░░░░░░░░░░░░░ 0%
-
-## Current Phase
-
-Milestone v1.1: Branding, Docs & Hardening — defining requirements and roadmap.
-
 ## Project Reference
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
-Core value: TUI tool authors can produce polished demo videos from a declarative script.
-Current focus: Branding, documentation, reliability hardening, CI, and release automation.
+**Core value:** TUI tool authors can produce polished demo videos from a declarative script.
+**Current focus:** Phase 7 — Branding & Repo Polish (v1.1)
+
+## Current Position
+
+Phase: 7 of 12 (Branding & Repo Polish)
+Plan: 0 of TBD in current phase
+Status: Ready to plan
+Last activity: 2026-07-16 — Roadmap created for v1.1 milestone
+
+Progress: [██████████░░░░░░░░░░] 50% (v1.0 complete, v1.1 starting)
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | — | — | Defining | — |
+| v1.1 Branding, Docs & Hardening | 7-12 | 0/TBD | In progress | — |
 
-## Blockers/Concerns Carried Forward
+## Performance Metrics
 
-- None blocking milestone planning.
+**Velocity (v1.0):**
+- Total plans completed: 23
+- 6 phases, 50 tasks
+- Shipped in <1 day
 
-## Key Risks
-
-| Risk | Mitigation | Status |
-|------|------------|--------|
-| tuistory API instability | Pin dependency and expand integration tests | Open |
-| Frame timing inconsistency | Add long-run regression captures | Open |
-| ffmpeg pipeline fragility | Add fixture matrix and failure diagnostics | Open |
-| GIF quality/size variance | Add profile tuning and baseline snapshots | Open |
+**v1.1:** No plans executed yet.
 
 ## Accumulated Context
 
-- v1.0 shipped full pipeline: JSONC → PTY → frames → video (MP4/WebM/GIF) with overlays, sound, and workflow tooling.
-- Two-pass record/composite architecture is validated and stable.
-- Monorepo structure (`@tuireel/core` + `tuireel` CLI) works well.
-- No README, no docs site, no license, no CI, no published release yet.
+### Decisions
+
+Decisions logged in PROJECT.md Key Decisions table.
+Recent pending decisions:
+- Apache 2.0 license (confirmed in requirements)
+- Mintlify for docs (confirmed in requirements)
+- GitHub Actions for CI (confirmed in requirements)
+
+### Blockers/Concerns
+
+- None blocking phase 7.
+
+### Key Risks
+
+| Risk | Mitigation |
+|------|------------|
+| `workspace:*` not rewritten on publish | Verify changesets dry-run before first release |
+| Sharp native binary in CI | Use `--platform=linux` in pnpm install |
+| ffmpeg not in CI | Use `setup-ffmpeg@v3` action |
+| Non-deterministic video output | Compare metadata, not pixels |
 
 ## Session Continuity
 
 Last session: 2026-07-16
-Stopped at: Milestone v1.1 initialization — gathering requirements
-Resume command: `/gsd-new-milestone` (in progress)
+Stopped at: Roadmap created for v1.1 — ready to plan Phase 7
+Resume command: `/gsd-plan-phase 7`

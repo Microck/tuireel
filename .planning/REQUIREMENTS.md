@@ -117,58 +117,58 @@ Deferred to v1.1.x patches or v1.2+.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BRND-01 | — | Pending |
-| BRND-02 | — | Pending |
-| BRND-03 | — | Pending |
-| BRND-04 | — | Pending |
-| BRND-05 | — | Pending |
-| REPO-01 | — | Pending |
-| REPO-02 | — | Pending |
-| REPO-03 | — | Pending |
-| REPO-04 | — | Pending |
-| REPO-05 | — | Pending |
-| DOCS-01 | — | Pending |
-| DOCS-02 | — | Pending |
-| DOCS-03 | — | Pending |
-| DOCS-04 | — | Pending |
-| DOCS-05 | — | Pending |
-| DOCS-06 | — | Pending |
-| DOCS-07 | — | Pending |
-| DOCS-08 | — | Pending |
-| DOCS-09 | — | Pending |
-| DOCS-10 | — | Pending |
-| PRST-01 | — | Pending |
-| PRST-02 | — | Pending |
-| PRST-03 | — | Pending |
-| PRST-04 | — | Pending |
-| RELY-01 | — | Pending |
-| RELY-02 | — | Pending |
-| RELY-03 | — | Pending |
-| RELY-04 | — | Pending |
-| RELY-05 | — | Pending |
-| RELY-06 | — | Pending |
-| DIAG-01 | — | Pending |
-| DIAG-02 | — | Pending |
-| DIAG-03 | — | Pending |
-| CI-01 | — | Pending |
-| CI-02 | — | Pending |
-| CI-03 | — | Pending |
-| CI-04 | — | Pending |
-| CI-05 | — | Pending |
-| REL-01 | — | Pending |
-| REL-02 | — | Pending |
-| REL-03 | — | Pending |
-| REL-04 | — | Pending |
-| REL-05 | — | Pending |
-| PERF-01 | — | Pending |
-| PERF-02 | — | Pending |
-| PERF-03 | — | Pending |
+| BRND-01 | Phase 7 | Pending |
+| BRND-02 | Phase 7 | Pending |
+| BRND-03 | Phase 7 | Pending |
+| BRND-04 | Phase 7 | Pending |
+| BRND-05 | Phase 7 | Pending |
+| REPO-01 | Phase 7 | Pending |
+| REPO-02 | Phase 7 | Pending |
+| REPO-03 | Phase 7 | Pending |
+| REPO-04 | Phase 7 | Pending |
+| REPO-05 | Phase 7 | Pending |
+| DOCS-01 | Phase 10 | Pending |
+| DOCS-02 | Phase 10 | Pending |
+| DOCS-03 | Phase 10 | Pending |
+| DOCS-04 | Phase 10 | Pending |
+| DOCS-05 | Phase 10 | Pending |
+| DOCS-06 | Phase 10 | Pending |
+| DOCS-07 | Phase 10 | Pending |
+| DOCS-08 | Phase 10 | Pending |
+| DOCS-09 | Phase 10 | Pending |
+| DOCS-10 | Phase 10 | Pending |
+| PRST-01 | Phase 8 | Pending |
+| PRST-02 | Phase 8 | Pending |
+| PRST-03 | Phase 8 | Pending |
+| PRST-04 | Phase 8 | Pending |
+| RELY-01 | Phase 8 | Pending |
+| RELY-02 | Phase 8 | Pending |
+| RELY-03 | Phase 8 | Pending |
+| RELY-04 | Phase 8 | Pending |
+| RELY-05 | Phase 8 | Pending |
+| RELY-06 | Phase 8 | Pending |
+| DIAG-01 | Phase 9 | Pending |
+| DIAG-02 | Phase 9 | Pending |
+| DIAG-03 | Phase 9 | Pending |
+| CI-01 | Phase 11 | Pending |
+| CI-02 | Phase 11 | Pending |
+| CI-03 | Phase 11 | Pending |
+| CI-04 | Phase 11 | Pending |
+| CI-05 | Phase 11 | Pending |
+| REL-01 | Phase 12 | Pending |
+| REL-02 | Phase 12 | Pending |
+| REL-03 | Phase 12 | Pending |
+| REL-04 | Phase 12 | Pending |
+| REL-05 | Phase 12 | Pending |
+| PERF-01 | Phase 12 | Pending |
+| PERF-02 | Phase 12 | Pending |
+| PERF-03 | Phase 12 | Pending |
 
 **Coverage:**
-- v1.1 requirements: 43 total
-- Mapped to phases: 0
-- Unmapped: 43
+- v1.1 requirements: 46 total
+- Mapped to phases: 46
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-07-16*
-*Last updated: 2026-07-16 after initial definition*
+*Last updated: 2026-07-16 after roadmap creation*
