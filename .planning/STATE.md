@@ -9,18 +9,18 @@ See: `.planning/PROJECT.md` (updated 2026-07-16)
 ## Current Position
 
 Phase: 7 of 12 (Branding & Repo Polish)
-Plan: 3 of 5 in current phase
+Plan: 4 of 5 in current phase
 Status: In progress
-Last activity: 2026-03-03 — Completed 07-03-PLAN.md (GitHub Issue & PR Templates)
+Last activity: 2026-03-03 — Completed 07-04-PLAN.md (Banner & OG Image)
 
-Progress: [██████████████████░░] 93% (v1.0 complete, v1.1: 3/5 plans done)
+Progress: [███████████████████░] 96% (v1.0 complete, v1.1: 4/5 plans done)
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12 | 3/5+ | In progress | — |
+| v1.1 Branding, Docs & Hardening | 7-12 | 4/5+ | In progress | — |
 
 ## Performance Metrics
 
@@ -29,7 +29,7 @@ Progress: [██████████████████░░] 93% (v1
 - 6 phases, 50 tasks
 - Shipped in <1 day
 
-**v1.1:** 3 plans completed (07-01 Logo/Favicon 1 min, 07-02 License/Contributing 1 min, 07-03 Templates 1 min).
+**v1.1:** 4 plans completed (07-01 Logo/Favicon 1 min, 07-02 License/Contributing 1 min, 07-03 Templates 1 min, 07-04 Banner/OG 3 min).
 
 ## Accumulated Context
 
@@ -46,6 +46,8 @@ Recent decisions:
 - LICENSE uses official apache.org text verbatim for GitHub detection
 - YAML form templates (not markdown) for structured issue validation
 - Minimal PR template (3 sections, no checklists)
+- favicon.svg used as composite source for banner/OG (icon-only, better centering)
+- scripts/ directory established for reproducible asset generation
 
 ### Blockers/Concerns
 
@@ -63,5 +65,5 @@ Recent decisions:
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 07-03-PLAN.md (GitHub Issue & PR Templates)
-Resume: Next plan is 07-04 (wave 2)
+Stopped at: Completed 07-04-PLAN.md (Banner & OG Image)
+Resume: Next plan is 07-05 (README)

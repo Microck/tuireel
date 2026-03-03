@@ -52,7 +52,7 @@ Plans:
 - [x] 07-01-PLAN.md — Logo SVG + favicon (icon, dark/light variants, color palette)
 - [x] 07-02-PLAN.md — LICENSE (Apache 2.0) + package.json updates + CONTRIBUTING.md
 - [x] 07-03-PLAN.md — GitHub issue templates (YAML) + PR template
-- [ ] 07-04-PLAN.md — Banner PNG (1280x640) + OG image PNG (1200x630) via Sharp
+- [x] 07-04-PLAN.md — Banner PNG (1280x640) + OG image PNG (1200x630) via Sharp
 - [ ] 07-05-PLAN.md — README.md (branded, with logo/banner/badges) + human verification
 
 ### Phase 8: Presets & Reliability
