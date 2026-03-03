@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 2 of 6 (Core Pipeline)
-Plan: 2 of 2
+Plan: 3 of 3
 Status: Phase complete
-Last activity: 2026-03-03 - Completed 02-02-PLAN.md (frame capture + ffmpeg + record CLI)
-Progress: ███████░░░░░░░░░░░░░ 35% (7/20 plans)
+Last activity: 2026-03-03 - Completed 02-03-PLAN.md (wait regex config + executor parity)
+Progress: ████████░░░░░░░░░░░░░ 38% (8/21 plans)
 
 ## Current Phase
 
-Phase 2: Core Pipeline — Complete (2/2 plans complete)
+Phase 2: Core Pipeline — Complete (3/3 plans complete)
 
 ## Project Reference
 
@@ -55,6 +55,8 @@ Current focus: Completing Phase 2 recording pipeline foundation and MP4 loop.
 | 02-02 | Resolve launch command from the first `launch` step while keeping top-level `cols`/`rows` config fields. | Maintains compatibility with established config schema and 02-01 launch semantics. |
 | 02-02 | Render screenshots at fixed row-derived height (`rows * fontSize * lineHeight`). | Prevents renderer content-trim behavior from collapsing viewport height in MP4 output. |
 | 02-02 | Register recorder signal handlers before setup and terminate ffmpeg immediately on interrupt. | Reduces orphan-process risk during SIGINT/SIGTERM shutdown paths. |
+| 02-03 | Represent regex waits as `{ regex, flags? }` objects while preserving string `pattern` support. | Keeps existing configs backward-compatible while adding explicit regex configuration semantics. |
+| 02-03 | Compile wait regex objects in dispatcher before `waitStep()` calls. | Preserves `waitStep(session, string | RegExp, timeout)` API boundaries and keeps conversion near step dispatch context. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -71,6 +73,6 @@ Current focus: Completing Phase 2 recording pipeline foundation and MP4 loop.
 
 ## Session Continuity
 
-Last session: 2026-03-03T00:18:18Z
-Stopped at: Completed 02-02-PLAN.md (frame capture + ffmpeg + record CLI)
+Last session: 2026-03-03T00:39:00Z
+Stopped at: Completed 02-03-PLAN.md (wait regex config + executor parity)
 Resume file: .planning/phases/03-output-quality/03-01-PLAN.md
