@@ -4,23 +4,23 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 7 — Branding & Repo Polish (v1.1)
+**Current focus:** Phase 8 — Presets & Reliability (v1.1)
 
 ## Current Position
 
-Phase: 7 of 12 (Branding & Repo Polish)
-Plan: 4 of 5 in current phase
-Status: In progress
-Last activity: 2026-03-03 — Completed 07-04-PLAN.md (Banner & OG Image)
+Phase: 7 of 12 (Branding & Repo Polish) — COMPLETE
+Plan: 5 of 5 in current phase
+Status: Phase complete
+Last activity: 2026-03-03 — Completed 07-05-PLAN.md (Branded README)
 
-Progress: [███████████████████░] 96% (v1.0 complete, v1.1: 4/5 plans done)
+Progress: [████████████████████] 100% (v1.0 complete, v1.1 Phase 7: 5/5 plans done)
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12 | 4/5+ | In progress | — |
+| v1.1 Branding, Docs & Hardening | 7-12 | 5/5+ | In progress (Phase 7 complete) | — |
 
 ## Performance Metrics
 
@@ -29,7 +29,7 @@ Progress: [███████████████████░] 96% (v1
 - 6 phases, 50 tasks
 - Shipped in <1 day
 
-**v1.1:** 4 plans completed (07-01 Logo/Favicon 1 min, 07-02 License/Contributing 1 min, 07-03 Templates 1 min, 07-04 Banner/OG 3 min).
+**v1.1:** 5 plans completed (07-01 Logo/Favicon 1 min, 07-02 License/Contributing 1 min, 07-03 Templates 1 min, 07-04 Banner/OG 3 min, 07-05 README 1 min). Phase 7 complete.
 
 ## Accumulated Context
 
@@ -49,9 +49,13 @@ Recent decisions:
 - favicon.svg used as composite source for banner/OG (icon-only, better centering)
 - scripts/ directory established for reproducible asset generation
 
+- 3 badges only for README (npm, CI, license) — no badge overload
+- Relative image paths in README for portability
+- README section order established: logo → banner → tagline → badges → install → quickstart → features → docs → contributing → license
+
 ### Blockers/Concerns
 
-- None blocking phase 7.
+- None. Phase 7 complete, ready for Phase 8.
 
 ### Key Risks
 
@@ -65,5 +69,5 @@ Recent decisions:
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed 07-04-PLAN.md (Banner & OG Image)
-Resume: Next plan is 07-05 (README)
+Stopped at: Completed 07-05-PLAN.md (Branded README) — Phase 7 complete
+Resume: Next is Phase 8 (Presets & Reliability) — needs planning
