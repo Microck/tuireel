@@ -8,19 +8,19 @@ See: `.planning/PROJECT.md` (updated 2026-07-16)
 
 ## Current Position
 
-Phase: 9 of 12 (Diagnostics)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-03-03 -- Completed 09-01-PLAN.md (Logger Infrastructure + CLI flags)
+Phase: 10 of 12 (Documentation)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-03-03 -- Completed 10-01-PLAN.md (Mintlify docs site init)
 
-Progress: [████████████████████████████████] Phase 9: 2/2 summaries
+Progress: [████████████████████████████░░░░] Phase 10: 1/3 summaries
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12 | 11/14+ | In progress (Phase 9 complete) | -- |
+| v1.1 Branding, Docs & Hardening | 7-12 | 12/14+ | In progress (Phase 10 in progress) | -- |
 
 ## Performance Metrics
 
@@ -29,7 +29,7 @@ Progress: [███████████████████████
 - 6 phases, 50 tasks
 - Shipped in <1 day
 
-**v1.1:** 11 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9 complete: 09-01 (8 min), 09-02 (8 min).
+**v1.1:** 12 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9 complete: 09-01 (8 min), 09-02 (8 min). Phase 10: 10-01 (2 min).
 
 ## Accumulated Context
 
@@ -76,9 +76,15 @@ Phase 9 decisions:
 - Preserve { cause: error } chaining on all re-thrown errors
 - ENOENT-specific handling added to config loader for file-not-found guidance
 
+Phase 10 decisions:
+- Mintlify v4 docs.json format (not older mint.json)
+- Branding assets copied into docs/images/ for Mintlify local path requirement
+- Single Documentation tab with 3 groups: Get Started, Configuration, Features
+- docs/ added to pnpm-workspace.yaml as workspace member
+
 ### Blockers/Concerns
 
-- None. Phase 9 complete.
+- None.
 
 ### Key Risks
 
@@ -92,5 +98,5 @@ Phase 9 decisions:
 ## Session Continuity
 
 Last session: 2026-03-03
-Stopped at: Completed Phase 9 -- all diagnostics requirements met (DIAG-01, DIAG-02, DIAG-03)
-Resume: Phase 10 -- Documentation (Mintlify docs site)
+Stopped at: Completed 10-01-PLAN.md (Mintlify docs site init)
+Resume: Phase 10, plan 02 -- reference documentation pages
