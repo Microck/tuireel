@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { PRESET_NAMES } from "../presets/built-in.js";
 import { themeSchema } from "../themes/schema.js";
 
 const stepTypes = [
@@ -38,12 +39,28 @@ const soundSchema = z
   })
   .optional();
 
+const cursorSchema = z
+  .object({
+    visible: z.boolean().optional(),
+  })
+  .optional();
+
+const hudSchema = z
+  .object({
+    visible: z.boolean().optional(),
+  })
+  .optional();
+
 const baseConfigFields = {
   $schema: z.string().optional(),
+  preset: z.enum(PRESET_NAMES).optional(),
   format: z.enum(outputFormats).default("mp4"),
   output: z.string().default("output.mp4"),
   theme: z.union([z.string(), themeSchema]).optional(),
   sound: soundSchema,
+  cursor: cursorSchema,
+  hud: hudSchema,
+  defaultWaitTimeout: z.number().positive().optional(),
   fps: z.number().int().positive().default(30),
   cols: z.number().int().positive().default(80),
   rows: z.number().int().positive().default(24),
@@ -160,9 +177,13 @@ export const videoDefinitionSchema = z.object({
   name: z.string().min(1),
   output: z.string().min(1),
   steps: stepArraySchema,
+  preset: z.enum(PRESET_NAMES).optional(),
   format: z.enum(outputFormats).optional(),
   theme: z.union([z.string(), themeSchema]).optional(),
   sound: soundSchema,
+  cursor: cursorSchema,
+  hud: hudSchema,
+  defaultWaitTimeout: z.number().positive().optional(),
   fps: z.number().int().positive().optional(),
   cols: z.number().int().positive().optional(),
   rows: z.number().int().positive().optional(),
