@@ -3,14 +3,14 @@
 ## Current Position
 
 Phase: 3 of 6 (Output Quality)
-Plan: 1 of 2
-Status: In progress
-Last activity: 2026-03-03 - Completed 03-01-PLAN.md (webm vp9 + gif two-pass encoding)
-Progress: █████████░░░░░░░░░░░░ 43% (9/21 plans)
+Plan: 2 of 2
+Status: Phase complete
+Last activity: 2026-03-03 - Completed 03-02-PLAN.md (terminal theming: built-in + custom palettes)
+Progress: ██████████░░░░░░░░░░░ 48% (10/21 plans)
 
 ## Current Phase
 
-Phase 3: Output Quality — In progress (1/2 plans complete)
+Phase 3: Output Quality — Complete (2/2 plans complete)
 
 ## Project Reference
 
@@ -24,7 +24,7 @@ Current focus: Completing output quality work (format parity delivered, terminal
 |-------|------|--------|----------|
 | 1 | Foundation | ● Complete | 100% |
 | 2 | Core Pipeline | ● Complete | 100% |
-| 3 | Output Quality | ◐ In progress | 50% |
+| 3 | Output Quality | ● Complete | 100% |
 | 4 | Overlay System | ○ Pending | 0% |
 | 5 | Sound | ○ Pending | 0% |
 | 6 | Workflow & Polish | ○ Pending | 0% |
@@ -60,6 +60,8 @@ Current focus: Completing output quality work (format parity delivered, terminal
 | 03-01 | Add `format` to config schema and support CLI `record --format` override. | Makes output format selection explicit and keeps MP4/WebM/GIF routing centralized. |
 | 03-01 | Route GIF output through temporary MP4 capture followed by palettegen/paletteuse conversion. | Preserves stream capture architecture while enabling true two-pass GIF optimization. |
 | 03-01 | Quantize GIF FPS to centisecond-safe `100/N` ratios. | Avoids GIF timing rounding that can overshoot the 15fps cap. |
+| 03-02 | Apply terminal theme colors through OSC palette/default color commands before capture starts. | Ensures ANSI color indexes and default fg/bg render with selected theme without changing ghostty internals. |
+| 03-02 | Treat `theme.fontFamily` as renderer passthrough metadata and use it as `fontPath` when path-like. | Preserves config flexibility while aligning with ghostty-opentui's supported font configuration surface. |
 
 ## Blockers/Concerns Carried Forward
 
@@ -76,6 +78,6 @@ Current focus: Completing output quality work (format parity delivered, terminal
 
 ## Session Continuity
 
-Last session: 2026-03-03T01:05:15Z
-Stopped at: Completed 03-01-PLAN.md (webm vp9 + gif two-pass encoding)
-Resume file: .planning/phases/03-output-quality/03-02-PLAN.md
+Last session: 2026-03-03T01:18:24Z
+Stopped at: Completed 03-02-PLAN.md (terminal theming)
+Resume file: .planning/phases/04-overlay-system/04-01-PLAN.md
