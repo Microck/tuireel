@@ -15,6 +15,7 @@ const stepTypes = [
   "set-env",
 ] as const;
 const outputFormats = ["mp4", "webm", "gif"] as const;
+const ENV_VAR_KEY_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
 const soundEffectSchema = z.union([
   z.literal(1),
   z.literal(2),
@@ -116,7 +117,10 @@ const resizeStepSchema = z.object({
 
 const setEnvStepSchema = z.object({
   type: z.literal("set-env"),
-  key: z.string().min(1),
+  key: z.string().regex(ENV_VAR_KEY_PATTERN, {
+    message:
+      "set-env key must start with a letter or underscore and contain only letters, numbers, or underscores.",
+  }),
   value: z.string(),
 });
 
