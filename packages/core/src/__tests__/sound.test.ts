@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { configSchema } from "../config/schema.js";
 import {
   buildAudioMixArgs,
+  buildFullAudioArgs,
   ensureSoundAssets,
   extractSoundEvents,
   resolveSfxPath,
@@ -126,6 +127,54 @@ describe("buildAudioMixArgs", () => {
   });
 });
 
+describe("buildFullAudioArgs", () => {
+  it("returns null when no effects or track are configured", () => {
+    const result = buildFullAudioArgs("input.mp4", [], 6);
+
+    expect(result).toBeNull();
+  });
+
+  it("builds track-only audio args with trim, pad, fade, and volume", () => {
+    const result = buildFullAudioArgs("input.mp4", [], 8, {
+      track: "/music/theme.mp3",
+    });
+
+    expect(result).not.toBeNull();
+    expect(result?.inputArgs).toContain("/music/theme.mp3");
+    expect(result?.inputArgs).toContain("-t");
+    expect(result?.inputArgs).toContain("8.000");
+    expect(result?.filterComplex).toContain("atrim=0:8.000");
+    expect(result?.filterComplex).toContain("apad=pad_dur=8.000");
+    expect(result?.filterComplex).toContain("afade=t=out:st=6.000:d=2.000[aout]");
+    expect(result?.filterComplex).toContain("volume=0.300");
+    expect(result?.audioLabel).toBe("aout");
+  });
+
+  it("builds combined effects and track args with independent volumes", () => {
+    const result = buildFullAudioArgs(
+      "input.mp4",
+      [
+        { type: "click", timeMs: 500 },
+        { type: "key", timeMs: 1000 },
+      ],
+      10,
+      {
+        effects: { click: 2 },
+        track: "/music/theme.mp3",
+        effectsVolume: 0.65,
+        trackVolume: 0.2,
+      },
+    );
+
+    expect(result).not.toBeNull();
+    expect(result?.inputArgs).toContain("/music/theme.mp3");
+    expect(result?.filterComplex).toContain("[aout]volume=0.650[effects]");
+    expect(result?.filterComplex).toContain("volume=0.200");
+    expect(result?.filterComplex).toContain("amix=inputs=2");
+    expect(result?.audioLabel).toBe("aoutfull");
+  });
+});
+
 describe("extractSoundEvents", () => {
   it("maps timeline events into ffmpeg-ready sound events", () => {
     const soundEvents = extractSoundEvents({
@@ -170,6 +219,36 @@ describe("sound config schema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error.issues.some((issue) => issue.path.join(".") === "sound.effects.click")).toBe(
+        true,
+      );
+    }
+  });
+
+  it("accepts custom track and volume options", () => {
+    const result = configSchema.safeParse({
+      steps: [{ type: "launch", command: "echo sound" }],
+      sound: {
+        track: "./audio/theme.mp3",
+        trackVolume: 0.4,
+        effectsVolume: 0.7,
+      },
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects invalid track volume ranges", () => {
+    const result = configSchema.safeParse({
+      steps: [{ type: "launch", command: "echo sound" }],
+      sound: {
+        track: "./audio/theme.mp3",
+        trackVolume: 1.4,
+      },
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.some((issue) => issue.path.join(".") === "sound.trackVolume")).toBe(
         true,
       );
     }

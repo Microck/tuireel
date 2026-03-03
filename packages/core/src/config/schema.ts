@@ -77,6 +77,9 @@ export const configSchema = z.object({
           key: soundEffectSchema.optional(),
         })
         .optional(),
+      track: z.string().optional(),
+      trackVolume: z.number().min(0).max(1).default(0.3).optional(),
+      effectsVolume: z.number().min(0).max(1).default(0.5).optional(),
     })
     .optional(),
   fps: z.number().int().positive().default(30),

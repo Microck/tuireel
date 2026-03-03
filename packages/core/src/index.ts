@@ -6,11 +6,14 @@ export { compose } from "./compositor.js";
 export { record } from "./recorder.js";
 export {
   buildAudioMixArgs,
+  buildFullAudioArgs,
   ensureSoundAssets,
   extractSoundEvents,
   finalizeMp4WithSound,
   finalizeWebmWithSound,
+  mixAudioTracks,
   resolveSfxPath,
+  type SoundConfig,
   type SfxConfig,
 } from "./sound.js";
 export { InteractionTimeline } from "./timeline/interaction-timeline.js";

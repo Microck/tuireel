@@ -5,6 +5,9 @@ import { resolve } from "node:path";
 import type { TimelineData } from "./timeline/types.js";
 
 const SAMPLE_RATE = 44100;
+const DEFAULT_TRACK_VOLUME = 0.3;
+const DEFAULT_EFFECTS_VOLUME = 0.5;
+const TRACK_FADE_DURATION_SEC = 2;
 
 function resolveAssetsDirectory(): string {
   const candidates = [
@@ -35,6 +38,35 @@ type SoundEvent = {
 export interface SfxConfig {
   click?: 1 | 2 | 3 | 4 | string;
   key?: 1 | 2 | 3 | 4 | string;
+}
+
+export interface SoundConfig {
+  effects?: SfxConfig;
+  track?: string;
+  trackVolume?: number;
+  effectsVolume?: number;
+}
+
+interface FullAudioArgs {
+  inputArgs: string[];
+  filterComplex: string;
+  audioLabel: string;
+}
+
+function clampVolume(value: number | undefined, fallback: number): number {
+  if (!Number.isFinite(value)) {
+    return fallback;
+  }
+
+  return Math.min(1, Math.max(0, value ?? fallback));
+}
+
+function resolveDurationSec(durationSec: number): number {
+  if (!Number.isFinite(durationSec)) {
+    return 0;
+  }
+
+  return Math.max(0, durationSec);
 }
 
 function runFfmpeg(ffmpegPath: string, args: string[]): void {
@@ -159,30 +191,142 @@ export function buildAudioMixArgs(
   };
 }
 
+export function mixAudioTracks(
+  leftLabel: string,
+  rightLabel: string,
+  outputLabel: string,
+): string {
+  return `[${leftLabel}][${rightLabel}]amix=inputs=2:normalize=0[${outputLabel}]`;
+}
+
+function buildTrackFilter(
+  inputIndex: number,
+  outputLabel: string,
+  durationSec: number,
+  trackVolume: number,
+): string {
+  const clampedDurationSec = resolveDurationSec(durationSec);
+  const fadeStartSec = Math.max(0, clampedDurationSec - TRACK_FADE_DURATION_SEC);
+  const fadeDurationSec = Math.min(TRACK_FADE_DURATION_SEC, clampedDurationSec);
+
+  return [
+    `[${inputIndex}:a]aresample=${SAMPLE_RATE}`,
+    `atrim=0:${clampedDurationSec.toFixed(3)}`,
+    `apad=pad_dur=${clampedDurationSec.toFixed(3)}`,
+    `atrim=0:${clampedDurationSec.toFixed(3)}`,
+    `volume=${trackVolume.toFixed(3)}`,
+    `afade=t=out:st=${fadeStartSec.toFixed(3)}:d=${fadeDurationSec.toFixed(3)}[${outputLabel}]`,
+  ].join(",");
+}
+
+export function buildFullAudioArgs(
+  videoInput: string,
+  events: SoundEvent[],
+  durationSec: number,
+  soundConfig?: SoundConfig,
+): FullAudioArgs | null {
+  const clampedDurationSec = resolveDurationSec(durationSec);
+  const hasEffects = events.length > 0 && soundConfig?.effects !== undefined;
+  const hasTrack = typeof soundConfig?.track === "string" && soundConfig.track.length > 0;
+
+  if (!hasEffects && !hasTrack) {
+    return null;
+  }
+
+  const effectsVolume = clampVolume(soundConfig?.effectsVolume, DEFAULT_EFFECTS_VOLUME);
+  const trackVolume = clampVolume(soundConfig?.trackVolume, DEFAULT_TRACK_VOLUME);
+
+  if (hasEffects && !hasTrack) {
+    const effectsArgs = buildAudioMixArgs(
+      videoInput,
+      events,
+      clampedDurationSec,
+      soundConfig?.effects,
+    );
+
+    if (effectsVolume === 1) {
+      return {
+        inputArgs: effectsArgs.inputArgs,
+        filterComplex: effectsArgs.filterComplex,
+        audioLabel: "aout",
+      };
+    }
+
+    return {
+      inputArgs: effectsArgs.inputArgs,
+      filterComplex: `${effectsArgs.filterComplex};[aout]volume=${effectsVolume.toFixed(3)}[aoutfull]`,
+      audioLabel: "aoutfull",
+    };
+  }
+
+  if (!hasEffects && hasTrack) {
+    return {
+      inputArgs: [
+        "-i",
+        videoInput,
+        "-t",
+        clampedDurationSec.toFixed(3),
+        "-i",
+        soundConfig?.track ?? "",
+      ],
+      filterComplex: buildTrackFilter(1, "aout", clampedDurationSec, trackVolume),
+      audioLabel: "aout",
+    };
+  }
+
+  const effectsArgs = buildAudioMixArgs(
+    videoInput,
+    events,
+    clampedDurationSec,
+    soundConfig?.effects,
+  );
+  const trackInputIndex = events.length + 2;
+  const filterParts = [effectsArgs.filterComplex];
+  const effectsLabel = effectsVolume === 1 ? "aout" : "effects";
+
+  if (effectsVolume !== 1) {
+    filterParts.push(`[aout]volume=${effectsVolume.toFixed(3)}[effects]`);
+  }
+
+  filterParts.push(buildTrackFilter(trackInputIndex, "track", clampedDurationSec, trackVolume));
+  filterParts.push(mixAudioTracks(effectsLabel, "track", "aoutfull"));
+
+  return {
+    inputArgs: [
+      ...effectsArgs.inputArgs,
+      "-t",
+      clampedDurationSec.toFixed(3),
+      "-i",
+      soundConfig?.track ?? "",
+    ],
+    filterComplex: filterParts.join(";"),
+    audioLabel: "aoutfull",
+  };
+}
+
 export function finalizeMp4WithSound(
   ffmpegPath: string,
   tempVideo: string,
   outputPath: string,
   events: SoundEvent[],
   durationSec: number,
-  sfx?: SfxConfig,
+  soundConfig?: SoundConfig,
 ): void {
-  if (events.length === 0 || !sfx) {
+  const fullAudioArgs = buildFullAudioArgs(tempVideo, events, durationSec, soundConfig);
+  if (!fullAudioArgs) {
     moveOutput(tempVideo, outputPath);
     return;
   }
 
-  const { inputArgs, filterComplex } = buildAudioMixArgs(tempVideo, events, durationSec, sfx);
-
   runFfmpeg(ffmpegPath, [
     "-y",
-    ...inputArgs,
+    ...fullAudioArgs.inputArgs,
     "-filter_complex",
-    filterComplex,
+    fullAudioArgs.filterComplex,
     "-map",
     "0:v",
     "-map",
-    "[aout]",
+    `[${fullAudioArgs.audioLabel}]`,
     "-c:v",
     "copy",
     "-c:a",
@@ -202,24 +346,23 @@ export function finalizeWebmWithSound(
   outputPath: string,
   events: SoundEvent[],
   durationSec: number,
-  sfx?: SfxConfig,
+  soundConfig?: SoundConfig,
 ): void {
-  if (events.length === 0 || !sfx) {
+  const fullAudioArgs = buildFullAudioArgs(tempVideo, events, durationSec, soundConfig);
+  if (!fullAudioArgs) {
     moveOutput(tempVideo, outputPath);
     return;
   }
 
-  const { inputArgs, filterComplex } = buildAudioMixArgs(tempVideo, events, durationSec, sfx);
-
   runFfmpeg(ffmpegPath, [
     "-y",
-    ...inputArgs,
+    ...fullAudioArgs.inputArgs,
     "-filter_complex",
-    filterComplex,
+    fullAudioArgs.filterComplex,
     "-map",
     "0:v",
     "-map",
-    "[aout]",
+    `[${fullAudioArgs.audioLabel}]`,
     "-c:v",
     "copy",
     "-c:a",
