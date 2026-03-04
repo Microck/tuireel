@@ -4,16 +4,16 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 17 complete (CI-04 multi-format smoke fixed); ready to re-audit milestone.
+**Current focus:** Phase 18 in progress (preset sound portability).
 
 ## Current Position
 
-Phase: 17 of 17 (fix multi-format record outputs)
-Plan: All plans complete
-Status: Phase complete
-Last activity: 2026-03-04 -- Verified Phase 17 (Fix Multi-Format Record Outputs)
+Phase: 18 of 19 (preset sound portability)
+Plan: 1 of 2
+Status: In progress
+Last activity: 2026-03-04 - Completed 18-01-PLAN.md
 
-Progress: [################################] Gap closure: 12/12 autonomous plans (3 checkpoint plans skipped — require /gsd-audit-milestone)
+Progress: [█████████████████████████████░░░] 55/61 plans complete (90%)
 
 ## Milestone Progress
 
@@ -50,9 +50,21 @@ Recent decisions:
 - CI CLI invocation via node packages/cli/dist/index.js (deterministic, no workspace resolution)
 - CLI version sourced from own package.json via createRequire (no cross-package VERSION constants)
 - Publish smoke gate: packs tarballs, validates no workspace: refs, tests npx + bun execution before release
+- @tuireel/core publish allowlist includes assets/ so built-in SFX ship in package tarballs
+- Built-in SFX paths resolve package-relatively via import.meta.url/\_\_dirname before CWD fallbacks
 
 ### Quick Tasks Completed
 
 | #   | Description                        | Date       | Commit  | Directory                                                 |
 | --- | ---------------------------------- | ---------- | ------- | --------------------------------------------------------- |
 | 001 | GitHub repo creation + npm publish | 2026-03-04 | 1254e25 | [001-github-npm-publish](./quick/001-github-npm-publish/) |
+
+## Blockers/Concerns Carried Forward
+
+- None.
+
+## Session Continuity
+
+- Last session: 2026-03-04T21:01:02Z
+- Stopped at: Completed 18-01-PLAN.md
+- Resume file: `.planning/phases/18-preset-sound-portability/18-02-PLAN.md`
