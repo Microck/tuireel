@@ -99,8 +99,8 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 10-01-PLAN.md — Mintlify site setup + branding + Introduction + Quickstart pages
-- [ ] 10-02-PLAN.md — Config reference + Steps reference + CLI reference pages
+- [x] 10-01-PLAN.md — Mintlify site setup + branding + Introduction + Quickstart pages
+- [x] 10-02-PLAN.md — Config reference + Steps reference + CLI reference pages
 - [ ] 10-03-PLAN.md — Themes + Presets + Sound + Multi-video/Includes pages
 
 ### Phase 11: CI & Linting
@@ -145,6 +145,6 @@ Plans:
 | 7. Branding & Repo Polish | v1.1 | 5/5 | Complete | 2026-03-03 |
 | 8. Presets & Reliability | v1.1 | 4/4 | Complete | 2026-03-03 |
 | 9. Diagnostics | v1.1 | 2/2 | Complete | 2026-03-03 |
-| 10. Documentation | v1.1 | 0/3 | Planned | - |
+| 10. Documentation | v1.1 | 2/3 | In progress | - |
 | 11. CI & Linting | v1.1 | 0/2 | Planned | - |
 | 12. Release & Performance | v1.1 | 0/3 | Planned | - |
