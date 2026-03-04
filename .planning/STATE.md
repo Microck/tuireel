@@ -11,7 +11,7 @@ See: `.planning/PROJECT.md` (updated 2026-07-16)
 Phase: 12 of 12 (Release & Performance)
 Plan: 3 of 3 in current phase
 Status: Complete
-Last activity: 2026-03-04 -- All v1.1 phases complete
+Last activity: 2026-03-04 -- Completed quick task 001: GitHub repo + npm publish
 
 Progress: [################################] Milestone v1.1: 19/19 plans
 
@@ -43,3 +43,9 @@ Recent decisions:
 - Icon concept: film reel frame + terminal prompt (>_) with sprocket holes
 - Color palette: teal #06B6D4, amber #F59E0B, navy #0F172A, off-white #F8FAFC
 - Copyright holder: "Tuireel Contributors" (community project)
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 001 | GitHub repo creation + npm publish | 2026-03-04 | 1254e25 | [001-github-npm-publish](./quick/001-github-npm-publish/) |
