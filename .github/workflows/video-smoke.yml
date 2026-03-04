@@ -28,13 +28,13 @@ jobs:
       - run: pnpm build
 
       - name: Record MP4
-        run: pnpm exec tuireel record packages/core/test/fixtures/smoke.tuireel.jsonc --format mp4
+        run: node packages/cli/dist/index.js record packages/core/test/fixtures/smoke.tuireel.jsonc --format mp4
 
       - name: Record WebM
-        run: pnpm exec tuireel record packages/core/test/fixtures/smoke.tuireel.jsonc --format webm
+        run: node packages/cli/dist/index.js record packages/core/test/fixtures/smoke.tuireel.jsonc --format webm
 
       - name: Record GIF
-        run: pnpm exec tuireel record packages/core/test/fixtures/smoke.tuireel.jsonc --format gif
+        run: node packages/cli/dist/index.js record packages/core/test/fixtures/smoke.tuireel.jsonc --format gif
 
       - name: Validate MP4
         run: |
