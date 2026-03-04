@@ -60,6 +60,32 @@ if (!coreTarball) {
   process.exit(1);
 }
 
+const cliTarPath = join(packsDir, cliTarball);
+const coreTarPath = join(packsDir, coreTarball);
+
+// --- Check core tarball includes built-in SFX assets ---
+
+console.log("\n--- Checking core tarball SFX assets ---");
+
+try {
+  const coreTarEntries = run(`tar -tf "${coreTarPath}"`);
+  const requiredSfxEntries = [
+    "package/assets/sounds/click-1.mp3",
+    "package/assets/sounds/key-1.mp3",
+  ];
+
+  for (const requiredEntry of requiredSfxEntries) {
+    if (coreTarEntries.includes(requiredEntry)) {
+      pass(`core tarball includes ${requiredEntry}`);
+    } else {
+      fail(`core tarball missing ${requiredEntry}`);
+    }
+  }
+} catch (e: unknown) {
+  const msg = e instanceof Error ? e.message : String(e);
+  fail("core tarball SFX asset check failed", msg.slice(0, 300));
+}
+
 // --- Check for workspace: references ---
 
 console.log("\n--- Checking for workspace: references ---");
@@ -80,8 +106,6 @@ for (const tarball of [cliTarball, coreTarball]) {
 console.log("\n--- npx smoke test ---");
 
 const npxDir = mkdtempSync(join(tmpdir(), "tuireel-npx-"));
-const cliTarPath = join(packsDir, cliTarball);
-const coreTarPath = join(packsDir, coreTarball);
 
 try {
   // Install core dep first, then CLI tarball
