@@ -199,7 +199,7 @@ Plans:
 
 - [x] 14-01-PLAN.md — Create Phase 10 verification report (10-VERIFICATION.md)
 - [x] 14-02-PLAN.md — Create Phase 11 verification report (11-VERIFICATION.md)
-- [ ] 14-03-PLAN.md — Create Phase 12 verification report (12-VERIFICATION.md)
+- [x] 14-03-PLAN.md — Create Phase 12 verification report (12-VERIFICATION.md)
 - [ ] 14-04-PLAN.md — Re-run v1.1 milestone audit and capture 10/11/12 coverage evidence
 
 ### Phase 15: CI Wiring Fixes
@@ -255,6 +255,6 @@ Plans:
 | 11. CI & Linting                  | v1.1      | 2/2            | Complete    | 2026-03-04 |
 | 12. Release & Performance         | v1.1      | 3/3            | Complete    | 2026-03-04 |
 | 13. Verify Runtime Phases (08-09) | v1.1      | 2/3            | In progress | —          |
-| 14. Verify Ops Phases (10-12)     | v1.1      | 2/4            | In progress | —          |
+| 14. Verify Ops Phases (10-12)     | v1.1      | 3/4            | In progress | —          |
 | 15. CI Wiring Fixes               | v1.1      | 0/TBD          | Planned     | —          |
 | 16. Publish Installability Fixes  | v1.1      | 0/2            | Planned     | —          |
