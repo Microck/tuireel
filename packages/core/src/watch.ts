@@ -5,6 +5,7 @@ import chokidar from "chokidar";
 import { loadConfig, type OutputFormat, type TuireelConfig } from "./config/index.js";
 import { record } from "./recorder.js";
 import { debounce } from "./utils/debounce.js";
+import { resolveOutputPath } from "./utils/output-path.js";
 
 interface WatchAndRecordOptions {
   format?: OutputFormat;
@@ -33,9 +34,12 @@ function resolveRecordConfig(
   configPath: string,
   options: WatchAndRecordOptions,
 ): TuireelConfig {
+  const selectedFormat = options.format ?? config.format;
+
   return {
     ...config,
-    format: options.format ?? config.format,
+    format: selectedFormat,
+    output: selectedFormat ? resolveOutputPath(config.output, selectedFormat) : config.output,
     sound: resolveSoundConfig(config.sound, configPath),
   } satisfies TuireelConfig;
 }

@@ -6,6 +6,7 @@ import {
   createLogger,
   loadConfig,
   record as runRecord,
+  resolveOutputPath,
   watchAndRecord,
   type OutputFormat,
   type TuireelConfig,
@@ -28,7 +29,9 @@ function parseOutputFormat(value: string): OutputFormat {
     return value as OutputFormat;
   }
 
-  throw new InvalidArgumentError(`Invalid format \"${value}\". Expected one of: ${OUTPUT_FORMATS.join(", ")}.`);
+  throw new InvalidArgumentError(
+    `Invalid format \"${value}\". Expected one of: ${OUTPUT_FORMATS.join(", ")}.`,
+  );
 }
 
 function resolveSoundConfig(
@@ -58,7 +61,11 @@ export function registerRecordCommand(program: Command): void {
     .option("--debug", "Show ffmpeg commands and internal timing")
     .action(async (configPathArg: string, options: RecordOptions) => {
       const configPath = resolve(process.cwd(), configPathArg);
-      const logLevel = options.debug ? LogLevel.debug : options.verbose ? LogLevel.verbose : LogLevel.normal;
+      const logLevel = options.debug
+        ? LogLevel.debug
+        : options.verbose
+          ? LogLevel.verbose
+          : LogLevel.normal;
       const logger = createLogger(logLevel);
 
       try {
@@ -73,9 +80,13 @@ export function registerRecordCommand(program: Command): void {
         const configs = await loadConfig(configPath);
 
         for (const [index, config] of configs.entries()) {
+          const selectedFormat = options.format ?? config.format;
           const resolvedConfig = {
             ...config,
-            format: options.format ?? config.format,
+            format: selectedFormat,
+            output: selectedFormat
+              ? resolveOutputPath(config.output, selectedFormat)
+              : config.output,
             sound: resolveSoundConfig(config.sound, configPath),
           } satisfies TuireelConfig;
 
