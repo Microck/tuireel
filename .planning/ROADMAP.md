@@ -254,7 +254,7 @@ Plans:
 | 10. Documentation                 | v1.1      | 3/3            | Complete    | 2026-03-04 |
 | 11. CI & Linting                  | v1.1      | 2/2            | Complete    | 2026-03-04 |
 | 12. Release & Performance         | v1.1      | 3/3            | Complete    | 2026-03-04 |
-| 13. Verify Runtime Phases (08-09) | v1.1      | 1/3            | In progress | —          |
+| 13. Verify Runtime Phases (08-09) | v1.1      | 2/3            | In progress | —          |
 | 14. Verify Ops Phases (10-12)     | v1.1      | 0/TBD          | Planned     | —          |
 | 15. CI Wiring Fixes               | v1.1      | 0/TBD          | Planned     | —          |
 | 16. Publish Installability Fixes  | v1.1      | 0/2            | Planned     | —          |
