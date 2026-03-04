@@ -29,7 +29,12 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - uses: oven-sh/setup-bun@v2
+
       - run: pnpm build
+
+      - name: Publish smoke test
+        run: pnpm -w publish:smoke
 
       - name: Create Release PR or Publish
         id: changesets
@@ -42,6 +47,26 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # No NPM_TOKEN needed — uses OIDC trusted publishing.
           # Configure trusted publishers at npmjs.com for each package.
+
+      - name: Post-publish validation
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          VERSION=$(node -e "console.log(require('./packages/cli/package.json').version)")
+          echo "Validating published tuireel@${VERSION}"
+          for attempt in 1 2 3 4 5; do
+            echo "Attempt ${attempt}/5..."
+            if npx -y "tuireel@${VERSION}" --help && \
+               npx -y "tuireel@${VERSION}" --version && \
+               bunx "tuireel@${VERSION}" --help && \
+               bunx "tuireel@${VERSION}" --version; then
+              echo "Post-publish validation passed on attempt ${attempt}"
+              exit 0
+            fi
+            echo "Attempt ${attempt} failed, sleeping $((attempt * 10))s..."
+            sleep $((attempt * 10))
+          done
+          echo "Post-publish validation failed after 5 attempts"
+          exit 1
 
       - name: Create GitHub Release
         if: steps.changesets.outputs.published == 'true'

@@ -12,7 +12,8 @@
     "changeset": "changeset",
     "version": "changeset version",
     "release": "pnpm build && changeset publish",
-    "benchmark": "tsx scripts/benchmark.ts"
+    "benchmark": "tsx scripts/benchmark.ts",
+    "publish:smoke": "pnpm -w build --filter tuireel... && tsx scripts/publish-smoke.ts"
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",
