@@ -35,6 +35,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
+    "lint": "eslint src/",
     "test": "vitest run",
     "clean": "rm -rf dist"
   },
