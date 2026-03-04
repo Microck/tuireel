@@ -10,12 +10,33 @@
  */
 
 import { execSync } from "node:child_process";
-import { mkdtempSync, readdirSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
 let failures = 0;
+
+const FFMPEG_BIN = join(homedir(), ".tuireel", "bin", "ffmpeg");
+const SOUND_SMOKE_STEPS = [
+  { type: "launch", command: "bash" },
+  { type: "type", text: "echo sound" },
+  { type: "press", key: "enter" },
+  { type: "wait", pattern: "sound" },
+  { type: "pause", duration: 0.2 },
+] as const;
+const SOUND_SMOKE_CASES = [
+  {
+    preset: "polished",
+    configFile: "sound-smoke-polished.jsonc",
+    outputFile: "sound-smoke-polished.mp4",
+  },
+  {
+    preset: "demo",
+    configFile: "sound-smoke-demo.jsonc",
+    outputFile: "sound-smoke-demo.mp4",
+  },
+] as const;
 
 function run(cmd: string, opts?: { cwd?: string }): string {
   return execSync(cmd, {
@@ -33,6 +54,55 @@ function fail(label: string, detail?: string) {
   console.error(`  \u2717 ${label}`);
   if (detail) console.error(`    ${detail}`);
   failures++;
+}
+
+function errorMessage(error: unknown): string {
+  return (error instanceof Error ? error.message : String(error)).slice(0, 300);
+}
+
+function writeSoundSmokeConfigs(targetDir: string): void {
+  for (const smokeCase of SOUND_SMOKE_CASES) {
+    const configPath = join(targetDir, smokeCase.configFile);
+    const config = {
+      preset: smokeCase.preset,
+      output: smokeCase.outputFile,
+      steps: SOUND_SMOKE_STEPS,
+    };
+    writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`);
+  }
+}
+
+function runRecordAndAudioSmoke(
+  targetDir: string,
+  labelPrefix: string,
+  recordCommand: (configFile: string) => string,
+): void {
+  try {
+    writeSoundSmokeConfigs(targetDir);
+    pass(`${labelPrefix}: wrote polished+demo sound smoke configs`);
+  } catch (e: unknown) {
+    fail(`${labelPrefix}: failed to write sound smoke configs`, errorMessage(e));
+    return;
+  }
+
+  for (const smokeCase of SOUND_SMOKE_CASES) {
+    try {
+      run(recordCommand(smokeCase.configFile), { cwd: targetDir });
+      pass(`${labelPrefix}: record ${smokeCase.preset} preset exited 0`);
+    } catch (e: unknown) {
+      fail(`${labelPrefix}: record ${smokeCase.preset} preset failed`, errorMessage(e));
+      continue;
+    }
+
+    try {
+      run(`"${FFMPEG_BIN}" -v error -i "${smokeCase.outputFile}" -map 0:a:0 -f null -`, {
+        cwd: targetDir,
+      });
+      pass(`${labelPrefix}: ${smokeCase.outputFile} contains audio stream`);
+    } catch (e: unknown) {
+      fail(`${labelPrefix}: ${smokeCase.outputFile} missing audio stream`, errorMessage(e));
+    }
+  }
 }
 
 // --- Pack both packages ---
@@ -117,9 +187,14 @@ try {
   } else {
     fail("npx tuireel --help produced no output");
   }
+
+  runRecordAndAudioSmoke(
+    npxDir,
+    "npx",
+    (configFile) => `npx tuireel record ./${configFile} --format mp4`,
+  );
 } catch (e: unknown) {
-  const msg = e instanceof Error ? e.message : String(e);
-  fail("npx tuireel --help failed", msg.slice(0, 300));
+  fail("npx tuireel --help failed", errorMessage(e));
 }
 
 // --- bun smoke test (optional) ---
@@ -132,25 +207,33 @@ try {
   // bun not available
 }
 
+let bunDir: string | undefined;
+
 if (hasBun) {
   console.log("\n--- bun smoke test ---");
-  const bunDir = mkdtempSync(join(tmpdir(), "tuireel-bun-"));
+  bunDir = mkdtempSync(join(tmpdir(), "tuireel-bun-"));
 
   try {
-    run(`bun init -y`, { cwd: bunDir });
-    run(`bun add "${coreTarPath}" "${cliTarPath}"`, { cwd: bunDir });
+    run(`npm init -y`, { cwd: bunDir });
+    run(`npm install "${coreTarPath}" "${cliTarPath}"`, { cwd: bunDir });
 
-    run(`./node_modules/.bin/tuireel --help`, { cwd: bunDir });
-    pass("bun: tuireel --help exited 0");
+    run(`bunx --no-install tuireel --help`, { cwd: bunDir });
+    pass("bunx: tuireel --help exited 0");
 
-    run(`./node_modules/.bin/tuireel --version`, { cwd: bunDir });
-    pass("bun: tuireel --version exited 0");
+    run(`bunx --no-install tuireel --version`, { cwd: bunDir });
+    pass("bunx: tuireel --version exited 0");
+
+    runRecordAndAudioSmoke(
+      bunDir,
+      "bunx",
+      (configFile) => `bunx --no-install tuireel record ./${configFile} --format mp4`,
+    );
   } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : String(e);
-    fail("bun smoke test failed", msg.slice(0, 300));
+    fail("bun smoke test failed", errorMessage(e));
   }
 } else {
   console.log("\n--- bun not found, skipping bun smoke test ---");
+  pass("bunx record smoke skipped (bun not available)");
 }
 
 // --- Cleanup ---
@@ -158,6 +241,9 @@ if (hasBun) {
 try {
   rmSync(packDir, { recursive: true, force: true });
   rmSync(npxDir, { recursive: true, force: true });
+  if (bunDir) {
+    rmSync(bunDir, { recursive: true, force: true });
+  }
 } catch {
   // best-effort cleanup
 }
