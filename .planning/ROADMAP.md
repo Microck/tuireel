@@ -115,7 +115,7 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 11-01-PLAN.md — ESLint + Prettier + turbo lint + GitHub Actions CI workflow
+- [x] 11-01-PLAN.md — ESLint + Prettier + turbo lint + GitHub Actions CI workflow
 - [ ] 11-02-PLAN.md — Video smoke test CI job + artifact upload on failure
 
 ### Phase 12: Release & Performance
@@ -146,5 +146,5 @@ Plans:
 | 8. Presets & Reliability | v1.1 | 4/4 | Complete | 2026-03-03 |
 | 9. Diagnostics | v1.1 | 2/2 | Complete | 2026-03-03 |
 | 10. Documentation | v1.1 | 3/3 | Complete | 2026-03-04 |
-| 11. CI & Linting | v1.1 | 0/2 | Planned | - |
+| 11. CI & Linting | v1.1 | 1/2 | In progress | - |
 | 12. Release & Performance | v1.1 | 0/3 | Planned | - |

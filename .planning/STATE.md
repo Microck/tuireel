@@ -4,23 +4,23 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 10 complete, ready for Phase 11 (v1.1)
+**Current focus:** Phase 11 in progress (v1.1)
 
 ## Current Position
 
-Phase: 10 of 12 (Documentation)
-Plan: 3 of 3 in current phase
-Status: Phase complete
-Last activity: 2026-03-04 -- Completed 10-03-PLAN.md (Feature documentation pages)
+Phase: 11 of 12 (CI & Linting)
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-03-04 -- Completed 11-01-PLAN.md (ESLint + Prettier + CI)
 
-Progress: [████████████████████████████████] Phase 10: 3/3 summaries
+Progress: [████████████████░░░░░░░░░░░░░░░░] Phase 11: 1/2 summaries
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12 | 14/14+ | In progress (Phase 10 complete) | -- |
+| v1.1 Branding, Docs & Hardening | 7-12 | 15/19 | In progress (Phase 11: 1/2) | -- |
 
 ## Performance Metrics
 
@@ -29,7 +29,7 @@ Progress: [███████████████████████
 - 6 phases, 50 tasks
 - Shipped in <1 day
 
-**v1.1:** 14 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9 complete: 09-01 (8 min), 09-02 (8 min). Phase 10 complete: 10-01 (2 min), 10-02 (2 min), 10-03 (3 min).
+**v1.1:** 15 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9 complete: 09-01 (8 min), 09-02 (8 min). Phase 10 complete: 10-01 (2 min), 10-02 (2 min), 10-03 (3 min). Phase 11: 11-01 (3 min).
 
 ## Accumulated Context
 
@@ -87,6 +87,13 @@ Phase 10 decisions:
 - Documented all 8 built-in themes (plan listed 6, source has monokai and nord too)
 - Include file format documented as { "steps": [...] } per resolver.ts parsing logic
 
+Phase 11 decisions:
+- ESLint 10 flat config (eslint.config.mjs) with typescript-eslint recommended
+- Relaxed preserve-caught-error (off), no-useless-escape (warn), no-explicit-any (warn)
+- Prettier matches existing style: double quotes, semis, trailing commas, 2-space indent, 100 width
+- Single CI job: install → lint → type-check → build → test
+- Node 22 + pnpm/action-setup@v4 in CI
+
 ### Blockers/Concerns
 
 - None.
@@ -103,5 +110,5 @@ Phase 10 decisions:
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 10-03-PLAN.md (Feature documentation pages) -- Phase 10 complete
-Resume: Phase 11
+Stopped at: Completed 11-01-PLAN.md (ESLint + Prettier + CI) -- Phase 11 in progress
+Resume: 11-02-PLAN.md (Video smoke test CI job)
