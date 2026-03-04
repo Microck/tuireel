@@ -4,16 +4,16 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 18 in progress (preset sound portability).
+**Current focus:** Phase 18 complete; ready for Phase 19 (bun publish smoke gate).
 
 ## Current Position
 
 Phase: 18 of 19 (preset sound portability)
-Plan: 1 of 2
-Status: In progress
-Last activity: 2026-03-04 - Completed 18-01-PLAN.md
+Plan: 2 of 2
+Status: Phase complete
+Last activity: 2026-03-04 - Completed 18-02-PLAN.md
 
-Progress: [█████████████████████████████░░░] 55/61 plans complete (90%)
+Progress: [██████████████████████████████░░] 56/61 plans complete (92%)
 
 ## Milestone Progress
 
@@ -52,6 +52,8 @@ Recent decisions:
 - Publish smoke gate: packs tarballs, validates no workspace: refs, tests npx + bun execution before release
 - @tuireel/core publish allowlist includes assets/ so built-in SFX ship in package tarballs
 - Built-in SFX paths resolve package-relatively via import.meta.url/\_\_dirname before CWD fallbacks
+- Publish smoke now verifies core tarballs include required built-in SFX files before install checks
+- Publish smoke now records polished/demo presets in temp npx+bunx installs and asserts MP4 audio via ffmpeg stream mapping
 
 ### Quick Tasks Completed
 
@@ -65,6 +67,6 @@ Recent decisions:
 
 ## Session Continuity
 
-- Last session: 2026-03-04T21:01:02Z
-- Stopped at: Completed 18-01-PLAN.md
-- Resume file: `.planning/phases/18-preset-sound-portability/18-02-PLAN.md`
+- Last session: 2026-03-04T21:30:28Z
+- Stopped at: Completed 18-02-PLAN.md
+- Resume file: `.planning/phases/19-bun-publish-smoke-gate/19-01-PLAN.md`
