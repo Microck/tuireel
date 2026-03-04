@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, renameSync, rmSync } from "node:fs";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import type { TimelineData } from "./timeline/types.js";
 
@@ -10,12 +11,24 @@ const DEFAULT_EFFECTS_VOLUME = 0.5;
 const TRACK_FADE_DURATION_SEC = 2;
 
 function resolveAssetsDirectory(): string {
+  const moduleCandidates: string[] = [];
+
+  try {
+    moduleCandidates.push(
+      resolve(dirname(fileURLToPath(import.meta.url)), "..", "assets", "sounds"),
+    );
+  } catch {}
+
+  if (typeof __dirname === "string") {
+    moduleCandidates.push(resolve(__dirname, "..", "assets", "sounds"));
+  }
+
   const candidates = [
-    typeof __dirname === "string" ? resolve(__dirname, "..", "assets", "sounds") : null,
+    ...moduleCandidates,
     resolve(process.cwd(), "assets", "sounds"),
     resolve(process.cwd(), "packages", "core", "assets", "sounds"),
     resolve(process.cwd(), "node_modules", "@tuireel", "core", "assets", "sounds"),
-  ].filter((candidate): candidate is string => candidate !== null);
+  ];
 
   for (const candidate of candidates) {
     if (existsSync(candidate)) {
@@ -191,11 +204,7 @@ export function buildAudioMixArgs(
   };
 }
 
-export function mixAudioTracks(
-  leftLabel: string,
-  rightLabel: string,
-  outputLabel: string,
-): string {
+export function mixAudioTracks(leftLabel: string, rightLabel: string, outputLabel: string): string {
   return `[${leftLabel}][${rightLabel}]amix=inputs=2:normalize=0[${outputLabel}]`;
 }
 
