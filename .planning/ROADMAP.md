@@ -30,7 +30,7 @@ Archive:
 - [x] **Phase 7: Branding & Repo Polish** - Visual identity and repository community assets (completed 2026-03-03)
 - [x] **Phase 8: Presets & Reliability** - User-facing presets and pipeline hardening (completed 2026-03-03)
 - [x] **Phase 9: Diagnostics** - Verbose/debug CLI modes and actionable error guidance (completed 2026-03-03)
-- [ ] **Phase 10: Documentation** - Mintlify docs site with guides and references
+- [x] **Phase 10: Documentation** - Mintlify docs site with guides and references
 - [ ] **Phase 11: CI & Linting** - GitHub Actions pipeline and code quality enforcement
 - [ ] **Phase 12: Release & Performance** - npm publishing automation and compositing optimization
 
@@ -101,7 +101,7 @@ Plans:
 Plans:
 - [x] 10-01-PLAN.md — Mintlify site setup + branding + Introduction + Quickstart pages
 - [x] 10-02-PLAN.md — Config reference + Steps reference + CLI reference pages
-- [ ] 10-03-PLAN.md — Themes + Presets + Sound + Multi-video/Includes pages
+- [x] 10-03-PLAN.md — Themes + Presets + Sound + Multi-video/Includes pages
 
 ### Phase 11: CI & Linting
 **Goal**: Every PR and push to main is automatically validated for code quality and video output correctness.
@@ -145,6 +145,6 @@ Plans:
 | 7. Branding & Repo Polish | v1.1 | 5/5 | Complete | 2026-03-03 |
 | 8. Presets & Reliability | v1.1 | 4/4 | Complete | 2026-03-03 |
 | 9. Diagnostics | v1.1 | 2/2 | Complete | 2026-03-03 |
-| 10. Documentation | v1.1 | 2/3 | In progress | - |
+| 10. Documentation | v1.1 | 3/3 | Complete | 2026-03-04 |
 | 11. CI & Linting | v1.1 | 0/2 | Planned | - |
 | 12. Release & Performance | v1.1 | 0/3 | Planned | - |

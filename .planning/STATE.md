@@ -4,23 +4,23 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 10 -- Documentation (v1.1)
+**Current focus:** Phase 10 complete, ready for Phase 11 (v1.1)
 
 ## Current Position
 
 Phase: 10 of 12 (Documentation)
-Plan: 2 of 3 in current phase
-Status: In progress
-Last activity: 2026-03-03 -- Completed 10-02-PLAN.md (Reference documentation pages)
+Plan: 3 of 3 in current phase
+Status: Phase complete
+Last activity: 2026-03-04 -- Completed 10-03-PLAN.md (Feature documentation pages)
 
-Progress: [█████████████████████████████░░░] Phase 10: 2/3 summaries
+Progress: [████████████████████████████████] Phase 10: 3/3 summaries
 
 ## Milestone Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 1-6 | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12 | 12/14+ | In progress (Phase 10 in progress) | -- |
+| v1.1 Branding, Docs & Hardening | 7-12 | 14/14+ | In progress (Phase 10 complete) | -- |
 
 ## Performance Metrics
 
@@ -29,7 +29,7 @@ Progress: [███████████████████████
 - 6 phases, 50 tasks
 - Shipped in <1 day
 
-**v1.1:** 13 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9 complete: 09-01 (8 min), 09-02 (8 min). Phase 10: 10-01 (2 min), 10-02 (2 min).
+**v1.1:** 14 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9 complete: 09-01 (8 min), 09-02 (8 min). Phase 10 complete: 10-01 (2 min), 10-02 (2 min), 10-03 (3 min).
 
 ## Accumulated Context
 
@@ -84,6 +84,8 @@ Phase 10 decisions:
 - ResponseField + Expandable components for structured API reference docs
 - Config fields grouped into General, Presentation, Sound, Behavior categories
 - $include directive documented in steps reference (part of schema API surface)
+- Documented all 8 built-in themes (plan listed 6, source has monokai and nord too)
+- Include file format documented as { "steps": [...] } per resolver.ts parsing logic
 
 ### Blockers/Concerns
 
@@ -100,6 +102,6 @@ Phase 10 decisions:
 
 ## Session Continuity
 
-Last session: 2026-03-03
-Stopped at: Completed 10-02-PLAN.md (Reference documentation pages)
-Resume: Phase 10, plan 03 -- feature documentation pages
+Last session: 2026-03-04
+Stopped at: Completed 10-03-PLAN.md (Feature documentation pages) -- Phase 10 complete
+Resume: Phase 11
