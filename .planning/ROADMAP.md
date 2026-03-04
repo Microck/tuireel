@@ -43,6 +43,8 @@ Gap closure phases (from `.planning/v1.1-MILESTONE-AUDIT.md`):
 - [ ] **Phase 15: CI Wiring Fixes** - Real type-check + fix video smoke CLI invocation (GAP CLOSURE)
 - [ ] **Phase 16: Publish Installability Fixes** - Remove `workspace:*` from published deps + align version drift (GAP CLOSURE)
 - [x] **Phase 17: Fix Multi-Format Record Outputs (CI Smoke)** - Make MP4/WebM/GIF smoke test deterministic (completed 2026-03-04) (GAP CLOSURE)
+- [ ] **Phase 18: Preset Sound Portability** - Make built-in preset SFX work outside the repo (GAP CLOSURE)
+- [ ] **Phase 19: Bun Publish Smoke Gate** - Unblock `publish:smoke` bun validation and release gating (GAP CLOSURE)
 
 ## Phase Details
 
@@ -259,11 +261,47 @@ Plans:
 - [x] 17-02-PLAN.md — Update video smoke workflow to match the contract + add regression verification
 - [x] 17-03-PLAN.md — Update CLI docs (and README if needed) to match behavior
 
+### Phase 18: Preset Sound Portability
+
+**Goal**: Built-in preset sound effects work in typical installed usage (not repo-CWD dependent), so `polished`/`demo` presets reliably include sound.
+**Depends on**: Phase 5 (Sound), Phase 8 (Presets)
+**Requirements**: PRST-03
+**Gap Closure**: Closes `.planning/v1.1-MILESTONE-AUDIT.md` gaps: preset polished E2E record fails outside repo; built-in SFX resolution is repo-local.
+**Success Criteria** (what must be TRUE):
+
+1. Running `tuireel record` in a non-repo directory with config `"preset": "polished"` succeeds without missing asset errors
+2. Output produced with `polished` preset includes an audio stream (or equivalent proof that SFX are applied)
+3. Built-in SFX assets are included in the published package install surface and resolved via a package-relative path (no `process.cwd()` dependency)
+   **Plans:** 2 plans
+
+Plans:
+
+- [ ] 18-01-PLAN.md — Package built-in SFX assets + resolve paths via module-relative location
+- [ ] 18-02-PLAN.md — Add regression coverage for preset sound outside the repo (smoke / fixture)
+
+### Phase 19: Bun Publish Smoke Gate
+
+**Goal**: `pnpm -w publish:smoke` passes (including bun), unblocking the release workflow gate and restoring confidence in `bunx` install/run.
+**Depends on**: Phase 16 (Publish smoke tooling), Phase 17 (Multi-format output contract)
+**Requirements**: REL-04
+**Gap Closure**: Closes `.planning/v1.1-MILESTONE-AUDIT.md` gaps: `publish:smoke` bun failure due to mismatched installed core export surface.
+**Success Criteria** (what must be TRUE):
+
+1. `pnpm -w publish:smoke` passes locally, including the bun install/run checks
+2. Bun smoke test installs tarballs for both packages deterministically (no registry fallback / nested mismatches)
+3. Release workflow gate remains in place (`release.yml` runs publish smoke before publish) and would pass in CI
+   **Plans:** 2 plans
+
+Plans:
+
+- [ ] 19-01-PLAN.md — Make publish smoke tarball installs deterministic for bun
+- [ ] 19-02-PLAN.md — Add regression assertions for bun smoke import surface + wiring
+
 ## Progress
 
 **Execution Order:** 7 → 8 → 9 → 10 → 11 → 12
 
-**Gap Closure Order:** 13 → 14 → 15 → 16 → 17
+**Gap Closure Order:** 13 → 14 → 15 → 16 → 17 → 18 → 19
 
 | Phase                                          | Milestone | Plans Complete | Status      | Completed  |
 | ---------------------------------------------- | --------- | -------------- | ----------- | ---------- |
@@ -279,3 +317,5 @@ Plans:
 | 15. CI Wiring Fixes                            | v1.1      | 0/TBD          | Planned     | —          |
 | 16. Publish Installability Fixes               | v1.1      | 0/2            | Planned     | —          |
 | 17. Fix Multi-Format Record Outputs (CI Smoke) | v1.1      | 3/3            | Complete    | 2026-03-04 |
+| 18. Preset Sound Portability                   | v1.1      | 0/2            | Planned     | —          |
+| 19. Bun Publish Smoke Gate                     | v1.1      | 0/2            | Planned     | —          |
