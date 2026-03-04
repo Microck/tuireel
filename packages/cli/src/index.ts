@@ -1,8 +1,11 @@
+import { createRequire } from "node:module";
 import { realpathSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { Command } from "commander";
-import { VERSION } from "@tuireel/core";
+
+const require = createRequire(import.meta.url);
+const { version } = require("../package.json") as { version: string };
 
 import { registerCompositeCommand } from "./commands/composite.js";
 import { registerInitCommand } from "./commands/init.js";
@@ -15,7 +18,7 @@ export function createProgram(): Command {
 
   program
     .name("tuireel")
-    .version(VERSION)
+    .version(version)
     .description("Record polished demo videos from scripted TUI sessions")
     .addHelpText(
       "after",
@@ -24,8 +27,8 @@ export function createProgram(): Command {
         "Getting started:",
         "  tuireel init",
         "  tuireel validate .tuireel.jsonc",
-        "  tuireel record .tuireel.jsonc"
-      ].join("\n")
+        "  tuireel record .tuireel.jsonc",
+      ].join("\n"),
     );
 
   registerInitCommand(program);

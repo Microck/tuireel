@@ -54,8 +54,8 @@ importers:
   packages/cli:
     dependencies:
       '@tuireel/core':
-        specifier: workspace:*
-        version: link:../core
+        specifier: 0.1.0
+        version: 0.1.0
       commander:
         specifier: ^14.0.2
         version: 14.0.3
@@ -1492,6 +1492,10 @@ packages:
 
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
+
+  '@tuireel/core@0.1.0':
+    resolution: {integrity: sha512-YzI6qJ5jEl51k8FHArifrb+Gqbms43ZcBgiicmWTupBJK6mAV+Sc9w365loajrLXB0HoPg+b3Ygy3zBQ7iNCBA==}
+    engines: {node: '>=18'}
 
   '@types/acorn@4.0.6':
     resolution: {integrity: sha512-veQTnWP+1D/xbxVrPC3zHnCZRjSrKfhbMUlEA43iMZLu7EsnTtkJklIuwrCPbOi8YkvDQAiW05VQQFvvz9oieQ==}
@@ -6832,6 +6836,19 @@ snapshots:
     optional: true
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
+
+  '@tuireel/core@0.1.0':
+    dependencies:
+      chokidar: 5.0.0
+      commander: 14.0.3
+      ghostty-opentui: 1.4.5
+      jsonc-parser: 3.3.1
+      sharp: 0.34.5
+      tuistory: 0.0.16
+      zod: 4.3.6
+      zod-to-json-schema: 3.25.1(zod@4.3.6)
+    transitivePeerDependencies:
+      - '@opentui/core'
 
   '@types/acorn@4.0.6':
     dependencies:

@@ -39,7 +39,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@tuireel/core": "workspace:*",
+    "@tuireel/core": "0.1.0",
     "commander": "^14.0.2"
   },
   "devDependencies": {
