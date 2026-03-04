@@ -42,6 +42,7 @@ Gap closure phases (from `.planning/v1.1-MILESTONE-AUDIT.md`):
 - [ ] **Phase 14: Verify Ops Phases (10-12)** - Add missing verification reports (GAP CLOSURE)
 - [ ] **Phase 15: CI Wiring Fixes** - Real type-check + fix video smoke CLI invocation (GAP CLOSURE)
 - [ ] **Phase 16: Publish Installability Fixes** - Remove `workspace:*` from published deps + align version drift (GAP CLOSURE)
+- [ ] **Phase 17: Fix Multi-Format Record Outputs (CI Smoke)** - Make MP4/WebM/GIF smoke test deterministic (GAP CLOSURE)
 
 ## Phase Details
 
@@ -239,22 +240,42 @@ Plans:
 - [ ] 16-01-PLAN.md — Remove `workspace:*` publish deps + fix version drift
 - [ ] 16-02-PLAN.md — Add pack/npx publish smoke gate + wire into release workflow
 
+### Phase 17: Fix Multi-Format Record Outputs (CI Smoke)
+
+**Goal**: `tuireel record --format` produces format-consistent outputs so CI can reliably record and validate MP4, WebM, and GIF in one job.
+**Depends on**: Phase 11 (CI workflows exist), Phase 15 (deterministic CLI invocation pattern)
+**Requirements**: CI-04
+**Gap Closure**: Closes `.planning/v1.1-MILESTONE-AUDIT.md` gaps: record output naming overwrites output; video smoke MP4/WebM/GIF flow broken.
+**Success Criteria** (what must be TRUE):
+
+1. Running `tuireel record --format mp4`, `--format webm`, and `--format gif` produces three distinct output files that match their container/codec expectations.
+2. `.github/workflows/video-smoke.yml` records and validates MP4/WebM/GIF without relying on ambiguous filenames.
+3. Docs accurately describe `--format` behavior (no "WebM inside .mp4" style mismatches).
+   **Plans:** 3 plans
+
+Plans:
+
+- [ ] 17-01-PLAN.md — Define output naming contract for `record --format` + implement deterministic outputs
+- [ ] 17-02-PLAN.md — Update video smoke workflow to match the contract + add regression verification
+- [ ] 17-03-PLAN.md — Update CLI docs (and README if needed) to match behavior
+
 ## Progress
 
 **Execution Order:** 7 → 8 → 9 → 10 → 11 → 12
 
 **Gap Closure Order:** 13 → 14 → 15 → 16
 
-| Phase                             | Milestone | Plans Complete | Status      | Completed  |
-| --------------------------------- | --------- | -------------- | ----------- | ---------- |
-| 1-6                               | v1.0 MVP  | 23/23          | Complete    | 2026-03-03 |
-| 7. Branding & Repo Polish         | v1.1      | 5/5            | Complete    | 2026-03-03 |
-| 8. Presets & Reliability          | v1.1      | 4/4            | Complete    | 2026-03-03 |
-| 9. Diagnostics                    | v1.1      | 2/2            | Complete    | 2026-03-03 |
-| 10. Documentation                 | v1.1      | 3/3            | Complete    | 2026-03-04 |
-| 11. CI & Linting                  | v1.1      | 2/2            | Complete    | 2026-03-04 |
-| 12. Release & Performance         | v1.1      | 3/3            | Complete    | 2026-03-04 |
-| 13. Verify Runtime Phases (08-09) | v1.1      | 2/3            | In progress | —          |
-| 14. Verify Ops Phases (10-12)     | v1.1      | 3/4            | In progress | —          |
-| 15. CI Wiring Fixes               | v1.1      | 0/TBD          | Planned     | —          |
-| 16. Publish Installability Fixes  | v1.1      | 0/2            | Planned     | —          |
+| Phase                                          | Milestone | Plans Complete | Status      | Completed  |
+| ---------------------------------------------- | --------- | -------------- | ----------- | ---------- |
+| 1-6                                            | v1.0 MVP  | 23/23          | Complete    | 2026-03-03 |
+| 7. Branding & Repo Polish                      | v1.1      | 5/5            | Complete    | 2026-03-03 |
+| 8. Presets & Reliability                       | v1.1      | 4/4            | Complete    | 2026-03-03 |
+| 9. Diagnostics                                 | v1.1      | 2/2            | Complete    | 2026-03-03 |
+| 10. Documentation                              | v1.1      | 3/3            | Complete    | 2026-03-04 |
+| 11. CI & Linting                               | v1.1      | 2/2            | Complete    | 2026-03-04 |
+| 12. Release & Performance                      | v1.1      | 3/3            | Complete    | 2026-03-04 |
+| 13. Verify Runtime Phases (08-09)              | v1.1      | 2/3            | In progress | —          |
+| 14. Verify Ops Phases (10-12)                  | v1.1      | 3/4            | In progress | —          |
+| 15. CI Wiring Fixes                            | v1.1      | 0/TBD          | Planned     | —          |
+| 16. Publish Installability Fixes               | v1.1      | 0/2            | Planned     | —          |
+| 17. Fix Multi-Format Record Outputs (CI Smoke) | v1.1      | 0/3            | Planned     | —          |
