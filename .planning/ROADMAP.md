@@ -217,7 +217,7 @@ Plans:
 
 Plans:
 
-- [ ] 15-01-PLAN.md — Fix CI type-check to use explicit tsconfig projects
+- [x] 15-01-PLAN.md — Fix CI type-check to use explicit tsconfig projects
 - [ ] 15-02-PLAN.md — Fix video smoke workflow to invoke CLI via built dist entry
 - [ ] 15-03-PLAN.md — Re-run milestone audit and record CI-01/CI-04 closure evidence
 
