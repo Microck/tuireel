@@ -12,10 +12,10 @@ tuireel [command] [options]
 
 Global options:
 
-| Flag | Description |
-|------|-------------|
-| `-V, --version` | Print the version number |
-| `-h, --help` | Display help for a command |
+| Flag            | Description                |
+| --------------- | -------------------------- |
+| `-V, --version` | Print the version number   |
+| `-h, --help`    | Display help for a command |
 
 ## init
 
@@ -25,10 +25,10 @@ Create a starter `.tuireel.jsonc` config file with JSON Schema support.
 tuireel init [options]
 ```
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `-o, --output <path>` | Output config file path | `.tuireel.jsonc` |
-| `-f, --force` | Overwrite an existing config file | `false` |
+| Flag                  | Description                       | Default          |
+| --------------------- | --------------------------------- | ---------------- |
+| `-o, --output <path>` | Output config file path           | `.tuireel.jsonc` |
+| `-f, --force`         | Overwrite an existing config file | `false`          |
 
 In TTY mode, `init` prompts you to select a preset:
 
@@ -64,8 +64,8 @@ Validate a config file against the Tuireel schema. Reports errors with line and 
 tuireel validate [configPath]
 ```
 
-| Argument | Description | Default |
-|----------|-------------|---------|
+| Argument     | Description             | Default          |
+| ------------ | ----------------------- | ---------------- |
 | `configPath` | Path to the config file | `.tuireel.jsonc` |
 
 Exits with code `0` on success, `1` on validation failure.
@@ -81,11 +81,13 @@ tuireel validate my-demo.jsonc
 ```
 
 **Output on success:**
+
 ```
 ✓ Config is valid: .tuireel.jsonc
 ```
 
 **Output on failure:**
+
 ```
 ✗ steps.0.type: Invalid discriminator value. Expected 'launch' | 'type' | ...
 ```
@@ -98,16 +100,23 @@ Record a TUI session to video. Spawns a PTY, executes all steps, captures frames
 tuireel record [configPath] [options]
 ```
 
-| Argument | Description | Default |
-|----------|-------------|---------|
+| Argument     | Description             | Default          |
+| ------------ | ----------------------- | ---------------- |
 | `configPath` | Path to the config file | `.tuireel.jsonc` |
 
-| Flag | Description |
-|------|-------------|
-| `--format <format>` | Override output format (`mp4`, `webm`, `gif`) |
-| `-w, --watch` | Watch config file and re-record on changes |
-| `--verbose` | Show step-by-step progress and recording stats |
-| `--debug` | Show ffmpeg commands and internal timing details |
+| Flag                | Description                                      |
+| ------------------- | ------------------------------------------------ |
+| `--format <format>` | Override output format (`mp4`, `webm`, `gif`)    |
+| `-w, --watch`       | Watch config file and re-record on changes       |
+| `--verbose`         | Show step-by-step progress and recording stats   |
+| `--debug`           | Show ffmpeg commands and internal timing details |
+
+When a format is selected (via `--format` or config `format`), Tuireel normalizes the output filename extension to match the selected format:
+
+- If the output path has no extension, it appends `.<format>`.
+- If the output path already has an extension, it replaces the last extension with `.<format>`.
+
+Example: if your config sets `output: smoke-output.mp4`, then `tuireel record --format webm` writes `smoke-output.webm`.
 
 When using a multi-video config, all videos are recorded sequentially with progress indicators.
 
@@ -141,14 +150,14 @@ Run the scripted steps in a visible terminal without recording video. Useful for
 tuireel preview [config] [options]
 ```
 
-| Argument | Description | Default |
-|----------|-------------|---------|
+| Argument | Description             | Default          |
+| -------- | ----------------------- | ---------------- |
 | `config` | Path to the config file | `.tuireel.jsonc` |
 
-| Flag | Description |
-|------|-------------|
+| Flag        | Description                          |
+| ----------- | ------------------------------------ |
 | `--verbose` | Show step-by-step progress and stats |
-| `--debug` | Show internal timing details |
+| `--debug`   | Show internal timing details         |
 
 **Examples:**
 
@@ -171,19 +180,19 @@ Re-composite overlays (cursor, HUD, sound) onto an existing raw recording withou
 tuireel composite [configPath] [options]
 ```
 
-| Argument | Description | Default |
-|----------|-------------|---------|
+| Argument     | Description             | Default          |
+| ------------ | ----------------------- | ---------------- |
 | `configPath` | Path to the config file | `.tuireel.jsonc` |
 
-| Flag | Description |
-|------|-------------|
+| Flag                  | Description                                      |
+| --------------------- | ------------------------------------------------ |
 | `-c, --config <path>` | Config file path (overrides positional argument) |
-| `--format <format>` | Override output format (`mp4`, `webm`, `gif`) |
-| `--cursor-size <n>` | Cursor size in pixels |
-| `--no-cursor` | Disable cursor overlay |
-| `--no-hud` | Disable keystroke HUD overlay |
-| `--verbose` | Show step-by-step progress and stats |
-| `--debug` | Show ffmpeg commands and internal timing |
+| `--format <format>`   | Override output format (`mp4`, `webm`, `gif`)    |
+| `--cursor-size <n>`   | Cursor size in pixels                            |
+| `--no-cursor`         | Disable cursor overlay                           |
+| `--no-hud`            | Disable keystroke HUD overlay                    |
+| `--verbose`           | Show step-by-step progress and stats             |
+| `--debug`             | Show ffmpeg commands and internal timing         |
 
 **Examples:**
 
