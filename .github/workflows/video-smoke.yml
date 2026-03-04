@@ -27,14 +27,23 @@ jobs:
 
       - run: pnpm build
 
+      - name: Cleanup smoke outputs
+        run: rm -f smoke-output.*
+
       - name: Record MP4
-        run: node packages/cli/dist/index.js record packages/core/test/fixtures/smoke.tuireel.jsonc --format mp4
+        run: |
+          node packages/cli/dist/index.js record packages/core/test/fixtures/smoke.tuireel.jsonc --format mp4
+          test -s smoke-output.mp4
 
       - name: Record WebM
-        run: node packages/cli/dist/index.js record packages/core/test/fixtures/smoke.tuireel.jsonc --format webm
+        run: |
+          node packages/cli/dist/index.js record packages/core/test/fixtures/smoke.tuireel.jsonc --format webm
+          test -s smoke-output.webm
 
       - name: Record GIF
-        run: node packages/cli/dist/index.js record packages/core/test/fixtures/smoke.tuireel.jsonc --format gif
+        run: |
+          node packages/cli/dist/index.js record packages/core/test/fixtures/smoke.tuireel.jsonc --format gif
+          test -s smoke-output.gif
 
       - name: Validate MP4
         run: |
