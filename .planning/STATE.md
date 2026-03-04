@@ -4,14 +4,14 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Gap closure complete (phases 13-17 done; 3 checkpoint plans remain for manual audit)
+**Current focus:** Phase 17 docs alignment for multi-format record outputs (`--format` output naming)
 
 ## Current Position
 
 Phase: 17 of 17 (fix multi-format record outputs)
-Plan: 17-01 complete
-Status: Gap closure finished
-Last activity: 2026-03-04 -- Completed 17-01 (Fix Multi-Format Record Outputs)
+Plan: 17-03 complete
+Status: In progress
+Last activity: 2026-03-04 -- Completed 17-03 (Fix Multi-Format Record Outputs)
 
 Progress: [################################] Gap closure: 10/10 autonomous plans (3 checkpoint plans skipped — require /gsd-audit-milestone)
 
