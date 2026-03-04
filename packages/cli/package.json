@@ -13,7 +13,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tuireel/tuireel.git",
+    "url": "git+https://github.com/Microck/tuireel.git",
     "directory": "packages/cli"
   },
   "type": "module",
@@ -25,6 +25,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=18"
   },

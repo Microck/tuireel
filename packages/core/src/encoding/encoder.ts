@@ -175,7 +175,7 @@ export class FfmpegEncoder {
 
   async writeFrame(jpegBuffer: Buffer): Promise<void> {
     if (this.finalized) {
-      throw new Error("Cannot write frame after encoder has been finalized. Try: this is an internal error — please report it at https://github.com/tuireel/tuireel/issues.");
+      throw new Error("Cannot write frame after encoder has been finalized. Try: this is an internal error — please report it at https://github.com/Microck/tuireel/issues.");
     }
 
     this.assertWritable();

@@ -13,7 +13,7 @@ Thanks for your interest in contributing. This guide covers setup, development w
 **Setup:**
 
 ```bash
-git clone https://github.com/tuireel/tuireel.git
+git clone https://github.com/Microck/tuireel.git
 cd tuireel
 pnpm install
 pnpm build

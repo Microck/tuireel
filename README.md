@@ -16,7 +16,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/tuireel"><img src="https://img.shields.io/npm/v/tuireel" alt="npm version"></a>
-  <a href="https://github.com/tuireel/tuireel/actions/workflows/ci.yml"><img src="https://github.com/tuireel/tuireel/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/Microck/tuireel/actions/workflows/ci.yml"><img src="https://github.com/Microck/tuireel/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/npm/l/tuireel" alt="license"></a>
 </p>
 

@@ -1,4 +1,35 @@
+# Dependencies
 node_modules
+
+# Build output
 dist
 .turbo
 *.tsbuildinfo
+
+# Recording artifacts
+.tuireel
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Test/benchmark output
+smoke-output.*
+benchmark-output.*
+benchmark-recompose.*
+*-probe.json
+
+# Logs
+*.log
+
+# opensrc (fetched reference sources)
+opensrc/

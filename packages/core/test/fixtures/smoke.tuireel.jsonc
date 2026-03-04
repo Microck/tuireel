@@ -1,0 +1,15 @@
+{
+  "$schema": "../../src/config/schema.json",
+  "output": "smoke-output.mp4",
+  "format": "mp4",
+  "fps": 10,
+  "cols": 40,
+  "rows": 12,
+  "steps": [
+    { "type": "launch", "command": "echo 'Tuireel smoke test'" },
+    { "type": "pause", "duration": 500 },
+    { "type": "type", "text": "echo hello world" },
+    { "type": "press", "key": "Enter" },
+    { "type": "pause", "duration": 500 }
+  ]
+}

@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** - Phases 1-6 (shipped 2026-03-03)
-- 🚧 **v1.1 Branding, Docs & Hardening** - Phases 7-12 (in progress)
+- ✅ **v1.1 Branding, Docs & Hardening** - Phases 7-12 (shipped 2026-03-04)
 
 ## Phases
 
@@ -19,7 +19,7 @@ Archive:
 
 </details>
 
-### 🚧 v1.1 Branding, Docs & Hardening (In Progress)
+### ✅ v1.1 Branding, Docs & Hardening (Shipped 2026-03-04)
 
 **Milestone Goal:** Ship tuireel as a polished, documented, published open-source project with full branding, Mintlify docs, reliability hardening, CI, and release automation.
 
@@ -31,8 +31,8 @@ Archive:
 - [x] **Phase 8: Presets & Reliability** - User-facing presets and pipeline hardening (completed 2026-03-03)
 - [x] **Phase 9: Diagnostics** - Verbose/debug CLI modes and actionable error guidance (completed 2026-03-03)
 - [x] **Phase 10: Documentation** - Mintlify docs site with guides and references
-- [ ] **Phase 11: CI & Linting** - GitHub Actions pipeline and code quality enforcement
-- [ ] **Phase 12: Release & Performance** - npm publishing automation and compositing optimization
+- [x] **Phase 11: CI & Linting** - GitHub Actions pipeline and code quality enforcement (completed 2026-03-04)
+- [x] **Phase 12: Release & Performance** - npm publishing automation and compositing optimization (completed 2026-03-04)
 
 ## Phase Details
 
@@ -116,7 +116,7 @@ Plans:
 
 Plans:
 - [x] 11-01-PLAN.md — ESLint + Prettier + turbo lint + GitHub Actions CI workflow
-- [ ] 11-02-PLAN.md — Video smoke test CI job + artifact upload on failure
+- [x] 11-02-PLAN.md — Video smoke test CI job + artifact upload on failure
 
 ### Phase 12: Release & Performance
 **Goal**: Merging to main triggers automated npm publishing with GitHub releases, and compositing performance has a benchmark baseline with at least one optimization applied.
@@ -131,9 +131,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 12-01-PLAN.md — Changesets setup + npm publish config
-- [ ] 12-02-PLAN.md — GitHub Actions release workflow (version PR + auto-publish)
-- [ ] 12-03-PLAN.md — Performance benchmark + compositing optimization
+- [x] 12-01-PLAN.md — Changesets setup + npm publish config
+- [x] 12-02-PLAN.md — GitHub Actions release workflow (version PR + auto-publish)
+- [x] 12-03-PLAN.md — Performance benchmark + compositing optimization
 
 ## Progress
 
@@ -146,5 +146,5 @@ Plans:
 | 8. Presets & Reliability | v1.1 | 4/4 | Complete | 2026-03-03 |
 | 9. Diagnostics | v1.1 | 2/2 | Complete | 2026-03-03 |
 | 10. Documentation | v1.1 | 3/3 | Complete | 2026-03-04 |
-| 11. CI & Linting | v1.1 | 1/2 | In progress | - |
-| 12. Release & Performance | v1.1 | 0/3 | Planned | - |
+| 11. CI & Linting | v1.1 | 2/2 | Complete | 2026-03-04 |
+| 12. Release & Performance | v1.1 | 3/3 | Complete | 2026-03-04 |

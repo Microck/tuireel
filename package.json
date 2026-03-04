@@ -8,15 +8,21 @@
     "dev": "turbo run dev --parallel",
     "clean": "turbo run clean",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish",
+    "benchmark": "tsx scripts/benchmark.ts"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
     "@eslint/js": "^10.0.1",
     "@types/node": "^25.3.3",
     "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.8.1",
     "sharp": "^0.34.5",
+    "tsx": "^4.21.0",
     "turbo": "^2.5.6",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.56.1",
