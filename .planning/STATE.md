@@ -4,16 +4,16 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 17 CI smoke hardening for multi-format record outputs (CI-04)
+**Current focus:** Phase 17 complete (CI-04 multi-format smoke fixed); ready to re-audit milestone.
 
 ## Current Position
 
 Phase: 17 of 17 (fix multi-format record outputs)
-Plan: 17-02 complete
-Status: In progress
-Last activity: 2026-03-04 -- Completed 17-02 (Fix Multi-Format Record Outputs)
+Plan: All plans complete
+Status: Phase complete
+Last activity: 2026-03-04 -- Verified Phase 17 (Fix Multi-Format Record Outputs)
 
-Progress: [################################] Gap closure: 11/11 autonomous plans (3 checkpoint plans skipped — require /gsd-audit-milestone)
+Progress: [################################] Gap closure: 12/12 autonomous plans (3 checkpoint plans skipped — require /gsd-audit-milestone)
 
 ## Milestone Progress
 
@@ -32,7 +32,7 @@ Progress: [################################] Gap closure: 11/11 autonomous plans
 
 **v1.1:** 19 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9 complete: 09-01 (8 min), 09-02 (8 min). Phase 10 complete: 10-01 (2 min), 10-02 (2 min), 10-03 (3 min). Phase 11: 11-01 (3 min), 11-02 (3 min). Phase 12: 12-01 (3 min), 12-02 (2 min), 12-03 (5 min).
 
-**Gap closure:** 13-01 (2 min), 13-02 (2 min), 14-01 (2 min), 14-02 (1 min), 14-03 (2 min), 15-01 (1 min), 15-02 (1 min), 16-01 (2 min), 16-02 (2 min), 17-01 (19 min), 17-02 (4 min).
+**Gap closure:** 13-01 (2 min), 13-02 (2 min), 14-01 (2 min), 14-02 (1 min), 14-03 (2 min), 15-01 (1 min), 15-02 (1 min), 16-01 (2 min), 16-02 (2 min), 17-01 (19 min), 17-02 (4 min), 17-03 (3 min).
 
 ## Accumulated Context
 

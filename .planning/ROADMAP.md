@@ -42,7 +42,7 @@ Gap closure phases (from `.planning/v1.1-MILESTONE-AUDIT.md`):
 - [ ] **Phase 14: Verify Ops Phases (10-12)** - Add missing verification reports (GAP CLOSURE)
 - [ ] **Phase 15: CI Wiring Fixes** - Real type-check + fix video smoke CLI invocation (GAP CLOSURE)
 - [ ] **Phase 16: Publish Installability Fixes** - Remove `workspace:*` from published deps + align version drift (GAP CLOSURE)
-- [ ] **Phase 17: Fix Multi-Format Record Outputs (CI Smoke)** - Make MP4/WebM/GIF smoke test deterministic (GAP CLOSURE)
+- [x] **Phase 17: Fix Multi-Format Record Outputs (CI Smoke)** - Make MP4/WebM/GIF smoke test deterministic (completed 2026-03-04) (GAP CLOSURE)
 
 ## Phase Details
 
@@ -255,15 +255,15 @@ Plans:
 
 Plans:
 
-- [ ] 17-01-PLAN.md — Define output naming contract for `record --format` + implement deterministic outputs
-- [ ] 17-02-PLAN.md — Update video smoke workflow to match the contract + add regression verification
-- [ ] 17-03-PLAN.md — Update CLI docs (and README if needed) to match behavior
+- [x] 17-01-PLAN.md — Define output naming contract for `record --format` + implement deterministic outputs
+- [x] 17-02-PLAN.md — Update video smoke workflow to match the contract + add regression verification
+- [x] 17-03-PLAN.md — Update CLI docs (and README if needed) to match behavior
 
 ## Progress
 
 **Execution Order:** 7 → 8 → 9 → 10 → 11 → 12
 
-**Gap Closure Order:** 13 → 14 → 15 → 16
+**Gap Closure Order:** 13 → 14 → 15 → 16 → 17
 
 | Phase                                          | Milestone | Plans Complete | Status      | Completed  |
 | ---------------------------------------------- | --------- | -------------- | ----------- | ---------- |
@@ -278,4 +278,4 @@ Plans:
 | 14. Verify Ops Phases (10-12)                  | v1.1      | 3/4            | In progress | —          |
 | 15. CI Wiring Fixes                            | v1.1      | 0/TBD          | Planned     | —          |
 | 16. Publish Installability Fixes               | v1.1      | 0/2            | Planned     | —          |
-| 17. Fix Multi-Format Record Outputs (CI Smoke) | v1.1      | 0/3            | Planned     | —          |
+| 17. Fix Multi-Format Record Outputs (CI Smoke) | v1.1      | 3/3            | Complete    | 2026-03-04 |
