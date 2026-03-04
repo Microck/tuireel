@@ -8,12 +8,12 @@ See: `.planning/PROJECT.md` (updated 2026-07-16)
 
 ## Current Position
 
-Phase: 15 of 16 (CI Wiring Fixes)
-Plan: 2 of 3 in current phase
+Phase: 16 of 16 (Publish Installability Fixes)
+Plan: 1 of 2 in current phase
 Status: In progress
-Last activity: 2026-03-04 -- Completed 15-02-PLAN.md (Video smoke CLI invocation fix)
+Last activity: 2026-03-04 -- Completed 16-01-PLAN.md (Remove workspace:\* and fix version drift)
 
-Progress: [############################....] Gap closure: 7/12 plans
+Progress: [#############################...] Gap closure: 8/12 plans
 
 ## Milestone Progress
 
@@ -32,7 +32,7 @@ Progress: [############################....] Gap closure: 7/12 plans
 
 **v1.1:** 19 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9 complete: 09-01 (8 min), 09-02 (8 min). Phase 10 complete: 10-01 (2 min), 10-02 (2 min), 10-03 (3 min). Phase 11: 11-01 (3 min), 11-02 (3 min). Phase 12: 12-01 (3 min), 12-02 (2 min), 12-03 (5 min).
 
-**Gap closure:** 13-01 (2 min), 13-02 (2 min), 14-01 (2 min), 14-02 (1 min), 14-03 (2 min), 15-01 (1 min), 15-02 (1 min).
+**Gap closure:** 13-01 (2 min), 13-02 (2 min), 14-01 (2 min), 14-02 (1 min), 14-03 (2 min), 15-01 (1 min), 15-02 (1 min), 16-01 (2 min).
 
 ## Accumulated Context
 
@@ -48,6 +48,7 @@ Recent decisions:
 - Color palette: teal #06B6D4, amber #F59E0B, navy #0F172A, off-white #F8FAFC
 - Copyright holder: "Tuireel Contributors" (community project)
 - CI CLI invocation via node packages/cli/dist/index.js (deterministic, no workspace resolution)
+- CLI version sourced from own package.json via createRequire (no cross-package VERSION constants)
 
 ### Quick Tasks Completed
 
