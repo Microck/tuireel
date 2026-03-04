@@ -7,6 +7,7 @@ import {
   createLogger,
   compose,
   loadSingleConfig,
+  resolveOutputPath,
   type OutputFormat,
   type SoundConfig,
   type TimelineData,
@@ -33,7 +34,9 @@ function parseOutputFormat(value: string): OutputFormat {
     return value as OutputFormat;
   }
 
-  throw new InvalidArgumentError(`Invalid format \"${value}\". Expected one of: ${OUTPUT_FORMATS.join(", ")}.`);
+  throw new InvalidArgumentError(
+    `Invalid format \"${value}\". Expected one of: ${OUTPUT_FORMATS.join(", ")}.`,
+  );
 }
 
 function parseCursorSize(value: string): number {
@@ -78,16 +81,6 @@ function resolveRecordingArtifacts(recordingName: string): {
   };
 }
 
-function resolveOutputPath(configOutputPath: string, format: OutputFormat): string {
-  const extension = extname(configOutputPath);
-
-  if (extension.length === 0) {
-    return `${configOutputPath}.${format}`;
-  }
-
-  return `${configOutputPath.slice(0, -extension.length)}.${format}`;
-}
-
 function stripHudFromTimeline(timelineData: TimelineData): TimelineData {
   return {
     ...timelineData,
@@ -128,7 +121,11 @@ export function registerCompositeCommand(program: Command): void {
     .option("--debug", "Show ffmpeg commands and internal timing")
     .action(async (configPathArg: string, options: CompositeOptions) => {
       const configPath = resolve(process.cwd(), options.config ?? configPathArg);
-      const logLevel = options.debug ? LogLevel.debug : options.verbose ? LogLevel.verbose : LogLevel.normal;
+      const logLevel = options.debug
+        ? LogLevel.debug
+        : options.verbose
+          ? LogLevel.verbose
+          : LogLevel.normal;
       const logger = createLogger(logLevel);
 
       try {
@@ -138,16 +135,24 @@ export function registerCompositeCommand(program: Command): void {
         const artifacts = resolveRecordingArtifacts(recordingName);
 
         if (!(await fileExists(artifacts.rawVideoPath))) {
-          throw new Error(`Raw video not found: ${artifacts.rawVideoPath}. Run \`tuireel record\` first.`);
+          throw new Error(
+            `Raw video not found: ${artifacts.rawVideoPath}. Run \`tuireel record\` first.`,
+          );
         }
 
         if (!(await fileExists(artifacts.timelinePath))) {
-          throw new Error(`Timeline not found: ${artifacts.timelinePath}. Run \`tuireel record\` first.`);
+          throw new Error(
+            `Timeline not found: ${artifacts.timelinePath}. Run \`tuireel record\` first.`,
+          );
         }
 
-        const timelineData = JSON.parse(await readFile(artifacts.timelinePath, "utf8")) as TimelineData;
+        const timelineData = JSON.parse(
+          await readFile(artifacts.timelinePath, "utf8"),
+        ) as TimelineData;
         const selectedFormat = options.format ?? config.format;
-        const outputPath = resolveOutputPath(config.output, selectedFormat);
+        const outputPath = selectedFormat
+          ? resolveOutputPath(config.output, selectedFormat)
+          : config.output;
 
         console.log(`Compositing from ${artifacts.rawVideoPath}`);
 

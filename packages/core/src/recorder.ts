@@ -13,6 +13,7 @@ import { FfmpegEncoder } from "./encoding/encoder.js";
 import { computeCursorPath } from "./overlay/bezier.js";
 import { resolveTheme } from "./themes/resolve.js";
 import { InteractionTimeline } from "./timeline/interaction-timeline.js";
+import { resolveOutputPath } from "./utils/output-path.js";
 
 const DEFAULT_FPS = 30;
 const RECORDING_ROOT_DIR = ".tuireel";
@@ -55,7 +56,9 @@ function isLaunchStep(step: TuireelStep): step is LaunchStep {
 function getLaunchCommand(config: TuireelConfig): string {
   const launchStep = config.steps.find(isLaunchStep);
   if (!launchStep) {
-    throw new Error("Config must include at least one 'launch' step. Try: add a step like { \"type\": \"launch\", \"command\": \"bash\" } to your config.");
+    throw new Error(
+      'Config must include at least one \'launch\' step. Try: add a step like { "type": "launch", "command": "bash" } to your config.',
+    );
   }
 
   return launchStep.command;
@@ -141,16 +144,8 @@ function resolveCursorTarget(
   const marginX = Math.min(CURSOR_MARGIN, Math.floor(width / 2));
   const marginY = Math.min(CURSOR_MARGIN, Math.floor(height / 2));
 
-  const x = clamp(
-    Math.round(width * anchor.x),
-    marginX,
-    Math.max(marginX, width - marginX),
-  );
-  const y = clamp(
-    Math.round(height * anchor.y),
-    marginY,
-    Math.max(marginY, height - marginY),
-  );
+  const x = clamp(Math.round(width * anchor.x), marginX, Math.max(marginX, width - marginX));
+  const y = clamp(Math.round(height * anchor.y), marginY, Math.max(marginY, height - marginY));
 
   return { x, y };
 }
@@ -212,7 +207,9 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
 
   const throwIfInterrupted = (): void => {
     if (interruptedSignal) {
-      throw new Error(`Recording interrupted by ${interruptedSignal}. Try: re-run the command to start recording again.`);
+      throw new Error(
+        `Recording interrupted by ${interruptedSignal}. Try: re-run the command to start recording again.`,
+      );
     }
   };
 
@@ -241,7 +238,11 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
     const launchCommand = getLaunchCommand(config);
     const resolvedTheme = config.theme ? resolveTheme(config.theme) : undefined;
 
-    const recordingName = recordingNameFromOutput(config.output);
+    const normalizedOutput = config.format
+      ? resolveOutputPath(config.output, config.format)
+      : config.output;
+
+    const recordingName = recordingNameFromOutput(normalizedOutput);
     const artifacts = resolveRecordingArtifacts(recordingName);
 
     await mkdir(artifacts.rawDirectory, { recursive: true });
@@ -309,7 +310,12 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
           log.step(step.type, step.type === "launch" ? `"${launchCommand}"` : undefined);
 
           if (step.type !== "launch") {
-            const target = resolveCursorTarget(step, index, frameDimensions.width, frameDimensions.height);
+            const target = resolveCursorTarget(
+              step,
+              index,
+              frameDimensions.width,
+              frameDimensions.height,
+            );
             timeline.setCursorPath(
               computeCursorPath(currentCursor.x, currentCursor.y, target.x, target.y, fps),
             );
@@ -352,7 +358,9 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
 
     if (outcome === "signal") {
       throwIfInterrupted();
-      throw new Error("Recording interrupted by signal. Try: re-run the command to start recording again.");
+      throw new Error(
+        "Recording interrupted by signal. Try: re-run the command to start recording again.",
+      );
     }
 
     await capturer.stop();
@@ -365,21 +373,23 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
 
     timeline.save(artifacts.timelinePath);
 
-    log.verbose(`Compositing to ${config.output}...`);
+    log.verbose(`Compositing to ${normalizedOutput}...`);
     const composeStart = Date.now();
-    await compose(artifacts.rawVideoPath, timeline.toJSON(), config.output, {
+    await compose(artifacts.rawVideoPath, timeline.toJSON(), normalizedOutput, {
       format: config.format,
       sound: config.sound,
       cursorConfig: config.cursor ? { visible: config.cursor.visible ?? true } : undefined,
       logger: options.logger,
     });
     log.timing("compositing", Date.now() - composeStart);
-    log.verbose(`Recording complete: ${config.output}`);
+    log.verbose(`Recording complete: ${normalizedOutput}`);
   } catch (error) {
     await cleanup();
 
     if (interruptedSignal) {
-      throw new Error(`Recording interrupted by ${interruptedSignal}. Try: re-run the command to start recording again.`);
+      throw new Error(
+        `Recording interrupted by ${interruptedSignal}. Try: re-run the command to start recording again.`,
+      );
     }
 
     throw error;
