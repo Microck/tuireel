@@ -214,8 +214,20 @@ if (hasBun) {
   bunDir = mkdtempSync(join(tmpdir(), "tuireel-bun-"));
 
   try {
-    run(`npm init -y`, { cwd: bunDir });
-    run(`npm install "${coreTarPath}" "${cliTarPath}"`, { cwd: bunDir });
+    const bunPackageJson = {
+      private: true,
+      type: "module",
+      dependencies: {
+        tuireel: cliTarPath,
+        "@tuireel/core": coreTarPath,
+      },
+      overrides: {
+        "@tuireel/core": coreTarPath,
+      },
+    };
+    writeFileSync(join(bunDir, "package.json"), `${JSON.stringify(bunPackageJson, null, 2)}\n`);
+
+    run(`bun install`, { cwd: bunDir });
 
     run(`bunx --no-install tuireel --help`, { cwd: bunDir });
     pass("bunx: tuireel --help exited 0");
