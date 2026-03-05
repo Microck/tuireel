@@ -7,11 +7,11 @@
 </p>
 
 <p align="center">
-  <img src="assets/branding/banner.png" alt="Tuireel — Scripted TUI demo recorder" width="640">
+  <img src="assets/branding/banner.png" alt="Tuireel - Scripted TUI demo recorder" width="640">
 </p>
 
 <p align="center">
-  Scripted TUI demo recorder — produce polished terminal demo videos from declarative configs.
+  Scripted TUI demo recorder - produce polished terminal demo videos from declarative configs.
 </p>
 
 <p align="center">
@@ -316,9 +316,9 @@ pnpm build
 
 Three GitHub Actions workflows run on every push to `main` and on pull requests:
 
-- **CI** — lint, build, type-check, and test
-- **Video Smoke Tests** — records MP4, WebM, and GIF outputs and validates them with ffprobe
-- **Release** — automated publishing via [Changesets](https://github.com/changesets/changesets) with npm OIDC trusted publishing and post-publish validation
+- **CI** - lint, build, type-check, and test
+- **Video Smoke Tests** - records MP4, WebM, and GIF outputs and validates them with ffprobe
+- **Release** - automated publishing via [Changesets](https://github.com/changesets/changesets) with npm OIDC trusted publishing and post-publish validation
 
 ## Packages
 
