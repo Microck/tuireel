@@ -43,8 +43,8 @@ Gap closure phases (from `.planning/v1.1-MILESTONE-AUDIT.md`):
 - [ ] **Phase 15: CI Wiring Fixes** - Real type-check + fix video smoke CLI invocation (GAP CLOSURE)
 - [ ] **Phase 16: Publish Installability Fixes** - Remove `workspace:*` from published deps + align version drift (GAP CLOSURE)
 - [x] **Phase 17: Fix Multi-Format Record Outputs (CI Smoke)** - Make MP4/WebM/GIF smoke test deterministic (completed 2026-03-04) (GAP CLOSURE)
-- [ ] **Phase 18: Preset Sound Portability** - Make built-in preset SFX work outside the repo (GAP CLOSURE)
-- [ ] **Phase 19: Bun Publish Smoke Gate** - Unblock `publish:smoke` bun validation and release gating (GAP CLOSURE)
+- [x] **Phase 18: Preset Sound Portability** - Make built-in preset SFX work outside the repo (completed 2026-03-05) (GAP CLOSURE)
+- [x] **Phase 19: Bun Publish Smoke Gate** - Unblock `publish:smoke` bun validation and release gating (completed 2026-03-05) (GAP CLOSURE)
 
 ## Phase Details
 
@@ -317,5 +317,5 @@ Plans:
 | 15. CI Wiring Fixes                            | v1.1      | 0/TBD          | Planned     | —          |
 | 16. Publish Installability Fixes               | v1.1      | 0/2            | Planned     | —          |
 | 17. Fix Multi-Format Record Outputs (CI Smoke) | v1.1      | 3/3            | Complete    | 2026-03-04 |
-| 18. Preset Sound Portability                   | v1.1      | 2/2            | In progress | —          |
+| 18. Preset Sound Portability                   | v1.1      | 2/2            | Complete    | 2026-03-05 |
 | 19. Bun Publish Smoke Gate                     | v1.1      | 2/2            | Complete    | 2026-03-05 |

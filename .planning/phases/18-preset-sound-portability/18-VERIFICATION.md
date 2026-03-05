@@ -1,23 +1,24 @@
 ---
 phase: 18-preset-sound-portability
-verified: 2026-03-04T22:10:27Z
-status: human_needed
+verified: 2026-03-05T02:05:00Z
+status: passed
 score: 7/7 must-haves verified
 human_verification:
   - test: Run publish smoke end-to-end from a clean shell
     expected: pnpm -w publish:smoke completes with passing npx polished/demo record checks, audio stream checks, and bunx checks when bun is installed
-    why_human: Long-running pseudo-terminal + ffmpeg integration is environment-sensitive; automated run here timed out before npx record completion
+    result: passed
   - test: Record polished/demo from a non-repo directory and check audible SFX
     expected: Both outputs contain an audio stream and audible click/key effects during interaction steps
-    why_human: Stream presence can be machine-checked, but audible quality/real-world UX still needs human confirmation
+    result: approved-without-test
+approval_note: "User approved phase completion without running audible SFX quality check."
 ---
 
 # Phase 18: Preset Sound Portability Verification Report
 
 **Phase Goal:** Built-in preset sound effects work in typical installed usage (not repo-CWD dependent), so `polished`/`demo` presets reliably include sound.
-**Verified:** 2026-03-04T22:10:27Z
-**Status:** human_needed
-**Re-verification:** No - initial verification
+**Verified:** 2026-03-05T02:05:00Z
+**Status:** passed
+**Re-verification:** Yes - user approved human checkpoint
 
 ## Goal Achievement
 
@@ -70,25 +71,23 @@ human_verification:
 | ---------------------------- | ---- | ------------- | -------- | ------------------------------------------------------------------- |
 | `packages/core/src/sound.ts` | 242  | `return null` | INFO     | Intentional no-audio branch (`FullAudioArgs` or `null`), not a stub |
 
-### Human Verification Required
+### Human Verification Outcome
 
 ### 1. Publish Smoke Completion
 
 **Test:** Run `pnpm -w publish:smoke` and allow full completion.
-**Expected:** npx polished/demo record checks pass, ffmpeg audio checks pass, and bunx record checks pass when bun is installed (or explicitly skip when bun is unavailable).
-**Why human:** End-to-end pseudo-terminal recording + ffmpeg workflow is long-running and environment-sensitive. In this session, automated run reached npx sound-smoke execution but timed out before completion.
+**Outcome:** Passed (user-confirmed).
 
 ### 2. Audible Preset Quality
 
 **Test:** From a non-repo temp directory, run `tuireel record` with `{ "preset": "polished" }` and `{ "preset": "demo" }`, then play outputs.
-**Expected:** Both outputs contain audio streams and audible click/key SFX aligned with interaction steps.
-**Why human:** Audio-stream presence can be scripted, but audible quality and UX correctness are subjective runtime checks.
+**Outcome:** Not executed; user approved phase completion without this check.
 
 ### Gaps Summary
 
-No code-level gaps found in Phase 18 must-haves. Packaging, path resolution, and publish-smoke wiring for preset sound portability are present and connected. Remaining work is runtime confirmation in target environments.
+No code-level gaps found in Phase 18 must-haves. Packaging, path resolution, and publish-smoke wiring for preset sound portability are present and connected. Phase closure approved by user after confirming publish smoke passed.
 
 ---
 
-_Verified: 2026-03-04T22:10:27Z_
+_Verified: 2026-03-05T02:05:00Z_
 _Verifier: Claude (gsd-verifier)_
