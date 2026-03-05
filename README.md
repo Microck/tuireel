@@ -1,8 +1,8 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/branding/logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="assets/branding/logo-light.svg">
-    <img alt="Tuireel" src="assets/branding/logo-light.svg" width="360">
+    <source media="(prefers-color-scheme: light)" srcset="assets/branding/logo.svg">
+    <img alt="Tuireel" src="assets/branding/logo.svg" width="360">
   </picture>
 </p>
 

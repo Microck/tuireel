@@ -78,15 +78,17 @@ const palettePath = path.join(repoRoot, "assets", "branding", "palette.json");
 const docsJsonPath = path.join(repoRoot, "docs", "docs.json");
 const readmePath = path.join(repoRoot, "README.md");
 
-const brandingLogoLight = path.join(repoRoot, "assets", "branding", "logo-light.svg");
+const brandingLogo = path.join(repoRoot, "assets", "branding", "logo.svg");
 const brandingLogoDark = path.join(repoRoot, "assets", "branding", "logo-dark.svg");
 const brandingFavicon = path.join(repoRoot, "assets", "branding", "favicon.svg");
 const brandingBanner = path.join(repoRoot, "assets", "branding", "banner.png");
 const brandingOgImage = path.join(repoRoot, "assets", "branding", "og-image.png");
 
-const docsLogoLight = path.join(repoRoot, "docs", "images", "logo-light.svg");
 const docsLogoDark = path.join(repoRoot, "docs", "images", "logo-dark.svg");
 const docsFavicon = path.join(repoRoot, "docs", "images", "favicon.svg");
+
+const deprecatedBrandingLogoLight = path.join(repoRoot, "assets", "branding", "logo-light.svg");
+const deprecatedDocsLogoLight = path.join(repoRoot, "docs", "images", "logo-light.svg");
 
 let palette: Palette | null = null;
 try {
@@ -173,14 +175,20 @@ if (docsJson) {
   }
 }
 
-assertFileByteEqual(docsLogoLight, brandingLogoLight);
 assertFileByteEqual(docsLogoDark, brandingLogoDark);
 assertFileByteEqual(docsFavicon, brandingFavicon);
 
+if (!fs.existsSync(brandingLogo)) {
+  fail("missing file: assets/branding/logo.svg");
+}
+
 try {
   const readme = readUtf8(readmePath);
-  if (!readme.includes("assets/branding/logo-light.svg")) {
-    fail("README.md must reference assets/branding/logo-light.svg");
+  if (readme.includes("assets/branding/logo-light.svg")) {
+    fail("README.md must not reference assets/branding/logo-light.svg");
+  }
+  if (!readme.includes("assets/branding/logo.svg")) {
+    fail("README.md must reference assets/branding/logo.svg");
   }
   if (!readme.includes("assets/branding/logo-dark.svg")) {
     fail("README.md must reference assets/branding/logo-dark.svg");
@@ -190,6 +198,14 @@ try {
   }
 } catch (err) {
   fail(`failed to read README.md (${String(err)})`);
+}
+
+if (fs.existsSync(deprecatedBrandingLogoLight)) {
+  fail("deprecated file must not exist: assets/branding/logo-light.svg");
+}
+
+if (fs.existsSync(deprecatedDocsLogoLight)) {
+  fail("deprecated file must not exist: docs/images/logo-light.svg");
 }
 
 async function verifyPngDimensions(filePath: string, expected: { width: number; height: number }) {
