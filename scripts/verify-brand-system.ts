@@ -74,55 +74,21 @@ function assertFileByteEqual(leftPath: string, rightPath: string) {
   }
 }
 
-function verifyLogoVariantFills(logoPath: string, logoDarkPath: string) {
-  let logoSvg: string | null = null;
-  let logoDarkSvg: string | null = null;
-
-  try {
-    logoSvg = readUtf8(logoPath);
-  } catch (err) {
-    fail(`failed to read assets/branding/logo.svg (${String(err)})`);
-  }
-
-  try {
-    logoDarkSvg = readUtf8(logoDarkPath);
-  } catch (err) {
-    fail(`failed to read assets/branding/logo-dark.svg (${String(err)})`);
-  }
-
-  if (logoDarkSvg) {
-    if (!logoDarkSvg.includes('fill="#F5ECD9"')) {
-      fail('assets/branding/logo-dark.svg must contain fill="#F5ECD9"');
-    }
-    if (logoDarkSvg.includes('fill="#141015"')) {
-      fail('assets/branding/logo-dark.svg must not contain fill="#141015"');
-    }
-  }
-
-  if (logoSvg) {
-    if (!logoSvg.includes('fill="#141015"')) {
-      fail('assets/branding/logo.svg must contain fill="#141015"');
-    }
-    if (logoSvg.includes('fill="#F5ECD9"')) {
-      fail('assets/branding/logo.svg must not contain fill="#F5ECD9"');
-    }
-  }
-}
-
 const palettePath = path.join(repoRoot, "assets", "branding", "palette.json");
 const docsJsonPath = path.join(repoRoot, "docs", "docs.json");
 const readmePath = path.join(repoRoot, "README.md");
 
 const brandingLogo = path.join(repoRoot, "assets", "branding", "logo.svg");
-const brandingLogoDark = path.join(repoRoot, "assets", "branding", "logo-dark.svg");
 const brandingFavicon = path.join(repoRoot, "assets", "branding", "favicon.svg");
 const brandingBanner = path.join(repoRoot, "assets", "branding", "banner.png");
 const brandingOgImage = path.join(repoRoot, "assets", "branding", "og-image.png");
 
-const docsLogoDark = path.join(repoRoot, "docs", "images", "logo-dark.svg");
+const docsLogo = path.join(repoRoot, "docs", "images", "logo.svg");
 const docsFavicon = path.join(repoRoot, "docs", "images", "favicon.svg");
 
+const deprecatedBrandingLogoDark = path.join(repoRoot, "assets", "branding", "logo-dark.svg");
 const deprecatedBrandingLogoLight = path.join(repoRoot, "assets", "branding", "logo-light.svg");
+const deprecatedDocsLogoDark = path.join(repoRoot, "docs", "images", "logo-dark.svg");
 const deprecatedDocsLogoLight = path.join(repoRoot, "docs", "images", "logo-light.svg");
 
 let palette: Palette | null = null;
@@ -195,8 +161,8 @@ if (docsJson) {
       `docs/docs.json.logo: expected { light, dark } object, got string ${JSON.stringify(logo)}`,
     );
   } else {
-    assertEqual("docs/docs.json.logo.light", logo?.light, "/images/logo-dark.svg");
-    assertEqual("docs/docs.json.logo.dark", logo?.dark, "/images/logo-dark.svg");
+    assertEqual("docs/docs.json.logo.light", logo?.light, "/images/logo.svg");
+    assertEqual("docs/docs.json.logo.dark", logo?.dark, "/images/logo.svg");
   }
 
   const favicon = docsJson.favicon;
@@ -210,10 +176,8 @@ if (docsJson) {
   }
 }
 
-assertFileByteEqual(docsLogoDark, brandingLogoDark);
+assertFileByteEqual(docsLogo, brandingLogo);
 assertFileByteEqual(docsFavicon, brandingFavicon);
-
-verifyLogoVariantFills(brandingLogo, brandingLogoDark);
 
 if (!fs.existsSync(brandingLogo)) {
   fail("missing file: assets/branding/logo.svg");
@@ -221,14 +185,17 @@ if (!fs.existsSync(brandingLogo)) {
 
 try {
   const readme = readUtf8(readmePath);
+  if (readme.includes("<picture>")) {
+    fail("README.md must not contain a <picture> logo block");
+  }
   if (readme.includes("assets/branding/logo-light.svg")) {
     fail("README.md must not reference assets/branding/logo-light.svg");
   }
+  if (readme.includes("assets/branding/logo-dark.svg")) {
+    fail("README.md must not reference assets/branding/logo-dark.svg");
+  }
   if (!readme.includes("assets/branding/logo.svg")) {
     fail("README.md must reference assets/branding/logo.svg");
-  }
-  if (!readme.includes("assets/branding/logo-dark.svg")) {
-    fail("README.md must reference assets/branding/logo-dark.svg");
   }
   if (!readme.includes("assets/branding/banner.png")) {
     fail("README.md must reference assets/branding/banner.png");
@@ -237,8 +204,16 @@ try {
   fail(`failed to read README.md (${String(err)})`);
 }
 
+if (fs.existsSync(deprecatedBrandingLogoDark)) {
+  fail("deprecated file must not exist: assets/branding/logo-dark.svg");
+}
+
 if (fs.existsSync(deprecatedBrandingLogoLight)) {
   fail("deprecated file must not exist: assets/branding/logo-light.svg");
+}
+
+if (fs.existsSync(deprecatedDocsLogoDark)) {
+  fail("deprecated file must not exist: docs/images/logo-dark.svg");
 }
 
 if (fs.existsSync(deprecatedDocsLogoLight)) {
