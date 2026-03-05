@@ -10,7 +10,7 @@
  */
 
 import { execSync } from "node:child_process";
-import { mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -58,6 +58,142 @@ function fail(label: string, detail?: string) {
 
 function errorMessage(error: unknown): string {
   return (error instanceof Error ? error.message : String(error)).slice(0, 300);
+}
+
+type PackageJsonShape = {
+  name?: unknown;
+  version?: unknown;
+  exports?: unknown;
+};
+
+class SmokeAbortError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "SmokeAbortError";
+  }
+}
+
+function failFast(label: string, detail: string): never {
+  fail(label, detail);
+  throw new SmokeAbortError(label);
+}
+
+function parsePackageJson(rawValue: string, source: string): PackageJsonShape {
+  try {
+    return JSON.parse(rawValue) as PackageJsonShape;
+  } catch (error: unknown) {
+    failFast(
+      "publish smoke: failed to parse package.json",
+      [`Source: ${source}`, `Error: ${errorMessage(error)}`].join("\n"),
+    );
+  }
+}
+
+function normalizeExports(exportsValue: unknown): Record<string, unknown> {
+  if (typeof exportsValue === "string") {
+    return { ".": exportsValue };
+  }
+  if (exportsValue && typeof exportsValue === "object" && !Array.isArray(exportsValue)) {
+    return exportsValue as Record<string, unknown>;
+  }
+  return {};
+}
+
+function assertInstalledPackageMatchesTarball(options: {
+  packageLabel: string;
+  tarPath: string;
+  installedPackageJsonPath: string;
+}): void {
+  const { packageLabel, tarPath, installedPackageJsonPath } = options;
+
+  let tarballPackageJson: PackageJsonShape;
+  let installedPackageJson: PackageJsonShape;
+
+  try {
+    const tarballPackageJsonRaw = run(`tar -xOzf "${tarPath}" package/package.json`);
+    tarballPackageJson = parsePackageJson(
+      tarballPackageJsonRaw,
+      `${tarPath}::package/package.json`,
+    );
+
+    const installedPackageJsonRaw = readFileSync(installedPackageJsonPath, "utf8");
+    installedPackageJson = parsePackageJson(installedPackageJsonRaw, installedPackageJsonPath);
+  } catch (error: unknown) {
+    if (error instanceof SmokeAbortError) {
+      throw error;
+    }
+
+    failFast(
+      `bun install: unable to verify ${packageLabel} tarball equivalence`,
+      [
+        "Bun may have resolved this package from the registry/cache instead of the packed tarball under test.",
+        `Expected tarball: ${tarPath}`,
+        `Installed package.json: ${installedPackageJsonPath}`,
+        `Error: ${errorMessage(error)}`,
+      ].join("\n"),
+    );
+  }
+
+  const expectedName = String(tarballPackageJson.name ?? "");
+  const expectedVersion = String(tarballPackageJson.version ?? "");
+  const actualName = String(installedPackageJson.name ?? "");
+  const actualVersion = String(installedPackageJson.version ?? "");
+
+  const expectedExports = normalizeExports(tarballPackageJson.exports);
+  const actualExports = normalizeExports(installedPackageJson.exports);
+
+  const expectedExportKeys = Object.keys(expectedExports).sort();
+  const actualExportKeys = Object.keys(actualExports).sort();
+  const expectedExportKeysJoined = expectedExportKeys.join("\n");
+  const actualExportKeysJoined = actualExportKeys.join("\n");
+
+  const mismatches: string[] = [];
+
+  if (expectedName !== actualName || expectedVersion !== actualVersion) {
+    mismatches.push(
+      `name/version mismatch: expected ${expectedName}@${expectedVersion}, actual ${actualName}@${actualVersion}`,
+    );
+  }
+
+  if (expectedExportKeysJoined !== actualExportKeysJoined) {
+    mismatches.push(
+      [
+        "exports key mismatch:",
+        `expected keys:\n${expectedExportKeysJoined || "<none>"}`,
+        `actual keys:\n${actualExportKeysJoined || "<none>"}`,
+      ].join("\n"),
+    );
+  }
+
+  for (const exportKey of expectedExportKeys) {
+    const expectedValue = JSON.stringify(expectedExports[exportKey]);
+    const actualValue = JSON.stringify(actualExports[exportKey]);
+    if (expectedValue !== actualValue) {
+      mismatches.push(
+        [
+          `exports value mismatch for \"${exportKey}\"`,
+          `expected: ${expectedValue}`,
+          `actual: ${actualValue}`,
+        ].join("\n"),
+      );
+    }
+  }
+
+  if (mismatches.length > 0) {
+    failFast(
+      `bun install: ${packageLabel} package.json differs from packed tarball`,
+      [
+        "Bun may have resolved this package from the registry/cache instead of the packed tarball under test.",
+        `Expected tarball: ${tarPath}`,
+        `Installed package.json: ${installedPackageJsonPath}`,
+        `Expected name/version: ${expectedName}@${expectedVersion}`,
+        `Actual name/version: ${actualName}@${actualVersion}`,
+        `Differences:\n- ${mismatches.join("\n- ")}`,
+      ].join("\n"),
+    );
+  }
+
+  pass(`bun install: ${packageLabel} matches packed tarball package.json`);
 }
 
 function writeSoundSmokeConfigs(targetDir: string): void {
@@ -229,6 +365,40 @@ if (hasBun) {
 
     run(`bun install`, { cwd: bunDir });
 
+    assertInstalledPackageMatchesTarball({
+      packageLabel: "@tuireel/core",
+      tarPath: coreTarPath,
+      installedPackageJsonPath: join(bunDir, "node_modules", "@tuireel", "core", "package.json"),
+    });
+
+    assertInstalledPackageMatchesTarball({
+      packageLabel: "tuireel",
+      tarPath: cliTarPath,
+      installedPackageJsonPath: join(bunDir, "node_modules", "tuireel", "package.json"),
+    });
+
+    const nestedCoreDir = join(
+      bunDir,
+      "node_modules",
+      "tuireel",
+      "node_modules",
+      "@tuireel",
+      "core",
+    );
+
+    if (existsSync(nestedCoreDir)) {
+      failFast(
+        "bun install: detected nested tuireel/node_modules/@tuireel/core",
+        [
+          "Bun may have resolved @tuireel/core from the registry/cache instead of the packed tarball under test.",
+          `Expected core tarball: ${coreTarPath}`,
+          `Unexpected nested path: ${nestedCoreDir}`,
+        ].join("\n"),
+      );
+    }
+
+    pass("bun install: no nested tuireel/node_modules/@tuireel/core");
+
     run(
       `bun --cwd "${bunDir}" x --no-install tuireel --help || bun x --no-install tuireel --help`,
       { cwd: bunDir },
@@ -248,7 +418,9 @@ if (hasBun) {
         `bun --cwd "${bunDir}" x --no-install tuireel record ./${configFile} --format mp4 || bun x --no-install tuireel record ./${configFile} --format mp4`,
     );
   } catch (e: unknown) {
-    fail("bun smoke test failed", errorMessage(e));
+    if (!(e instanceof SmokeAbortError)) {
+      fail("bun smoke test failed", errorMessage(e));
+    }
   }
 } else {
   console.log("\n--- bun not found, skipping bun smoke test ---");
