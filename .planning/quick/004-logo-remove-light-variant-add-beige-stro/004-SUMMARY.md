@@ -76,3 +76,9 @@ None.
 
 - Brand system verification passes (`pnpm -s tsx scripts/verify-brand-system.ts`).
 - Repo no longer contains or consumes `logo-light.svg` as an asset variant.
+
+## Self-Check: PASSED
+
+- Summary present: `.planning/quick/004-logo-remove-light-variant-add-beige-stro/004-SUMMARY.md`
+- Commits present: `e48b566`, `633cc0e`, `faf9183`, `328cc5c`
+- Deprecated assets removed: `assets/branding/logo-light.svg`, `docs/images/logo-light.svg`
