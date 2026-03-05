@@ -1,0 +1,47 @@
+# Tuireel Brand System (v1.15)
+
+This document is intentionally drift-resistant.
+
+## Source of truth
+
+Palette tokens live in a single canonical file:
+
+- `assets/branding/palette.json`
+
+Do not duplicate token values elsewhere in markdown docs. Any surface that needs exact colors should reference (or be synced from) the JSON.
+
+## Palette tokens
+
+The v1.15 palette exposes these token names:
+
+- `background`
+- `surface`
+- `primary`
+- `secondary`
+- `accent`
+
+## Logo assets
+
+Canonical SVGs:
+
+- `assets/branding/logo.svg` (canonical logo)
+- `assets/branding/logo-light.svg` (for light backgrounds)
+- `assets/branding/logo-dark.svg` (for dark backgrounds)
+
+Where they are consumed:
+
+- README banner/logo: `README.md` references the light/dark SVG variants directly from `assets/branding/`.
+
+## Docs theming
+
+Mintlify docs are wired via:
+
+- `docs/docs.json`
+
+Docs-consumed asset copies live at:
+
+- `docs/images/logo-light.svg`
+- `docs/images/logo-dark.svg`
+- `docs/images/favicon.svg`
+
+These files should remain byte-equal to their canonical counterparts in `assets/branding/`.
