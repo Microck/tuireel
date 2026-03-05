@@ -7,14 +7,17 @@
       "canonical": "https://tuireel.micr.dev"
     }
   },
+  "font": {
+    "family": "Outfit"
+  },
   "colors": {
-    "primary": "#18AAA7",
+    "primary": "#C1263B",
     "light": "#18AAA7",
     "dark": "#C1263B"
   },
   "background": {
     "color": {
-      "light": "#F5ECD9",
+      "light": "#18AAA7",
       "dark": "#141015"
     }
   },
