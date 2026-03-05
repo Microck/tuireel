@@ -4,16 +4,16 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 19 Plan 01 complete; ready for Plan 02 regression assertions.
+**Current focus:** Phase 19 complete; Bun publish smoke now enforces deterministic tarball + export-surface assertions.
 
 ## Current Position
 
 Phase: 19 of 19 (bun publish smoke gate)
-Plan: 1 of 2
-Status: In progress
-Last activity: 2026-03-05 - Completed 19-01-PLAN.md
+Plan: 2 of 2
+Status: Phase complete
+Last activity: 2026-03-05 - Completed 19-02-PLAN.md
 
-Progress: [██████████████████████████████░░] 57/61 plans complete (93%)
+Progress: [██████████████████████████████░░] 58/61 plans complete (95%)
 
 ## Milestone Progress
 
@@ -55,6 +55,9 @@ Recent decisions:
 - Publish smoke now verifies core tarballs include required built-in SFX files before install checks
 - Publish smoke now records polished/demo presets in temp npx+bunx installs and asserts MP4 audio via ffmpeg stream mapping
 - Bun smoke runtime checks now execute through bun runtime command paths while preserving compatibility with Bun 1.3 CLI parsing
+- Bun smoke now compares installed `tuireel` + `@tuireel/core` package.json name/version/exports against packed tarballs and fails fast on mismatch
+- Bun smoke now verifies `resolveOutputPath` export via temp ESM probe before any CLI command and reports stderr snippets on failures
+- Publish smoke cleanup now deletes `packDir`, `npxDir`, and `bunDir` independently in best-effort mode
 
 ### Quick Tasks Completed
 
@@ -68,6 +71,6 @@ Recent decisions:
 
 ## Session Continuity
 
-- Last session: 2026-03-05T01:24:38Z
-- Stopped at: Completed 19-01-PLAN.md
-- Resume file: `.planning/phases/19-bun-publish-smoke-gate/19-02-PLAN.md`
+- Last session: 2026-03-05T01:35:04Z
+- Stopped at: Completed 19-02-PLAN.md
+- Resume file: `.planning/phases/13-verify-phases-08-09/13-03-PLAN.md`
