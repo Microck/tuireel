@@ -15,9 +15,9 @@
     "family": "Outfit"
   },
   "colors": {
-    "primary": "#C1263B",
-    "light": "#C1263B",
-    "dark": "#18AAA7"
+    "primary": "#18AAA7",
+    "light": "#18AAA7",
+    "dark": "#C1263B"
   },
   "background": {
     "color": {
