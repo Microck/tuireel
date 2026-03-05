@@ -46,7 +46,7 @@ Recent decisions:
 - Mintlify for docs (confirmed in requirements)
 - GitHub Actions for CI (confirmed in requirements)
 - Icon concept: film reel frame + terminal prompt (>\_) with sprocket holes
-- Color palette: teal #06B6D4, amber #F59E0B, navy #0F172A, off-white #F8FAFC
+- Color palette (v1.15): tokens `background`/`surface`/`primary`/`secondary`/`accent` in `assets/branding/palette.json`
 - Copyright holder: "Tuireel Contributors" (community project)
 - CI CLI invocation via node packages/cli/dist/index.js (deterministic, no workspace resolution)
 - CLI version sourced from own package.json via createRequire (no cross-package VERSION constants)
