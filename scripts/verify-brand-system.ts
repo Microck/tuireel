@@ -74,6 +74,41 @@ function assertFileByteEqual(leftPath: string, rightPath: string) {
   }
 }
 
+function verifyLogoVariantFills(logoPath: string, logoDarkPath: string) {
+  let logoSvg: string | null = null;
+  let logoDarkSvg: string | null = null;
+
+  try {
+    logoSvg = readUtf8(logoPath);
+  } catch (err) {
+    fail(`failed to read assets/branding/logo.svg (${String(err)})`);
+  }
+
+  try {
+    logoDarkSvg = readUtf8(logoDarkPath);
+  } catch (err) {
+    fail(`failed to read assets/branding/logo-dark.svg (${String(err)})`);
+  }
+
+  if (logoDarkSvg) {
+    if (!logoDarkSvg.includes('fill="#F5ECD9"')) {
+      fail('assets/branding/logo-dark.svg must contain fill="#F5ECD9"');
+    }
+    if (logoDarkSvg.includes('fill="#141015"')) {
+      fail('assets/branding/logo-dark.svg must not contain fill="#141015"');
+    }
+  }
+
+  if (logoSvg) {
+    if (!logoSvg.includes('fill="#141015"')) {
+      fail('assets/branding/logo.svg must contain fill="#141015"');
+    }
+    if (logoSvg.includes('fill="#F5ECD9"')) {
+      fail('assets/branding/logo.svg must not contain fill="#F5ECD9"');
+    }
+  }
+}
+
 const palettePath = path.join(repoRoot, "assets", "branding", "palette.json");
 const docsJsonPath = path.join(repoRoot, "docs", "docs.json");
 const readmePath = path.join(repoRoot, "README.md");
@@ -177,6 +212,8 @@ if (docsJson) {
 
 assertFileByteEqual(docsLogoDark, brandingLogoDark);
 assertFileByteEqual(docsFavicon, brandingFavicon);
+
+verifyLogoVariantFills(brandingLogo, brandingLogoDark);
 
 if (!fs.existsSync(brandingLogo)) {
   fail("missing file: assets/branding/logo.svg");
