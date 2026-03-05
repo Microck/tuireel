@@ -7,6 +7,10 @@
 </p>
 
 <p align="center">
+  Brand system: <a href="assets/branding/brand-system.md">assets/branding/brand-system.md</a>
+</p>
+
+<p align="center">
   <img src="assets/branding/banner.png" alt="Tuireel — Scripted TUI demo recorder" width="640">
 </p>
 
@@ -53,8 +57,8 @@ The generated config is a JSONC file describing your demo steps:
   "steps": [
     { "type": "type", "value": "echo 'Hello, world!'" },
     { "type": "enter" },
-    { "type": "pause", "duration": 1000 }
-  ]
+    { "type": "pause", "duration": 1000 },
+  ],
 }
 ```
 
