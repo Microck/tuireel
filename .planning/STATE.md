@@ -8,20 +8,20 @@ See: `.planning/PROJECT.md`
 
 ## Current Position
 
-Phase: 20 - Brand System Integration (in progress)
-Plan: 20-01 complete (1/2); Next: /gsd-execute-phase 20
-Status: Executing Phase 20 plans (canonical palette + logo wiring)
-Last activity: 2026-03-05 - Completed 20-brand-system-integration-01
+Phase: 20 - Brand System Integration (complete)
+Plan: 20-02 complete (2/2); Next: /gsd-execute-phase 21
+Status: Phase 20 complete (palette + docs wiring + drift checks)
+Last activity: 2026-03-05 - Completed 20-brand-system-integration-02
 
-Progress: v1.1 shipped (61/61 plans complete); v1.15 in progress (Phase 20: 1/2 plans complete)
+Progress: v1.1 shipped (61/61 plans complete); v1.15 in progress (Phase 20: 2/2 plans complete)
 
 ## Milestone Progress
 
-| Milestone                          | Phases | Plans | Status   | Shipped    |
-| ---------------------------------- | ------ | ----- | -------- | ---------- |
-| v1.0 MVP                           | 1-6    | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening    | 7-19   | 38/38 | Complete | 2026-03-05 |
-| v1.15 Brand Refresh & Docs Hosting | 20-24  | —     | Planning | —          |
+| Milestone                          | Phases | Plans | Status      | Shipped    |
+| ---------------------------------- | ------ | ----- | ----------- | ---------- |
+| v1.0 MVP                           | 1-6    | 23/23 | Complete    | 2026-03-03 |
+| v1.1 Branding, Docs & Hardening    | 7-19   | 38/38 | Complete    | 2026-03-05 |
+| v1.15 Brand Refresh & Docs Hosting | 20-24  | —     | In progress | —          |
 
 ## Performance Metrics
 
@@ -76,5 +76,5 @@ Recent decisions:
 ## Session Continuity
 
 - Last session: 2026-03-05
-- Stopped at: Completed 20-brand-system-integration-01
-- Resume file: `/gsd-execute-phase 20`
+- Stopped at: Completed 20-brand-system-integration-02
+- Resume file: `/gsd-execute-phase 21`

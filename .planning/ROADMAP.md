@@ -14,7 +14,7 @@
 
 **Phases**
 
-- [ ] **Phase 20: Brand System Integration** - Canonical logo + palette tokens integrated across repo and docs surfaces.
+- ✅ **Phase 20: Brand System Integration** - Canonical logo + palette tokens integrated across repo and docs surfaces. (completed 2026-03-05)
 - [ ] **Phase 21: Social + Icon Assets** - Banner/OG assets regenerated; favicon derived + wired for repo and docs.
 - [ ] **Phase 22: Docs Domain Move** - Mintlify docs hosted on `https://tuireel.micr.dev` with canonical links set.
 - [ ] **Phase 23: Docs Theme Alignment** - Docs theme matches v1.15 brand system (logo, colors, favicon).
@@ -36,7 +36,7 @@
 **Plans**:
 
 - ✅ `20-01` Brand system source-of-truth + docs wiring normalization
-- [ ] `20-02` Automated drift checks for palette + docs wiring
+- ✅ `20-02` Automated drift checks for palette + docs wiring
 
 ### Phase 21: Social + Icon Assets
 
@@ -122,7 +122,7 @@ Archive:
 
 Active milestone: **v1.15 Brand Refresh & Docs Hosting** (phases 20-24)
 
-Next: `/gsd-execute-phase 20`
+Next: `/gsd-execute-phase 21`
 
 Use `/gsd-new-milestone` to define the next milestone requirements and phases.
 
