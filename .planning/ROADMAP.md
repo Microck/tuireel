@@ -38,10 +38,10 @@ Archive:
 
 Gap closure phases (from `.planning/v1.1-MILESTONE-AUDIT.md`):
 
-- [ ] **Phase 13: Verify Runtime Phases (08-09)** - Add missing verification reports (GAP CLOSURE)
-- [ ] **Phase 14: Verify Ops Phases (10-12)** - Add missing verification reports (GAP CLOSURE)
-- [ ] **Phase 15: CI Wiring Fixes** - Real type-check + fix video smoke CLI invocation (GAP CLOSURE)
-- [ ] **Phase 16: Publish Installability Fixes** - Remove `workspace:*` from published deps + align version drift (GAP CLOSURE)
+- [x] **Phase 13: Verify Runtime Phases (08-09)** - Add missing verification reports (completed 2026-03-05) (GAP CLOSURE)
+- [x] **Phase 14: Verify Ops Phases (10-12)** - Add missing verification reports (completed 2026-03-05) (GAP CLOSURE)
+- [x] **Phase 15: CI Wiring Fixes** - Real type-check + fix video smoke CLI invocation (completed 2026-03-05) (GAP CLOSURE)
+- [x] **Phase 16: Publish Installability Fixes** - Remove `workspace:*` from published deps + align version drift (completed 2026-03-04) (GAP CLOSURE)
 - [x] **Phase 17: Fix Multi-Format Record Outputs (CI Smoke)** - Make MP4/WebM/GIF smoke test deterministic (completed 2026-03-04) (GAP CLOSURE)
 - [x] **Phase 18: Preset Sound Portability** - Make built-in preset SFX work outside the repo (completed 2026-03-05) (GAP CLOSURE)
 - [x] **Phase 19: Bun Publish Smoke Gate** - Unblock `publish:smoke` bun validation and release gating (completed 2026-03-05) (GAP CLOSURE)
@@ -182,7 +182,7 @@ Plans:
 
 - [x] 13-01-PLAN.md — Create Phase 08 verification report (08-VERIFICATION.md)
 - [x] 13-02-PLAN.md — Create Phase 09 verification report (09-VERIFICATION.md)
-- [ ] 13-03-PLAN.md — Re-run v1.1 milestone audit and capture 08/09 coverage evidence
+- [x] 13-03-PLAN.md — Re-run v1.1 milestone audit and capture 08/09 coverage evidence
 
 ### Phase 14: Verify Ops Phases (10-12)
 
@@ -203,7 +203,7 @@ Plans:
 - [x] 14-01-PLAN.md — Create Phase 10 verification report (10-VERIFICATION.md)
 - [x] 14-02-PLAN.md — Create Phase 11 verification report (11-VERIFICATION.md)
 - [x] 14-03-PLAN.md — Create Phase 12 verification report (12-VERIFICATION.md)
-- [ ] 14-04-PLAN.md — Re-run v1.1 milestone audit and capture 10/11/12 coverage evidence
+- [x] 14-04-PLAN.md — Re-run v1.1 milestone audit and capture 10/11/12 coverage evidence
 
 ### Phase 15: CI Wiring Fixes
 
@@ -221,8 +221,8 @@ Plans:
 Plans:
 
 - [x] 15-01-PLAN.md — Fix CI type-check to use explicit tsconfig projects
-- [ ] 15-02-PLAN.md — Fix video smoke workflow to invoke CLI via built dist entry
-- [ ] 15-03-PLAN.md — Re-run milestone audit and record CI-01/CI-04 closure evidence
+- [x] 15-02-PLAN.md — Fix video smoke workflow to invoke CLI via built dist entry
+- [x] 15-03-PLAN.md — Re-run milestone audit and record CI-01/CI-04 closure evidence
 
 ### Phase 16: Publish Installability Fixes
 
@@ -239,8 +239,8 @@ Plans:
 
 Plans:
 
-- [ ] 16-01-PLAN.md — Remove `workspace:*` publish deps + fix version drift
-- [ ] 16-02-PLAN.md — Add pack/npx publish smoke gate + wire into release workflow
+- [x] 16-01-PLAN.md — Remove `workspace:*` publish deps + fix version drift
+- [x] 16-02-PLAN.md — Add pack/npx publish smoke gate + wire into release workflow
 
 ### Phase 17: Fix Multi-Format Record Outputs (CI Smoke)
 
@@ -303,19 +303,19 @@ Plans:
 
 **Gap Closure Order:** 13 → 14 → 15 → 16 → 17 → 18 → 19
 
-| Phase                                          | Milestone | Plans Complete | Status      | Completed  |
-| ---------------------------------------------- | --------- | -------------- | ----------- | ---------- |
-| 1-6                                            | v1.0 MVP  | 23/23          | Complete    | 2026-03-03 |
-| 7. Branding & Repo Polish                      | v1.1      | 5/5            | Complete    | 2026-03-03 |
-| 8. Presets & Reliability                       | v1.1      | 4/4            | Complete    | 2026-03-03 |
-| 9. Diagnostics                                 | v1.1      | 2/2            | Complete    | 2026-03-03 |
-| 10. Documentation                              | v1.1      | 3/3            | Complete    | 2026-03-04 |
-| 11. CI & Linting                               | v1.1      | 2/2            | Complete    | 2026-03-04 |
-| 12. Release & Performance                      | v1.1      | 3/3            | Complete    | 2026-03-04 |
-| 13. Verify Runtime Phases (08-09)              | v1.1      | 2/3            | In progress | —          |
-| 14. Verify Ops Phases (10-12)                  | v1.1      | 3/4            | In progress | —          |
-| 15. CI Wiring Fixes                            | v1.1      | 0/TBD          | Planned     | —          |
-| 16. Publish Installability Fixes               | v1.1      | 0/2            | Planned     | —          |
-| 17. Fix Multi-Format Record Outputs (CI Smoke) | v1.1      | 3/3            | Complete    | 2026-03-04 |
-| 18. Preset Sound Portability                   | v1.1      | 2/2            | Complete    | 2026-03-05 |
-| 19. Bun Publish Smoke Gate                     | v1.1      | 2/2            | Complete    | 2026-03-05 |
+| Phase                                          | Milestone | Plans Complete | Status   | Completed  |
+| ---------------------------------------------- | --------- | -------------- | -------- | ---------- |
+| 1-6                                            | v1.0 MVP  | 23/23          | Complete | 2026-03-03 |
+| 7. Branding & Repo Polish                      | v1.1      | 5/5            | Complete | 2026-03-03 |
+| 8. Presets & Reliability                       | v1.1      | 4/4            | Complete | 2026-03-03 |
+| 9. Diagnostics                                 | v1.1      | 2/2            | Complete | 2026-03-03 |
+| 10. Documentation                              | v1.1      | 3/3            | Complete | 2026-03-04 |
+| 11. CI & Linting                               | v1.1      | 2/2            | Complete | 2026-03-04 |
+| 12. Release & Performance                      | v1.1      | 3/3            | Complete | 2026-03-04 |
+| 13. Verify Runtime Phases (08-09)              | v1.1      | 3/3            | Complete | 2026-03-05 |
+| 14. Verify Ops Phases (10-12)                  | v1.1      | 4/4            | Complete | 2026-03-05 |
+| 15. CI Wiring Fixes                            | v1.1      | 3/3            | Complete | 2026-03-05 |
+| 16. Publish Installability Fixes               | v1.1      | 2/2            | Complete | 2026-03-04 |
+| 17. Fix Multi-Format Record Outputs (CI Smoke) | v1.1      | 3/3            | Complete | 2026-03-04 |
+| 18. Preset Sound Portability                   | v1.1      | 2/2            | Complete | 2026-03-05 |
+| 19. Bun Publish Smoke Gate                     | v1.1      | 2/2            | Complete | 2026-03-05 |
