@@ -68,7 +68,7 @@ Recent decisions:
 | #   | Description                               | Date       | Commit  | Directory                                                 |
 | --- | ----------------------------------------- | ---------- | ------- | --------------------------------------------------------- |
 | 001 | GitHub repo creation + npm publish        | 2026-03-04 | 1254e25 | [001-github-npm-publish](./quick/001-github-npm-publish/) |
-| 002 | Expand README following webreel structure | 2026-03-05 | pending | [002-expand-readme](./quick/002-expand-readme/)           |
+| 002 | Expand README following webreel structure | 2026-03-05 | 260eb67 | [002-expand-readme](./quick/002-expand-readme/)           |
 
 ## Blockers/Concerns Carried Forward
 
