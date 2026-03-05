@@ -1,6 +1,12 @@
 {
   "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
   "name": "Tuireel",
+  "seo": {
+    "metatags": {
+      "canonical": "https://tuireel.micr.dev"
+    }
+  },
   "colors": {
     "primary": "#18AAA7",
     "light": "#18AAA7",
