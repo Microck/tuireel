@@ -17,7 +17,9 @@ function resolveAssetsDirectory(): string {
     moduleCandidates.push(
       resolve(dirname(fileURLToPath(import.meta.url)), "..", "assets", "sounds"),
     );
-  } catch {}
+  } catch (error) {
+    void error;
+  }
 
   if (typeof __dirname === "string") {
     moduleCandidates.push(resolve(__dirname, "..", "assets", "sounds"));
