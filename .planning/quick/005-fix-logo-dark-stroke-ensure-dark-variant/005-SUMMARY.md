@@ -58,7 +58,7 @@ Each task was committed atomically:
 1. **Task 1: Make logo-dark stroke visible via contrasting beige** - `d82e1a5` (fix)
 2. **Task 2: Add drift assertion locking logo vs logo-dark fill colors** - `cd6f95c` (chore)
 
-**Plan metadata:** (docs commit created after tasks)
+**Plan metadata:** `be2c928` (docs)
 
 ## Files Created/Modified
 
@@ -68,7 +68,7 @@ Each task was committed atomically:
 
 ## Decisions Made
 
-None - followed plan as specified.
+None - followed plan as specified (stroke updated to `#DCC9A8` per plan).
 
 ## Deviations from Plan
 
@@ -86,3 +86,8 @@ None - no external service configuration required.
 
 - Brand assets are drift-resistant (byte-equality + fill assertions)
 - Dark logo outline is now visible against the dark palette background
+
+## Self-Check: PASSED
+
+- Summary file present: `.planning/quick/005-fix-logo-dark-stroke-ensure-dark-variant/005-SUMMARY.md`
+- Commits present: `d82e1a5`, `cd6f95c`, `be2c928`
