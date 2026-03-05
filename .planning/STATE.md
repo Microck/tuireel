@@ -4,16 +4,16 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 19 complete; Bun publish smoke now enforces deterministic tarball + export-surface assertions.
+**Current focus:** Phase 13 audit rerun evidence captured; milestone gap-closure verification is now 59/61 plans complete.
 
 ## Current Position
 
-Phase: 19 of 19 (bun publish smoke gate)
-Plan: 2 of 2
+Phase: 13 of 19 (verify runtime phases 08-09)
+Plan: 3 of 3
 Status: Phase complete
-Last activity: 2026-03-05 - Completed 19-02-PLAN.md
+Last activity: 2026-03-05 - Completed 13-03-PLAN.md
 
-Progress: [██████████████████████████████░░] 58/61 plans complete (95%)
+Progress: [███████████████████████████████░] 59/61 plans complete (97%)
 
 ## Milestone Progress
 
@@ -32,7 +32,7 @@ Progress: [███████████████████████
 
 **v1.1:** 19 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9 complete: 09-01 (8 min), 09-02 (8 min). Phase 10 complete: 10-01 (2 min), 10-02 (2 min), 10-03 (3 min). Phase 11: 11-01 (3 min), 11-02 (3 min). Phase 12: 12-01 (3 min), 12-02 (2 min), 12-03 (5 min).
 
-**Gap closure:** 13-01 (2 min), 13-02 (2 min), 14-01 (2 min), 14-02 (1 min), 14-03 (2 min), 15-01 (1 min), 15-02 (1 min), 16-01 (2 min), 16-02 (2 min), 17-01 (19 min), 17-02 (4 min), 17-03 (3 min).
+**Gap closure:** 13-01 (2 min), 13-02 (2 min), 13-03 (5 min), 14-01 (2 min), 14-02 (1 min), 14-03 (2 min), 15-01 (1 min), 15-02 (1 min), 16-01 (2 min), 16-02 (2 min), 17-01 (19 min), 17-02 (4 min), 17-03 (3 min).
 
 ## Accumulated Context
 
@@ -58,6 +58,7 @@ Recent decisions:
 - Bun smoke now compares installed `tuireel` + `@tuireel/core` package.json name/version/exports against packed tarballs and fails fast on mismatch
 - Bun smoke now verifies `resolveOutputPath` export via temp ESM probe before any CLI command and reports stderr snippets on failures
 - Publish smoke cleanup now deletes `packDir`, `npxDir`, and `bunDir` independently in best-effort mode
+- v1.1 milestone audit now records explicit Phase 08/09 verification coverage rows and no longer includes missing-verification blocker strings
 
 ### Quick Tasks Completed
 
@@ -71,6 +72,6 @@ Recent decisions:
 
 ## Session Continuity
 
-- Last session: 2026-03-05T01:35:04Z
-- Stopped at: Completed 19-02-PLAN.md
-- Resume file: `.planning/phases/13-verify-phases-08-09/13-03-PLAN.md`
+- Last session: 2026-03-05T02:17:38Z
+- Stopped at: Completed 13-03-PLAN.md
+- Resume file: `.planning/phases/14-verify-phases-10-12/14-04-PLAN.md`
