@@ -93,7 +93,11 @@
 2. README links users to `https://tuireel.micr.dev` for docs, and a repo-wide link sweep finds no stale docs domains.
 3. Docs pages only reference `https://tuireel.micr.dev` as the docs base domain (no mixed old/new docs domains in navigation/content).
 
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+
+- [ ] `24-01` — README rewrite to Webreel structure + repo-wide link sweep
 
 ## Archived Milestones
 
