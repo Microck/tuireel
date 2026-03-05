@@ -58,7 +58,7 @@ Each task was committed atomically:
 1. **Task 1: Make logo-dark stroke visible via contrasting beige** - `d82e1a5` (fix)
 2. **Task 2: Add drift assertion locking logo vs logo-dark fill colors** - `cd6f95c` (chore)
 
-**Plan metadata:** `be2c928`, `117de92` (docs)
+**Plan metadata:** committed under `docs(quick-005): ...` (see git history)
 
 ## Files Created/Modified
 
@@ -90,4 +90,4 @@ None - no external service configuration required.
 ## Self-Check: PASSED
 
 - Summary file present: `.planning/quick/005-fix-logo-dark-stroke-ensure-dark-variant/005-SUMMARY.md`
-- Commits present: `d82e1a5`, `cd6f95c`, `be2c928`, `117de92`
+- Task commits present: `d82e1a5`, `cd6f95c`
