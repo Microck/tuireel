@@ -229,16 +229,23 @@ if (hasBun) {
 
     run(`bun install`, { cwd: bunDir });
 
-    run(`bunx --no-install tuireel --help`, { cwd: bunDir });
-    pass("bunx: tuireel --help exited 0");
+    run(
+      `bun --cwd "${bunDir}" x --no-install tuireel --help || bun x --no-install tuireel --help`,
+      { cwd: bunDir },
+    );
+    pass("bun runtime: tuireel --help exited 0");
 
-    run(`bunx --no-install tuireel --version`, { cwd: bunDir });
-    pass("bunx: tuireel --version exited 0");
+    run(
+      `bun --cwd "${bunDir}" x --no-install tuireel --version || bun x --no-install tuireel --version`,
+      { cwd: bunDir },
+    );
+    pass("bun runtime: tuireel --version exited 0");
 
     runRecordAndAudioSmoke(
       bunDir,
-      "bunx",
-      (configFile) => `bunx --no-install tuireel record ./${configFile} --format mp4`,
+      "bun runtime",
+      (configFile) =>
+        `bun --cwd "${bunDir}" x --no-install tuireel record ./${configFile} --format mp4 || bun x --no-install tuireel record ./${configFile} --format mp4`,
     );
   } catch (e: unknown) {
     fail("bun smoke test failed", errorMessage(e));
