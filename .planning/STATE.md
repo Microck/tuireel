@@ -4,14 +4,14 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 15 audit rerun evidence captured; milestone gap-closure verification is now 61/61 plans complete.
+**Current focus:** v1.1 milestone archived and tagged; ready to define next milestone.
 
 ## Current Position
 
-Phase: 15 of 19 (ci wiring fixes)
-Plan: 3 of 3
-Status: Phase complete
-Last activity: 2026-03-05 - Completed 15-03-PLAN.md
+Phase: Milestone complete
+Plan: Not started
+Status: Ready to plan next milestone
+Last activity: 2026-03-05 - Archived v1.1 milestone
 
 Progress: [████████████████████████████████] 61/61 plans complete (100%)
 
@@ -20,7 +20,7 @@ Progress: [███████████████████████
 | Milestone                       | Phases | Plans | Status   | Shipped    |
 | ------------------------------- | ------ | ----- | -------- | ---------- |
 | v1.0 MVP                        | 1-6    | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-12   | 19/19 | Complete | 2026-03-04 |
+| v1.1 Branding, Docs & Hardening | 7-19   | 38/38 | Complete | 2026-03-05 |
 
 ## Performance Metrics
 
@@ -74,6 +74,6 @@ Recent decisions:
 
 ## Session Continuity
 
-- Last session: 2026-03-05T02:36:23Z
-- Stopped at: Completed 15-03-PLAN.md
-- Resume file: None
+- Last session: 2026-03-05T03:05:00Z
+- Stopped at: Milestone archive and tag preparation
+- Resume file: `/gsd-new-milestone`
