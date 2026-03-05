@@ -63,7 +63,9 @@
 1. Visiting `https://tuireel.micr.dev` loads the Mintlify docs (home page + at least one content page) without mixed-domain navigation.
 2. Viewing page source shows canonical links (and any sitemap/base URL configuration) pointing to `https://tuireel.micr.dev`.
 
-**Plans**: TBD
+**Plans:**
+
+- [ ] `22-01` Dashboard + DNS + canonical config; verify docs live on custom domain
 
 ### Phase 23: Docs Theme Alignment
 
