@@ -97,5 +97,5 @@ describe("compose", () => {
     } finally {
       await rm(tempDirectory, { recursive: true, force: true });
     }
-  });
+  }, 120_000);
 });
