@@ -2,25 +2,26 @@
 
 ## Project Reference
 
-See: `.planning/PROJECT.md` (updated 2026-07-16)
+See: `.planning/PROJECT.md`
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** v1.1 milestone archived and tagged; ready to define next milestone.
+**Current focus:** v1.15 milestone kickoff (branding refresh, docs hosting move, README overhaul).
 
 ## Current Position
 
-Phase: Milestone complete
-Plan: Not started
-Status: Ready to plan next milestone
-Last activity: 2026-03-05 - Archived v1.1 milestone
+Phase: 20 - Brand System Integration (planning)
+Plan: Next: /gsd-plan-phase 20
+Status: Roadmap created for v1.15; ready to plan Phase 20
+Last activity: 2026-03-05 - Created v1.15 roadmap (phases 20-24)
 
-Progress: [████████████████████████████████] 61/61 plans complete (100%)
+Progress: v1.1 shipped (61/61 plans complete); v1.15 roadmap ready
 
 ## Milestone Progress
 
-| Milestone                       | Phases | Plans | Status   | Shipped    |
-| ------------------------------- | ------ | ----- | -------- | ---------- |
-| v1.0 MVP                        | 1-6    | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening | 7-19   | 38/38 | Complete | 2026-03-05 |
+| Milestone                          | Phases | Plans | Status   | Shipped    |
+| ---------------------------------- | ------ | ----- | -------- | ---------- |
+| v1.0 MVP                           | 1-6    | 23/23 | Complete | 2026-03-03 |
+| v1.1 Branding, Docs & Hardening    | 7-19   | 38/38 | Complete | 2026-03-05 |
+| v1.15 Brand Refresh & Docs Hosting | 20-24  | —     | Planning | —          |
 
 ## Performance Metrics
 
@@ -74,6 +75,6 @@ Recent decisions:
 
 ## Session Continuity
 
-- Last session: 2026-03-05T03:05:00Z
-- Stopped at: Milestone archive and tag preparation
-- Resume file: `/gsd-new-milestone`
+- Last session: 2026-03-05
+- Stopped at: v1.15 roadmap creation
+- Resume file: `/gsd-plan-phase 20`

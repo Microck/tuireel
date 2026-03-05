@@ -16,6 +16,17 @@ TUI tool authors can produce polished demo videos from a declarative script, wit
 - **Current quality posture:** core milestone scope shipped; remaining tech debt is mostly human-runtime verification and lint cleanup recorded in milestone archives.
 - **Execution posture:** no active milestone in progress; next work should start with fresh requirements definition.
 
+## Current Milestone: v1.15 Brand Refresh & Docs Hosting
+
+**Goal:** Refresh Tuireel's public-facing identity (logo + palette + assets) and move the Mintlify docs to `tuireel.micr.dev`, with a README refresh aligned to Webreel's style.
+
+**Target features:**
+
+- New logo asset set integrated (provided by maintainer)
+- New color palette applied across repo + docs + social assets
+- Mintlify docs hosted on `tuireel.micr.dev` (canonical links updated)
+- README reworked to resemble Webreel's README structure (Tuireel content kept accurate)
+
 ## Requirements
 
 ### Validated
@@ -33,8 +44,8 @@ TUI tool authors can produce polished demo videos from a declarative script, wit
 
 ### Active
 
-- [ ] Define v1.2 milestone scope and requirements (`/gsd-new-milestone`)
-- [ ] Resolve carried v1.1 tech debt items in the next milestone (human runtime checks + lint cleanup)
+- [ ] Define v1.15 milestone scope and requirements (branding refresh + docs hosting + README revamp)
+- [ ] Execute v1.15 phases and ship updated public-facing identity
 
 ### Out of Scope
 
@@ -64,9 +75,9 @@ TUI tool authors can produce polished demo videos from a declarative script, wit
 
 ## Next Milestone Goals
 
-1. Convert deferred runtime checks into executable milestone requirements.
-2. Re-baseline lint/type/CI quality gates with zero known local lint errors.
-3. Expand user-facing docs/workflows based on real installation and CI usage feedback.
+1. Refresh the Tuireel brand system (logo + palette) and apply it consistently across repo and docs.
+2. Move Mintlify docs hosting to `tuireel.micr.dev` and update canonical links.
+3. Rework the README to resemble Webreel's structure while keeping Tuireel usage accurate.
 
 <details>
 <summary>Historical project narrative (pre-v1.1 completion)</summary>
@@ -83,4 +94,4 @@ Historical roadmap, requirements, and audit details are archived in:
 
 ---
 
-_Last updated: 2026-03-05 after v1.1 milestone completion_
+_Last updated: 2026-03-05 after v1.15 milestone kickoff_
