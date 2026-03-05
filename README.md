@@ -1,13 +1,9 @@
 <p align="center">
-  <img alt="Tuireel" src="assets/branding/logo.svg" width="360">
+  <img alt="Tuireel" src="assets/branding/logo.svg" width="200">
 </p>
 
 <p align="center">
-  <img src="assets/branding/banner.png" alt="Tuireel - Scripted TUI demo recorder" width="640">
-</p>
-
-<p align="center">
-  Scripted TUI demo recorder - produce polished terminal demo videos from declarative configs.
+  Produce polished terminal demo videos from declarative configs.
 </p>
 
 <p align="center">
