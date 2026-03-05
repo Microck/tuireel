@@ -78,7 +78,9 @@
 2. The docs UI uses the v1.15 palette for primary/accent styling in a way that is visibly consistent with the README.
 3. The docs favicon matches the v1.15 favicon asset.
 
-**Plans**: TBD
+**Plans:**
+
+- [ ] `23-01` Add theme field, harden drift check, visual verification
 
 ### Phase 24: README Refresh + Link Hygiene
 
