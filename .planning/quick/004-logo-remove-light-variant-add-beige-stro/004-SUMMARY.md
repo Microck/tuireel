@@ -80,5 +80,5 @@ None.
 ## Self-Check: PASSED
 
 - Summary present: `.planning/quick/004-logo-remove-light-variant-add-beige-stro/004-SUMMARY.md`
-- Commits present: `e48b566`, `633cc0e`, `faf9183`, `328cc5c`
+- Commits present: task commits `e48b566`, `633cc0e` (plus docs metadata commits)
 - Deprecated assets removed: `assets/branding/logo-light.svg`, `docs/images/logo-light.svg`
