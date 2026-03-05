@@ -17,8 +17,8 @@ function resolveAssetsDirectory(): string {
     moduleCandidates.push(
       resolve(dirname(fileURLToPath(import.meta.url)), "..", "assets", "sounds"),
     );
-  } catch (error) {
-    void error;
+  } catch {
+    // Fall through to cwd-based candidates when module-relative resolution fails.
   }
 
   if (typeof __dirname === "string") {
