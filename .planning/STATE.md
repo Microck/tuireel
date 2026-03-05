@@ -4,16 +4,16 @@
 
 See: `.planning/PROJECT.md` (updated 2026-07-16)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** Phase 14 audit rerun evidence captured; milestone gap-closure verification is now 60/61 plans complete.
+**Current focus:** Phase 15 audit rerun evidence captured; milestone gap-closure verification is now 61/61 plans complete.
 
 ## Current Position
 
-Phase: 14 of 19 (verify ops phases 10-12)
-Plan: 4 of 4
+Phase: 15 of 19 (ci wiring fixes)
+Plan: 3 of 3
 Status: Phase complete
-Last activity: 2026-03-05 - Completed 14-04-PLAN.md
+Last activity: 2026-03-05 - Completed 15-03-PLAN.md
 
-Progress: [███████████████████████████████░] 60/61 plans complete (98%)
+Progress: [████████████████████████████████] 61/61 plans complete (100%)
 
 ## Milestone Progress
 
@@ -60,6 +60,7 @@ Recent decisions:
 - Publish smoke cleanup now deletes `packDir`, `npxDir`, and `bunDir` independently in best-effort mode
 - v1.1 milestone audit now records explicit Phase 08/09 verification coverage rows and no longer includes missing-verification blocker strings
 - v1.1 milestone audit now records explicit Phase 10/11/12 verification coverage rows and no longer includes missing-verification blocker strings
+- v1.1 milestone audit evidence now explicitly confirms CI-01 and CI-04 are not flagged as unsatisfied wiring gaps
 
 ### Quick Tasks Completed
 
@@ -73,6 +74,6 @@ Recent decisions:
 
 ## Session Continuity
 
-- Last session: 2026-03-05T02:28:01Z
-- Stopped at: Completed 14-04-PLAN.md
-- Resume file: `.planning/phases/15-ci-wiring-fixes/15-03-PLAN.md`
+- Last session: 2026-03-05T02:36:23Z
+- Stopped at: Completed 15-03-PLAN.md
+- Resume file: None
