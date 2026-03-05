@@ -2,9 +2,15 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "Tuireel",
   "colors": {
-    "primary": "#06B6D4",
-    "light": "#06B6D4",
-    "dark": "#0F172A"
+    "primary": "#18AAA7",
+    "light": "#18AAA7",
+    "dark": "#C1263B"
+  },
+  "background": {
+    "color": {
+      "light": "#F5ECD9",
+      "dark": "#141015"
+    }
   },
   "favicon": "/images/favicon.svg",
   "navigation": {
