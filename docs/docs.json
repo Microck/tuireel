@@ -7,17 +7,21 @@
       "canonical": "https://tuireel.micr.dev"
     }
   },
+  "modeToggle": {
+    "default": "dark",
+    "isHidden": true
+  },
   "font": {
     "family": "Outfit"
   },
   "colors": {
     "primary": "#C1263B",
-    "light": "#18AAA7",
-    "dark": "#C1263B"
+    "light": "#C1263B",
+    "dark": "#18AAA7"
   },
   "background": {
     "color": {
-      "light": "#18AAA7",
+      "light": "#141015",
       "dark": "#141015"
     }
   },
@@ -56,7 +60,7 @@
     }
   },
   "logo": {
-    "light": "/images/logo-light.svg",
+    "light": "/images/logo-dark.svg",
     "dark": "/images/logo-dark.svg"
   },
   "navbar": {
