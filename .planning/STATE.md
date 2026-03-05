@@ -69,7 +69,7 @@ Recent decisions:
 | --- | ----------------------------------------- | ---------- | ------- | --------------------------------------------------------------------------------- |
 | 001 | GitHub repo creation + npm publish        | 2026-03-04 | 1254e25 | [001-github-npm-publish](./quick/001-github-npm-publish/)                         |
 | 002 | Expand README following webreel structure | 2026-03-05 | 260eb67 | [002-expand-readme](./quick/002-expand-readme/)                                   |
-| 003 | Replace all emdashes in README            | 2026-03-05 | pending | [003-replace-all-emdashes-in-readme](./quick/003-replace-all-emdashes-in-readme/) |
+| 003 | Replace all emdashes in README            | 2026-03-05 | 4761b11 | [003-replace-all-emdashes-in-readme](./quick/003-replace-all-emdashes-in-readme/) |
 
 ## Blockers/Concerns Carried Forward
 
