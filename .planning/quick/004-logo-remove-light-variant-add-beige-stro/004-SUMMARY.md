@@ -62,7 +62,7 @@ Each task was committed atomically:
 1. **Task 1: Add beige outline to remaining logo SVGs** - `e48b566` (feat)
 2. **Task 2: Remove logo-light variant usage and drift checks** - `633cc0e` (chore)
 
-**Plan metadata:** pending (docs: complete quick-004 plan)
+**Plan metadata:** `faf9183` (docs)
 
 ## Deviations from Plan
 
