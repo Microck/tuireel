@@ -86,10 +86,12 @@ const brandingOgImage = path.join(repoRoot, "assets", "branding", "og-image.png"
 const docsLogo = path.join(repoRoot, "docs", "images", "logo.svg");
 const docsFavicon = path.join(repoRoot, "docs", "images", "favicon.svg");
 
-const deprecatedBrandingLogoDark = path.join(repoRoot, "assets", "branding", "logo-dark.svg");
-const deprecatedBrandingLogoLight = path.join(repoRoot, "assets", "branding", "logo-light.svg");
-const deprecatedDocsLogoDark = path.join(repoRoot, "docs", "images", "logo-dark.svg");
-const deprecatedDocsLogoLight = path.join(repoRoot, "docs", "images", "logo-light.svg");
+const deprecatedLogoVariants = ["dark", "light"] as const;
+type DeprecatedLogoVariant = (typeof deprecatedLogoVariants)[number];
+
+function logoVariantSvg(variant: DeprecatedLogoVariant): string {
+  return `logo-${variant}.svg`;
+}
 
 let palette: Palette | null = null;
 try {
@@ -188,11 +190,11 @@ try {
   if (readme.includes("<picture>")) {
     fail("README.md must not contain a <picture> logo block");
   }
-  if (readme.includes("assets/branding/logo-light.svg")) {
-    fail("README.md must not reference assets/branding/logo-light.svg");
-  }
-  if (readme.includes("assets/branding/logo-dark.svg")) {
-    fail("README.md must not reference assets/branding/logo-dark.svg");
+  for (const variant of deprecatedLogoVariants) {
+    const ref = `assets/branding/${logoVariantSvg(variant)}`;
+    if (readme.includes(ref)) {
+      fail(`README.md must not reference ${ref}`);
+    }
   }
   if (!readme.includes("assets/branding/logo.svg")) {
     fail("README.md must reference assets/branding/logo.svg");
@@ -204,20 +206,20 @@ try {
   fail(`failed to read README.md (${String(err)})`);
 }
 
-if (fs.existsSync(deprecatedBrandingLogoDark)) {
-  fail("deprecated file must not exist: assets/branding/logo-dark.svg");
-}
+for (const variant of deprecatedLogoVariants) {
+  const brandingVariant = path.join(repoRoot, "assets", "branding", logoVariantSvg(variant));
+  if (fs.existsSync(brandingVariant)) {
+    fail(
+      `deprecated file must not exist: ${normalizeRelative(path.relative(repoRoot, brandingVariant))}`,
+    );
+  }
 
-if (fs.existsSync(deprecatedBrandingLogoLight)) {
-  fail("deprecated file must not exist: assets/branding/logo-light.svg");
-}
-
-if (fs.existsSync(deprecatedDocsLogoDark)) {
-  fail("deprecated file must not exist: docs/images/logo-dark.svg");
-}
-
-if (fs.existsSync(deprecatedDocsLogoLight)) {
-  fail("deprecated file must not exist: docs/images/logo-light.svg");
+  const docsVariant = path.join(repoRoot, "docs", "images", logoVariantSvg(variant));
+  if (fs.existsSync(docsVariant)) {
+    fail(
+      `deprecated file must not exist: ${normalizeRelative(path.relative(repoRoot, docsVariant))}`,
+    );
+  }
 }
 
 async function verifyPngDimensions(filePath: string, expected: { width: number; height: number }) {
