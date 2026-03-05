@@ -8,12 +8,12 @@ See: `.planning/PROJECT.md`
 
 ## Current Position
 
-Phase: 20 - Brand System Integration (complete)
-Plan: 20-02 complete (2/2); Next: /gsd-execute-phase 21
-Status: Phase 20 complete (palette + docs wiring + drift checks)
-Last activity: 2026-03-05 - Completed 20-brand-system-integration-02
+Phase: 21 - Social + Icon Assets (complete)
+Plan: 21-01 complete (1/1); Next: Phase 22
+Status: Executing phases 21-24 sequentially
+Last activity: 2026-03-05 - Completed 21-social-icon-assets-01
 
-Progress: v1.1 shipped (61/61 plans complete); v1.15 in progress (Phase 20: 2/2 plans complete)
+Progress: v1.15 in progress (Phase 20: 2/2, Phase 21: 1/1 complete)
 
 ## Milestone Progress
 
@@ -76,5 +76,5 @@ Recent decisions:
 ## Session Continuity
 
 - Last session: 2026-03-05
-- Stopped at: Completed 20-brand-system-integration-02
-- Resume file: `/gsd-execute-phase 21`
+- Stopped at: Completed 21-social-icon-assets-01
+- Resume file: Executing phases 22-24
