@@ -49,7 +49,9 @@
 2. The Mintlify docs favicon is derived from the v1.15 logo and appears in the browser tab when viewing the docs.
 3. The repo surface references only the updated v1.15 banner/OG assets (no stale, older-brand images used for public previews).
 
-**Plans**: TBD
+**Plans:**
+
+- [ ] `21-01` Regenerate + commit v1.15 brand PNGs; verify all wiring
 
 ### Phase 22: Docs Domain Move
 
