@@ -8,12 +8,12 @@ See: `.planning/PROJECT.md`
 
 ## Current Position
 
-Phase: 21 - Social + Icon Assets (complete)
-Plan: 21-01 complete (1/1); Next: Phase 22
-Status: Executing phases 21-24 sequentially
-Last activity: 2026-03-05 - Completed 21-social-icon-assets-01
+Phase: 22 - Docs Domain Move (complete)
+Plan: 22-01 complete (1/1); Next: Phase 23 + 24
+Status: Executing phases 23-24
+Last activity: 2026-03-05 - Completed 22-docs-domain-move-01
 
-Progress: v1.15 in progress (Phase 20: 2/2, Phase 21: 1/1 complete)
+Progress: v1.15 in progress (Phase 20: 2/2, Phase 21: 1/1, Phase 22: 1/1 complete)
 
 ## Milestone Progress
 
@@ -76,5 +76,5 @@ Recent decisions:
 ## Session Continuity
 
 - Last session: 2026-03-05
-- Stopped at: Completed 21-social-icon-assets-01
-- Resume file: Executing phases 22-24
+- Stopped at: Completed 22-docs-domain-move-01
+- Resume file: Executing phases 23-24

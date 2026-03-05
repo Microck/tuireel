@@ -16,7 +16,7 @@
 
 - ✅ **Phase 20: Brand System Integration** - Canonical logo + palette tokens integrated across repo and docs surfaces. (completed 2026-03-05)
 - ✅ **Phase 21: Social + Icon Assets** - Banner/OG assets regenerated; favicon derived + wired for repo and docs. (completed 2026-03-05)
-- [ ] **Phase 22: Docs Domain Move** - Mintlify docs hosted on `https://tuireel.micr.dev` with canonical links set.
+- ✅ **Phase 22: Docs Domain Move** - Mintlify docs hosted on `https://tuireel.micr.dev` with canonical links set. (completed 2026-03-05)
 - [ ] **Phase 23: Docs Theme Alignment** - Docs theme matches v1.15 brand system (logo, colors, favicon).
 - [ ] **Phase 24: README Refresh + Link Hygiene** - README matches Webreel structure and all in-repo links point to `https://tuireel.micr.dev`.
 
@@ -65,7 +65,7 @@
 
 **Plans:**
 
-- [ ] `22-01` Dashboard + DNS + canonical config; verify docs live on custom domain
+- ✅ `22-01` Dashboard + DNS + canonical config; verify docs live on custom domain
 
 ### Phase 23: Docs Theme Alignment
 
