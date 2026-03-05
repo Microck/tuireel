@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import sharp from "sharp";
 
 type Palette = {
   background: string;
@@ -80,6 +81,8 @@ const readmePath = path.join(repoRoot, "README.md");
 const brandingLogoLight = path.join(repoRoot, "assets", "branding", "logo-light.svg");
 const brandingLogoDark = path.join(repoRoot, "assets", "branding", "logo-dark.svg");
 const brandingFavicon = path.join(repoRoot, "assets", "branding", "favicon.svg");
+const brandingBanner = path.join(repoRoot, "assets", "branding", "banner.png");
+const brandingOgImage = path.join(repoRoot, "assets", "branding", "og-image.png");
 
 const docsLogoLight = path.join(repoRoot, "docs", "images", "logo-light.svg");
 const docsLogoDark = path.join(repoRoot, "docs", "images", "logo-dark.svg");
@@ -111,6 +114,7 @@ if (palette) {
 }
 
 type DocsJson = {
+  theme?: string;
   colors?: { primary?: string; light?: string; dark?: string };
   background?: { color?: { light?: string; dark?: string } };
   logo?: { light?: string; dark?: string } | string;
@@ -125,6 +129,7 @@ try {
 }
 
 if (docsJson && palette) {
+  assertTruthy("docs/docs.json.theme", docsJson.theme);
   assertTruthy("docs/docs.json.colors.primary", docsJson.colors?.primary);
   assertTruthy("docs/docs.json.colors.light", docsJson.colors?.light);
   assertTruthy("docs/docs.json.colors.dark", docsJson.colors?.dark);
@@ -137,7 +142,7 @@ if (docsJson && palette) {
   assertEqual(
     "docs/docs.json.background.color.light",
     docsJson.background?.color?.light,
-    palette.secondary,
+    palette.background,
   );
   assertEqual(
     "docs/docs.json.background.color.dark",
@@ -153,7 +158,7 @@ if (docsJson) {
       `docs/docs.json.logo: expected { light, dark } object, got string ${JSON.stringify(logo)}`,
     );
   } else {
-    assertEqual("docs/docs.json.logo.light", logo?.light, "/images/logo-light.svg");
+    assertEqual("docs/docs.json.logo.light", logo?.light, "/images/logo-dark.svg");
     assertEqual("docs/docs.json.logo.dark", logo?.dark, "/images/logo-dark.svg");
   }
 
@@ -180,16 +185,61 @@ try {
   if (!readme.includes("assets/branding/logo-dark.svg")) {
     fail("README.md must reference assets/branding/logo-dark.svg");
   }
+  if (!readme.includes("assets/branding/banner.png")) {
+    fail("README.md must reference assets/branding/banner.png");
+  }
 } catch (err) {
   fail(`failed to read README.md (${String(err)})`);
 }
 
-if (errors.length > 0) {
-  for (const message of errors) {
-    // Keep output grep-friendly in CI.
-    console.error(`ERROR: ${message}`);
+async function verifyPngDimensions(filePath: string, expected: { width: number; height: number }) {
+  const rel = normalizeRelative(path.relative(repoRoot, filePath));
+
+  try {
+    const metadata = await sharp(filePath).metadata();
+    assertEqual(`${rel} width`, metadata.width, expected.width);
+    assertEqual(`${rel} height`, metadata.height, expected.height);
+  } catch (err) {
+    fail(`failed to read PNG metadata: ${rel} (${String(err)})`);
   }
-  process.exit(1);
 }
 
-console.log("Brand system verification passed.");
+function verifyBrandingGeneratorSource() {
+  try {
+    const generatorPath = path.join(repoRoot, "scripts", "generate-branding.ts");
+    const generator = readUtf8(generatorPath);
+    if (!generator.includes("palette.json")) {
+      fail("scripts/generate-branding.ts must read assets/branding/palette.json");
+    }
+    if (
+      generator.includes("#0F172A") ||
+      generator.includes("#06B6D4") ||
+      generator.includes("#E2E8F0")
+    ) {
+      fail("scripts/generate-branding.ts must not hardcode the old palette");
+    }
+  } catch (err) {
+    fail(`failed to read scripts/generate-branding.ts (${String(err)})`);
+  }
+}
+
+async function main() {
+  verifyBrandingGeneratorSource();
+  await verifyPngDimensions(brandingBanner, { width: 1280, height: 640 });
+  await verifyPngDimensions(brandingOgImage, { width: 1200, height: 630 });
+
+  if (errors.length > 0) {
+    for (const message of errors) {
+      // Keep output grep-friendly in CI.
+      console.error(`ERROR: ${message}`);
+    }
+    process.exit(1);
+  }
+
+  console.log("Brand system verification passed.");
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
