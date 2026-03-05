@@ -24,12 +24,11 @@ The v1.15 palette exposes these token names:
 
 Canonical SVGs:
 
-- `assets/branding/logo.svg` (canonical logo; for light backgrounds)
-- `assets/branding/logo-dark.svg` (for dark backgrounds)
+- `assets/branding/logo.svg` (canonical logo; includes outer outline for dark backgrounds)
 
 Where they are consumed:
 
-- README banner/logo: `README.md` references the canonical + dark SVG variants directly from `assets/branding/`.
+- README banner/logo: `README.md` references the canonical logo directly from `assets/branding/`.
 
 ## Social assets
 
@@ -50,7 +49,7 @@ Mintlify docs are wired via:
 
 Docs-consumed asset copies live at:
 
-- `docs/images/logo-dark.svg`
+- `docs/images/logo.svg`
 - `docs/images/favicon.svg`
 
 These files should remain byte-equal to their canonical counterparts in `assets/branding/`.
