@@ -4,24 +4,24 @@
 
 See: `.planning/PROJECT.md`
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** v1.15 milestone kickoff (branding refresh, docs hosting move, README overhaul).
+**Current focus:** v1.15 milestone complete. All 3 milestones shipped.
 
 ## Current Position
 
-Phase: 22 - Docs Domain Move (complete)
-Plan: 22-01 complete (1/1); Next: Phase 23 + 24
-Status: Executing phases 23-24
-Last activity: 2026-03-05 - Completed 22-docs-domain-move-01
+Phase: 24 - README Refresh + Link Hygiene (complete)
+Plan: 24-01 complete (1/1); All phases done
+Status: v1.15 milestone shipped
+Last activity: 2026-03-05 - Completed all v1.15 phases (20-24)
 
-Progress: v1.15 in progress (Phase 20: 2/2, Phase 21: 1/1, Phase 22: 1/1 complete)
+Progress: v1.15 complete (Phase 20: 2/2, Phase 21: 1/1, Phase 22: 1/1, Phase 23: 1/1, Phase 24: 1/1)
 
 ## Milestone Progress
 
-| Milestone                          | Phases | Plans | Status      | Shipped    |
-| ---------------------------------- | ------ | ----- | ----------- | ---------- |
-| v1.0 MVP                           | 1-6    | 23/23 | Complete    | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening    | 7-19   | 38/38 | Complete    | 2026-03-05 |
-| v1.15 Brand Refresh & Docs Hosting | 20-24  | —     | In progress | —          |
+| Milestone                          | Phases | Plans | Status   | Shipped    |
+| ---------------------------------- | ------ | ----- | -------- | ---------- |
+| v1.0 MVP                           | 1-6    | 23/23 | Complete | 2026-03-03 |
+| v1.1 Branding, Docs & Hardening    | 7-19   | 38/38 | Complete | 2026-03-05 |
+| v1.15 Brand Refresh & Docs Hosting | 20-24  | 5/5   | Complete | 2026-03-05 |
 
 ## Performance Metrics
 
@@ -76,5 +76,5 @@ Recent decisions:
 ## Session Continuity
 
 - Last session: 2026-03-05
-- Stopped at: Completed 22-docs-domain-move-01
-- Resume file: Executing phases 23-24
+- Stopped at: v1.15 milestone shipped — all phases 20-24 complete
+- Resume file: Use `/gsd-new-milestone` to define the next milestone

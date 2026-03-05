@@ -4,11 +4,11 @@
 
 - ✅ **v1.0 MVP** - Phases 1-6 (shipped 2026-03-03)
 - ✅ **v1.1 Branding, Docs & Hardening** - Phases 7-19 (shipped 2026-03-05)
-- 🚧 **v1.15 Brand Refresh & Docs Hosting** - Phases 20-24 (active)
+- ✅ **v1.15 Brand Refresh & Docs Hosting** - Phases 20-24 (shipped 2026-03-05)
 
 ## Active Milestone
 
-### 🚧 v1.15 Brand Refresh & Docs Hosting (Phases 20-24)
+### ✅ v1.15 Brand Refresh & Docs Hosting (Phases 20-24)
 
 **Milestone Goal:** Refresh Tuireel's public-facing identity (logo + palette + assets) and move the Mintlify docs to `https://tuireel.micr.dev`, with a README refresh aligned to Webreel's style.
 
@@ -17,8 +17,8 @@
 - ✅ **Phase 20: Brand System Integration** - Canonical logo + palette tokens integrated across repo and docs surfaces. (completed 2026-03-05)
 - ✅ **Phase 21: Social + Icon Assets** - Banner/OG assets regenerated; favicon derived + wired for repo and docs. (completed 2026-03-05)
 - ✅ **Phase 22: Docs Domain Move** - Mintlify docs hosted on `https://tuireel.micr.dev` with canonical links set. (completed 2026-03-05)
-- [ ] **Phase 23: Docs Theme Alignment** - Docs theme matches v1.15 brand system (logo, colors, favicon).
-- [ ] **Phase 24: README Refresh + Link Hygiene** - README matches Webreel structure and all in-repo links point to `https://tuireel.micr.dev`.
+- ✅ **Phase 23: Docs Theme Alignment** - Docs theme matches v1.15 brand system (logo, colors, favicon). (completed 2026-03-05)
+- ✅ **Phase 24: README Refresh + Link Hygiene** - README matches Webreel structure and all in-repo links point to `https://tuireel.micr.dev`. (completed 2026-03-05)
 
 ## Phase Details
 
@@ -80,7 +80,7 @@
 
 **Plans:**
 
-- [ ] `23-01` Add theme field, harden drift check, visual verification
+- ✅ `23-01` Add theme field, harden drift check, visual verification
 
 ### Phase 24: README Refresh + Link Hygiene
 
@@ -97,7 +97,7 @@
 
 Plans:
 
-- [ ] `24-01` — README rewrite to Webreel structure + repo-wide link sweep
+- ✅ `24-01` — README rewrite to Webreel structure + repo-wide link sweep
 
 ## Archived Milestones
 
@@ -130,9 +130,7 @@ Archive:
 
 ## Current Status
 
-Active milestone: **v1.15 Brand Refresh & Docs Hosting** (phases 20-24)
-
-Next: `/gsd-execute-phase 21`
+All milestones complete.
 
 Use `/gsd-new-milestone` to define the next milestone requirements and phases.
 
@@ -142,4 +140,4 @@ Use `/gsd-new-milestone` to define the next milestone requirements and phases.
 | ---------------------------------- | ------ | ----- | -------- | ---------- |
 | v1.0 MVP                           | 1-6    | 23/23 | Complete | 2026-03-03 |
 | v1.1 Branding, Docs & Hardening    | 7-19   | 38/38 | Complete | 2026-03-05 |
-| v1.15 Brand Refresh & Docs Hosting | 20-24  | —     | Planning | —          |
+| v1.15 Brand Refresh & Docs Hosting | 20-24  | 5/5   | Complete | 2026-03-05 |

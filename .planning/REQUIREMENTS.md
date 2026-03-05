@@ -9,7 +9,7 @@
 ### Branding Refresh
 
 - [ ] **BRND-06**: New logo asset set (light/dark SVG) is integrated and referenced consistently across README and docs
-- [ ] **BRND-07**: New color palette is defined as canonical tokens and applied consistently across repo + docs + social assets
+- [ ] **BRND-07**: New color palette is defined as canonical tokens and applied consistently across repo + docs
 - [ ] **BRND-08**: README banner and OG/social card assets are regenerated to match the new logo + palette
 - [ ] **BRND-09**: Favicon derived from the new logo is wired for both GitHub (repo) and Mintlify docs
 
