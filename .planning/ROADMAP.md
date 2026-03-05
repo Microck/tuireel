@@ -276,8 +276,8 @@ Plans:
 
 Plans:
 
-- [ ] 18-01-PLAN.md — Package built-in SFX assets + resolve paths via module-relative location
-- [ ] 18-02-PLAN.md — Add regression coverage for preset sound outside the repo (smoke / fixture)
+- [x] 18-01-PLAN.md — Package built-in SFX assets + resolve paths via module-relative location
+- [x] 18-02-PLAN.md — Add regression coverage for preset sound outside the repo (smoke / fixture)
 
 ### Phase 19: Bun Publish Smoke Gate
 
@@ -294,8 +294,8 @@ Plans:
 
 Plans:
 
-- [ ] 19-01-PLAN.md — Make publish smoke tarball installs deterministic for bun
-- [ ] 19-02-PLAN.md — Add regression assertions for bun smoke import surface + wiring
+- [x] 19-01-PLAN.md — Make publish smoke tarball installs deterministic for bun
+- [x] 19-02-PLAN.md — Add regression assertions for bun smoke import surface + wiring
 
 ## Progress
 
@@ -317,5 +317,5 @@ Plans:
 | 15. CI Wiring Fixes                            | v1.1      | 0/TBD          | Planned     | —          |
 | 16. Publish Installability Fixes               | v1.1      | 0/2            | Planned     | —          |
 | 17. Fix Multi-Format Record Outputs (CI Smoke) | v1.1      | 3/3            | Complete    | 2026-03-04 |
-| 18. Preset Sound Portability                   | v1.1      | 0/2            | Planned     | —          |
-| 19. Bun Publish Smoke Gate                     | v1.1      | 0/2            | Planned     | —          |
+| 18. Preset Sound Portability                   | v1.1      | 2/2            | In progress | —          |
+| 19. Bun Publish Smoke Gate                     | v1.1      | 2/2            | Complete    | 2026-03-05 |
