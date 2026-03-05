@@ -60,6 +60,20 @@ function errorMessage(error: unknown): string {
   return (error instanceof Error ? error.message : String(error)).slice(0, 300);
 }
 
+function stderrSnippet(error: unknown): string {
+  if (error && typeof error === "object" && "stderr" in error) {
+    const stderr = (error as { stderr?: string | Buffer }).stderr;
+    if (typeof stderr === "string" && stderr.trim().length > 0) {
+      return stderr.trim().slice(0, 300);
+    }
+    if (stderr instanceof Buffer && stderr.length > 0) {
+      return stderr.toString("utf8").trim().slice(0, 300);
+    }
+  }
+
+  return errorMessage(error);
+}
+
 type PackageJsonShape = {
   name?: unknown;
   version?: unknown;
@@ -399,6 +413,41 @@ if (hasBun) {
 
     pass("bun install: no nested tuireel/node_modules/@tuireel/core");
 
+    const coreExportSurfacePath = join(bunDir, "core-export-surface.mjs");
+    writeFileSync(
+      coreExportSurfacePath,
+      "import { resolveOutputPath } from '@tuireel/core';\nconsole.log(typeof resolveOutputPath);\n",
+    );
+
+    let coreExportSurfaceType = "";
+    try {
+      coreExportSurfaceType = run(`bun --cwd "${bunDir}" core-export-surface.mjs`, {
+        cwd: bunDir,
+      }).trim();
+    } catch (error: unknown) {
+      failFast(
+        "bun install: @tuireel/core export-surface check failed",
+        [
+          "Expected @tuireel/core to export resolveOutputPath from the packed tarball under test.",
+          `Export check script: ${coreExportSurfacePath}`,
+          `stderr: ${stderrSnippet(error)}`,
+        ].join("\n"),
+      );
+    }
+
+    if (coreExportSurfaceType !== "function") {
+      failFast(
+        "bun install: resolveOutputPath export has unexpected runtime type",
+        [
+          "Expected @tuireel/core resolveOutputPath export to be a function.",
+          `Export check script: ${coreExportSurfacePath}`,
+          `Observed type: ${coreExportSurfaceType || "<empty>"}`,
+        ].join("\n"),
+      );
+    }
+
+    pass("bun install: @tuireel/core exports resolveOutputPath");
+
     run(
       `bun --cwd "${bunDir}" x --no-install tuireel --help || bun x --no-install tuireel --help`,
       { cwd: bunDir },
@@ -429,14 +478,16 @@ if (hasBun) {
 
 // --- Cleanup ---
 
-try {
-  rmSync(packDir, { recursive: true, force: true });
-  rmSync(npxDir, { recursive: true, force: true });
-  if (bunDir) {
-    rmSync(bunDir, { recursive: true, force: true });
+for (const dir of [packDir, npxDir, bunDir]) {
+  if (!dir) {
+    continue;
   }
-} catch {
-  // best-effort cleanup
+
+  try {
+    rmSync(dir, { recursive: true, force: true });
+  } catch {
+    // best-effort cleanup
+  }
 }
 
 // --- Result ---
