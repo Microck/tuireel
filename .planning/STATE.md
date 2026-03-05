@@ -11,7 +11,7 @@ See: `.planning/PROJECT.md`
 Phase: 24 - README Refresh + Link Hygiene (complete)
 Plan: 24-01 complete (1/1); All phases done
 Status: v1.15 milestone shipped
-Last activity: 2026-03-05 - Completed quick task 003: Replace all emdashes in README
+Last activity: 2026-03-05 - Completed quick task 004: Remove logo-light variant, add beige outline
 
 Progress: v1.15 complete (Phase 20: 2/2, Phase 21: 1/1, Phase 22: 1/1, Phase 23: 1/1, Phase 24: 1/1)
 
@@ -65,11 +65,12 @@ Recent decisions:
 
 ### Quick Tasks Completed
 
-| #   | Description                               | Date       | Commit  | Directory                                                                         |
-| --- | ----------------------------------------- | ---------- | ------- | --------------------------------------------------------------------------------- |
-| 001 | GitHub repo creation + npm publish        | 2026-03-04 | 1254e25 | [001-github-npm-publish](./quick/001-github-npm-publish/)                         |
-| 002 | Expand README following webreel structure | 2026-03-05 | 260eb67 | [002-expand-readme](./quick/002-expand-readme/)                                   |
-| 003 | Replace all emdashes in README            | 2026-03-05 | 4761b11 | [003-replace-all-emdashes-in-readme](./quick/003-replace-all-emdashes-in-readme/) |
+| #   | Description                               | Date       | Commit  | Directory                                                                                             |
+| --- | ----------------------------------------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------- |
+| 001 | GitHub repo creation + npm publish        | 2026-03-04 | 1254e25 | [001-github-npm-publish](./quick/001-github-npm-publish/)                                             |
+| 002 | Expand README following webreel structure | 2026-03-05 | 260eb67 | [002-expand-readme](./quick/002-expand-readme/)                                                       |
+| 003 | Replace all emdashes in README            | 2026-03-05 | 4761b11 | [003-replace-all-emdashes-in-readme](./quick/003-replace-all-emdashes-in-readme/)                     |
+| 004 | Remove logo-light + add beige outline     | 2026-03-05 | 633cc0e | [004-logo-remove-light-variant-add-beige-stro](./quick/004-logo-remove-light-variant-add-beige-stro/) |
 
 ## Blockers/Concerns Carried Forward
 
