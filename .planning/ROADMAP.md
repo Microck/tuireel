@@ -33,7 +33,10 @@
 2. The v1.15 color palette exists as canonical tokens and is visibly applied consistently (no mixed old/new colors across README/docs).
 3. A user can point to a single, documented source-of-truth location in-repo for the v1.15 palette tokens.
 
-**Plans**: TBD
+**Plans**:
+
+- ✅ `20-01` Brand system source-of-truth + docs wiring normalization
+- [ ] `20-02` Automated drift checks for palette + docs wiring
 
 ### Phase 21: Social + Icon Assets
 
@@ -119,7 +122,7 @@ Archive:
 
 Active milestone: **v1.15 Brand Refresh & Docs Hosting** (phases 20-24)
 
-Next: `/gsd-plan-phase 20`
+Next: `/gsd-execute-phase 20`
 
 Use `/gsd-new-milestone` to define the next milestone requirements and phases.
 
