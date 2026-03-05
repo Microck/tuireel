@@ -16,10 +16,20 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BRANDING_DIR = resolve(__dirname, "../assets/branding");
 
-// Brand colors
-const BG = "#0F172A"; // navy background
-const TITLE_COLOR = "#06B6D4"; // teal
-const TAGLINE_COLOR = "#E2E8F0"; // slate-200
+type Palette = {
+  background: string;
+  surface: string;
+  primary: string;
+  secondary: string;
+  accent: string;
+};
+
+const palette = JSON.parse(readFileSync(resolve(BRANDING_DIR, "palette.json"), "utf8")) as Palette;
+
+// Brand colors (drift-resistant; sourced from assets/branding/palette.json)
+const BG = palette.background;
+const TITLE_COLOR = palette.primary;
+const TAGLINE_COLOR = palette.secondary;
 
 // Read the favicon SVG (icon-only, better for compositing)
 const logoSvg = readFileSync(resolve(BRANDING_DIR, "favicon.svg"), "utf-8");
@@ -42,13 +52,11 @@ async function generateImage(spec: ImageSpec): Promise<void> {
   const taglineSize = Math.round(height * 0.045);
 
   // Rasterise the logo SVG at target size
-  const iconPng = await sharp(Buffer.from(logoSvg))
-    .resize(iconSize, iconSize)
-    .png()
-    .toBuffer();
+  const iconPng = await sharp(Buffer.from(logoSvg)).resize(iconSize, iconSize).png().toBuffer();
 
   // Build text overlay as an SVG so we don't need system fonts
-  const textSvg = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+  const textSvg =
+    Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
   <style>
     .title { font-family: system-ui, -apple-system, sans-serif; font-weight: 700; }
     .tagline { font-family: system-ui, -apple-system, sans-serif; font-weight: 400; }

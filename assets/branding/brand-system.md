@@ -32,6 +32,17 @@ Where they are consumed:
 
 - README banner/logo: `README.md` references the light/dark SVG variants directly from `assets/branding/`.
 
+## Social assets
+
+These images are used for the repo front door and social previews:
+
+- `assets/branding/banner.png` (README hero image)
+- `assets/branding/og-image.png` (open graph / social card)
+
+To regenerate them from the canonical palette + favicon mark:
+
+- `scripts/generate-branding.ts`
+
 ## Docs theming
 
 Mintlify docs are wired via:
