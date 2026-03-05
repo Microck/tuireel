@@ -11,7 +11,7 @@ See: `.planning/PROJECT.md`
 Phase: 24 - README Refresh + Link Hygiene (complete)
 Plan: 24-01 complete (1/1); All phases done
 Status: v1.15 milestone shipped
-Last activity: 2026-03-05 - Completed quick task 005: Fix logo-dark stroke, lock dark variant
+Last activity: 2026-03-05 - Completed quick task 006: Collapse branding to single logo + filter outline
 
 Progress: v1.15 complete (Phase 20: 2/2, Phase 21: 1/1, Phase 22: 1/1, Phase 23: 1/1, Phase 24: 1/1)
 
@@ -72,6 +72,7 @@ Recent decisions:
 | 003 | Replace all emdashes in README            | 2026-03-05 | 4761b11 | [003-replace-all-emdashes-in-readme](./quick/003-replace-all-emdashes-in-readme/)                     |
 | 004 | Remove logo-light + add beige outline     | 2026-03-05 | 633cc0e | [004-logo-remove-light-variant-add-beige-stro](./quick/004-logo-remove-light-variant-add-beige-stro/) |
 | 005 | Fix logo-dark stroke + lock dark variant  | 2026-03-05 | cd6f95c | [005-fix-logo-dark-stroke-ensure-dark-variant](./quick/005-fix-logo-dark-stroke-ensure-dark-variant/) |
+| 006 | Single logo + filter outline + verifier   | 2026-03-05 | b713d2c | [006-branding-single-original-logo-svg-with-o](./quick/006-branding-single-original-logo-svg-with-o/) |
 
 ## Blockers/Concerns Carried Forward
 
