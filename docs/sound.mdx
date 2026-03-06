@@ -23,7 +23,7 @@ Add the `sound` field to your config:
 }
 ```
 
-Or use a preset that includes sound — `polished` and `demo` both enable click and key effects:
+Or use a preset that includes sound - `polished` and `demo` both enable click and key effects:
 
 ```jsonc
 {
@@ -46,9 +46,9 @@ Each effect type has 4 built-in variants (numbered 1-4):
   "sound": {
     "effects": {
       "click": 2,
-      "key": 3
-    }
-  }
+      "key": 3,
+    },
+  },
 }
 ```
 
@@ -61,9 +61,9 @@ Instead of a variant number, pass a file path to use your own sound:
   "sound": {
     "effects": {
       "click": "./sounds/my-click.mp3",
-      "key": "./sounds/my-key.wav"
-    }
-  }
+      "key": "./sounds/my-key.wav",
+    },
+  },
 }
 ```
 
@@ -77,8 +77,8 @@ Control the overall volume of sound effects with `effectsVolume` (0 to 1, defaul
 {
   "sound": {
     "effects": { "click": 1, "key": 1 },
-    "effectsVolume": 0.3
-  }
+    "effectsVolume": 0.3,
+  },
 }
 ```
 
@@ -97,10 +97,10 @@ Add a background music or ambient audio track with the `track` field:
 }
 ```
 
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `track` | `string` | — | Path to audio file (relative to working directory) |
-| `trackVolume` | `number` | `0.3` | Track volume, 0 to 1 |
+| Field         | Type     | Default | Description                                        |
+| ------------- | -------- | ------- | -------------------------------------------------- |
+| `track`       | `string` | -       | Path to audio file (relative to working directory) |
+| `trackVolume` | `number` | `0.3`   | Track volume, 0 to 1                               |
 
 The track is trimmed to the video duration and fades out over the last 2 seconds.
 
@@ -128,25 +128,26 @@ Effects are mixed on top of the background track in the final output.
 
 ## Full Sound Config Reference
 
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `effects.click` | `1-4` or `string` | — | Click effect variant or custom audio path |
-| `effects.key` | `1-4` or `string` | — | Key effect variant or custom audio path |
-| `effectsVolume` | `number` | `0.5` | Effects volume (0-1) |
-| `track` | `string` | — | Background audio file path |
-| `trackVolume` | `number` | `0.3` | Track volume (0-1) |
+| Field           | Type              | Default | Description                               |
+| --------------- | ----------------- | ------- | ----------------------------------------- |
+| `effects.click` | `1-4` or `string` | -       | Click effect variant or custom audio path |
+| `effects.key`   | `1-4` or `string` | -       | Key effect variant or custom audio path   |
+| `effectsVolume` | `number`          | `0.5`   | Effects volume (0-1)                      |
+| `track`         | `string`          | -       | Background audio file path                |
+| `trackVolume`   | `number`          | `0.3`   | Track volume (0-1)                        |
 
 <Note>
-  Sound encoding requires **ffmpeg**. Effects are mixed using ffmpeg's filter_complex pipeline and encoded as AAC (MP4) or Opus (WebM). GIF output does not support audio.
+  Sound encoding requires **ffmpeg**. Effects are mixed using ffmpeg's filter_complex pipeline and
+  encoded as AAC (MP4) or Opus (WebM). GIF output does not support audio.
 </Note>
 
 ## Presets with Sound
 
 Two built-in presets include sound effects:
 
-| Preset | Effects |
-|--------|---------|
+| Preset     | Effects                        |
+| ---------- | ------------------------------ |
 | `polished` | click variant 1, key variant 1 |
-| `demo` | click variant 1, key variant 1 |
+| `demo`     | click variant 1, key variant 1 |
 
 The `minimal` and `silent` presets do not include sound.

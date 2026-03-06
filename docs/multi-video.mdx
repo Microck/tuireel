@@ -16,7 +16,7 @@ Instead of a single config object, define a `videos` array to produce multiple r
     "theme": "catppuccin",
     "cols": 80,
     "rows": 24,
-    "fps": 30
+    "fps": 30,
   },
   "videos": [
     {
@@ -26,8 +26,8 @@ Instead of a single config object, define a `videos` array to produce multiple r
         { "type": "launch", "command": "bash" },
         { "type": "type", "text": "npm install my-cli" },
         { "type": "press", "key": "Enter" },
-        { "type": "pause", "duration": 3 }
-      ]
+        { "type": "pause", "duration": 3 },
+      ],
     },
     {
       "name": "usage",
@@ -36,37 +36,37 @@ Instead of a single config object, define a `videos` array to produce multiple r
         { "type": "launch", "command": "bash" },
         { "type": "type", "text": "my-cli --help" },
         { "type": "press", "key": "Enter" },
-        { "type": "pause", "duration": 2 }
-      ]
-    }
-  ]
+        { "type": "pause", "duration": 2 },
+      ],
+    },
+  ],
 }
 ```
 
 ### How It Works
 
 - Each video entry gets its own output file and recording
-- The `defaults` object provides shared settings — any field you'd normally put at the top level (theme, sound, cursor, HUD, cols, rows, fps, etc.)
+- The `defaults` object provides shared settings - any field you'd normally put at the top level (theme, sound, cursor, HUD, cols, rows, fps, etc.)
 - Each video can override any default with its own value
 - Every video must have a `name` (used for identification) and `output` (output file path)
 - Each video must define its own `steps` array
 
 ### Video Definition Fields
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `name` | `string` | Yes | Unique name for this video |
-| `output` | `string` | Yes | Output file path |
-| `steps` | `array` | Yes | Steps for this video |
-| `preset` | `string` | No | Override preset for this video |
-| `format` | `string` | No | Override format (mp4, webm, gif) |
-| `theme` | `string` or `object` | No | Override theme |
-| `sound` | `object` | No | Override sound config |
-| `cursor` | `object` | No | Override cursor config |
-| `hud` | `object` | No | Override HUD config |
-| `fps` | `number` | No | Override FPS |
-| `cols` | `number` | No | Override terminal width |
-| `rows` | `number` | No | Override terminal height |
+| Field    | Type                 | Required | Description                      |
+| -------- | -------------------- | -------- | -------------------------------- |
+| `name`   | `string`             | Yes      | Unique name for this video       |
+| `output` | `string`             | Yes      | Output file path                 |
+| `steps`  | `array`              | Yes      | Steps for this video             |
+| `preset` | `string`             | No       | Override preset for this video   |
+| `format` | `string`             | No       | Override format (mp4, webm, gif) |
+| `theme`  | `string` or `object` | No       | Override theme                   |
+| `sound`  | `object`             | No       | Override sound config            |
+| `cursor` | `object`             | No       | Override cursor config           |
+| `hud`    | `object`             | No       | Override HUD config              |
+| `fps`    | `number`             | No       | Override FPS                     |
+| `cols`   | `number`             | No       | Override terminal width          |
+| `rows`   | `number`             | No       | Override terminal height         |
 
 ## Step Includes
 
@@ -79,8 +79,8 @@ Extract reusable step sequences into separate JSONC files and reference them wit
     { "$include": "./shared/setup.jsonc" },
     { "type": "type", "text": "echo 'Main demo starts here'" },
     { "type": "press", "key": "Enter" },
-    { "type": "pause", "duration": 2 }
-  ]
+    { "type": "pause", "duration": 2 },
+  ],
 }
 ```
 
@@ -95,12 +95,12 @@ Include files must define a `steps` array:
     { "type": "launch", "command": "bash" },
     { "type": "type", "text": "cd my-project" },
     { "type": "press", "key": "Enter" },
-    { "type": "pause", "duration": 1 }
-  ]
+    { "type": "pause", "duration": 1 },
+  ],
 }
 ```
 
-The steps from the include file are inlined at the position of the `$include` directive — they replace the include object in the final step array.
+The steps from the include file are inlined at the position of the `$include` directive - they replace the include object in the final step array.
 
 ### Include Path Resolution
 
@@ -118,7 +118,7 @@ Combine both features for maximum reuse:
 {
   "defaults": {
     "theme": "dracula",
-    "cursor": { "visible": true }
+    "cursor": { "visible": true },
   },
   "videos": [
     {
@@ -128,8 +128,8 @@ Combine both features for maximum reuse:
         { "$include": "./shared/setup.jsonc" },
         { "type": "type", "text": "my-cli init" },
         { "type": "press", "key": "Enter" },
-        { "type": "pause", "duration": 3 }
-      ]
+        { "type": "pause", "duration": 3 },
+      ],
     },
     {
       "name": "advanced",
@@ -138,10 +138,10 @@ Combine both features for maximum reuse:
         { "$include": "./shared/setup.jsonc" },
         { "type": "type", "text": "my-cli run --verbose" },
         { "type": "press", "key": "Enter" },
-        { "type": "pause", "duration": 5 }
-      ]
-    }
-  ]
+        { "type": "pause", "duration": 5 },
+      ],
+    },
+  ],
 }
 ```
 
@@ -149,10 +149,10 @@ Both videos share the same setup steps, but each has its own main content. Chang
 
 ## When to Use These Features
 
-| Scenario | Feature |
-|----------|---------|
-| Demo suites with shared branding | Multi-video with `defaults` |
-| Common setup steps across recordings | Step includes |
-| Multiple output formats for same content | Multi-video (one per format) |
-| Shared onboarding sequence | Step include referenced from multiple configs |
-| CI-generated documentation videos | Multi-video for batch recording |
+| Scenario                                 | Feature                                       |
+| ---------------------------------------- | --------------------------------------------- |
+| Demo suites with shared branding         | Multi-video with `defaults`                   |
+| Common setup steps across recordings     | Step includes                                 |
+| Multiple output formats for same content | Multi-video (one per format)                  |
+| Shared onboarding sequence               | Step include referenced from multiple configs |
+| CI-generated documentation videos        | Multi-video for batch recording               |

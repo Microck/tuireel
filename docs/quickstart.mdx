@@ -23,8 +23,9 @@ npx tuireel
 </CodeGroup>
 
 <Note>
-  Tuireel requires **ffmpeg** to be installed on your system for video encoding.
-  Install it with `brew install ffmpeg` (macOS), `apt install ffmpeg` (Ubuntu), or download from [ffmpeg.org](https://ffmpeg.org).
+  Tuireel requires **ffmpeg** to be installed on your system for video encoding. Install it with
+  `brew install ffmpeg` (macOS), `apt install ffmpeg` (Ubuntu), or download from
+  [ffmpeg.org](https://ffmpeg.org).
 </Note>
 
 ## Create Your First Recording
@@ -38,6 +39,7 @@ npx tuireel
     ```
 
     This creates a starter config with a simple example. You can optionally choose a preset (like `polished` or `demo`) during init.
+
   </Step>
 
   <Step title="Edit your steps">
@@ -56,6 +58,7 @@ npx tuireel
       ]
     }
     ```
+
   </Step>
 
   <Step title="Validate your config">
@@ -66,6 +69,7 @@ npx tuireel
     ```
 
     This validates the schema, checks step types, and reports any issues.
+
   </Step>
 
   <Step title="Record">
@@ -76,10 +80,11 @@ npx tuireel
     ```
 
     Tuireel will spawn a PTY, execute each step, capture frames, and encode the final video.
+
   </Step>
 
   <Step title="View your output">
-    Open the generated `demo.mp4` to see your recording. That's it — a polished terminal demo with no manual editing.
+    Open the generated `demo.mp4` to see your recording. That's it - a polished terminal demo with no manual editing.
   </Step>
 </Steps>
 
@@ -95,12 +100,12 @@ Want instant polish? Add a preset to your config:
     { "type": "launch", "command": "bash" },
     { "type": "type", "text": "echo 'Polished recording!'" },
     { "type": "press", "key": "Enter" },
-    { "type": "pause", "duration": 2 }
-  ]
+    { "type": "pause", "duration": 2 },
+  ],
 }
 ```
 
-The `polished` preset applies the Catppuccin theme, enables cursor overlay, HUD, and sound effects — all in one line.
+The `polished` preset applies the Catppuccin theme, enables cursor overlay, HUD, and sound effects - all in one line.
 
 Available presets: `polished`, `minimal`, `demo`, `silent`.
 
