@@ -91,3 +91,4 @@ Recent decisions:
 - Last session: 2026-03-06
 - Stopped at: v1.15 milestone shipped — all phases complete; quick task 012 finished
 - Resume file: Use `/gsd-new-milestone` to define the next milestone
+| 013 | Make a demo video for tuireel using tuireel itself | 2026-03-06 | 1cf2b26 | [013-make-a-demo-video-for-tuireel-using-tuir](./quick/13-make-a-demo-video-for-tuireel-using-tuir/) |
