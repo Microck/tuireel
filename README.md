@@ -325,6 +325,10 @@ three github actions workflows run on every push to `main` and on pull requests:
 
 see [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, code style, and pr process.
 
+## credits
+
+inspired by [`webreel`](https://github.com/vercel-labs/webreel), built on [`tuistory`](https://github.com/remorses/tuistory) and [`ghostty-opentui`](https://github.com/remorses/ghostty-opentui).
+
 ## license
 
-[Apache 2.0](./LICENSE)
+[MIT](./LICENSE)

@@ -37,13 +37,13 @@ packages/
 
 Common commands (all from repo root):
 
-| Command | What it does |
-|---------|-------------|
-| `pnpm build` | Build all packages (via turbo) |
-| `pnpm dev` | Watch mode for all packages (via turbo) |
-| `pnpm test` | Run all tests (via vitest) |
-| `turbo build --filter=@tuireel/core` | Build only core |
-| `turbo build --filter=tuireel` | Build only CLI |
+| Command                              | What it does                            |
+| ------------------------------------ | --------------------------------------- |
+| `pnpm build`                         | Build all packages (via turbo)          |
+| `pnpm dev`                           | Watch mode for all packages (via turbo) |
+| `pnpm test`                          | Run all tests (via vitest)              |
+| `turbo build --filter=@tuireel/core` | Build only core                         |
+| `turbo build --filter=tuireel`       | Build only CLI                          |
 
 The build tool is **tsup** (per-package), orchestrated by **turbo** at the monorepo level. Tests use **vitest**.
 
@@ -81,4 +81,4 @@ Open a GitHub issue with:
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the [Apache License 2.0](./LICENSE).
+By contributing, you agree that your contributions will be licensed under the [MIT License](./LICENSE).

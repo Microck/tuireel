@@ -42,7 +42,7 @@ Progress: v1.15 complete (Phase 20: 2/2, Phase 21: 1/1, Phase 22: 1/1, Phase 23:
 Decisions logged in PROJECT.md Key Decisions table.
 Recent decisions:
 
-- Apache 2.0 license (confirmed in requirements)
+- MIT license (confirmed in requirements)
 - Mintlify for docs (confirmed in requirements)
 - GitHub Actions for CI (confirmed in requirements)
 - Icon concept: film reel frame + terminal prompt (>\_) with sprocket holes
