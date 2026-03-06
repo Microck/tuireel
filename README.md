@@ -25,6 +25,12 @@ define steps in a jsonc config (typing, key presses, launches, waits, pauses) an
 
 [documentation](https://tuireel.micr.dev) | [github](https://github.com/Microck/tuireel)
 
+<p align="center">
+  <video src="assets/demos/meta-demo.mp4" controls width="600"></video>
+  <br>
+  <em>watch tuireel create this demo (meta recursion)</em>
+</p>
+
 ## quick start
 
 ```bash
