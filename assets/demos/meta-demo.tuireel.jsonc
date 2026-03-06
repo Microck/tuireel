@@ -1,55 +1,29 @@
 {
   "$schema": "../../packages/core/schema.json",
-  "preset": "polished",
+  "preset": "demo",
   "output": "assets/demos/meta-demo.mp4",
-  "cols": 100,
-  "rows": 24,
+  "cols": 90,
+  "rows": 20,
   "steps": [
-    // Launch shell
     { "type": "launch", "command": "bash" },
     { "type": "pause", "duration": 500 },
-
-    // Type opencode command
-    { "type": "type", "text": "opencode", "speed": 80 },
-    { "type": "pause", "duration": 400 },
+    { "type": "type", "text": "echo '🤖 opencode ready'" },
     { "type": "press", "key": "Enter" },
     { "type": "pause", "duration": 800 },
-
-    // Simulate OpenCode prompt appearing
-    { "type": "type", "text": "echo '🤖 opencode ready'", "speed": 120 },
-    { "type": "press", "key": "Enter" },
-    { "type": "pause", "duration": 600 },
-
-    // User types the meta prompt
-    {
-      "type": "type",
-      "text": "# create a demo video showing tuireel recording terminal demos",
-      "speed": 60,
-    },
-    { "type": "pause", "duration": 800 },
+    { "type": "type", "text": "echo '# create a tuireel demo video'" },
     { "type": "press", "key": "Enter" },
     { "type": "pause", "duration": 1000 },
-
-    // Simulate thinking phase
-    { "type": "type", "text": "echo '⚡ analyzing request...'", "speed": 120 },
+    { "type": "type", "text": "echo '⚡ generating script...'" },
     { "type": "press", "key": "Enter" },
     { "type": "pause", "duration": 800 },
-
-    { "type": "type", "text": "echo '📝 generating tuireel script...'", "speed": 120 },
+    { "type": "type", "text": "echo '🎬 recording...'" },
     { "type": "press", "key": "Enter" },
     { "type": "pause", "duration": 1000 },
-
-    { "type": "type", "text": "echo '🎬 recording demo...'", "speed": 120 },
-    { "type": "press", "key": "Enter" },
-    { "type": "pause", "duration": 1200 },
-
-    // Show the result
-    { "type": "type", "text": "echo '✅ demo video created: meta-demo.mp4'", "speed": 100 },
+    { "type": "type", "text": "echo '✅ created: meta-demo.mp4'" },
     { "type": "press", "key": "Enter" },
     { "type": "pause", "duration": 800 },
-
-    { "type": "type", "text": "echo '   (you are watching what was just created)'", "speed": 80 },
+    { "type": "type", "text": "echo '(you are watching what was just created)'" },
     { "type": "press", "key": "Enter" },
-    { "type": "pause", "duration": 2000 },
+    { "type": "pause", "duration": 1500 },
   ],
 }
