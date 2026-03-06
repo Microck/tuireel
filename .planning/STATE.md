@@ -11,7 +11,7 @@ See: `.planning/PROJECT.md`
 Phase: 24 - README Refresh + Link Hygiene (complete)
 Plan: 24-01 complete (1/1); All phases done
 Status: v1.15 milestone shipped
-Last activity: 2026-03-06 - Completed quick task 011: Remove em dashes in docs + add tuireel skill companion docs
+Last activity: 2026-03-06 - Completed quick task 012: Rewrite skills/tuireel/SKILL.md as a user-facing skill
 
 Progress: v1.15 complete (Phase 20: 2/2, Phase 21: 1/1, Phase 22: 1/1, Phase 23: 1/1, Phase 24: 1/1)
 
@@ -80,6 +80,7 @@ Recent decisions:
 | 009 | Make README lowercase tone (microck style) | 2026-03-06 | 000a2b2 | [009-make-readme-lowercase-tone-microck-style](./quick/009-make-readme-lowercase-tone-microck-style/) |
 | 010 | Create skills/tuireel/SKILL.md             | 2026-03-06 | e0633a8 | [010-create-skills-folder-skill-md-webreel-st](./quick/010-create-skills-folder-skill-md-webreel-st/) |
 | 011 | Remove em dashes in docs + add skill refs  | 2026-03-06 | 99bacfd | [011-remove-em-dashes-from-readme-docs-add-sk](./quick/011-remove-em-dashes-from-readme-docs-add-sk/) |
+| 012 | Rewrite tuireel SKILL.md (user-facing)     | 2026-03-06 | d5d51f0 | [012-rewrite-tuireel-skill-md](./quick/012-rewrite-tuireel-skill-md/)                                 |
 
 ## Blockers/Concerns Carried Forward
 
@@ -88,5 +89,5 @@ Recent decisions:
 ## Session Continuity
 
 - Last session: 2026-03-06
-- Stopped at: v1.15 milestone shipped — all phases complete; quick task 010 finished
+- Stopped at: v1.15 milestone shipped — all phases complete; quick task 012 finished
 - Resume file: Use `/gsd-new-milestone` to define the next milestone
