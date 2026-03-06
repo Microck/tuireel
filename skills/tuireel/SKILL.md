@@ -98,7 +98,6 @@ run steps in a visible terminal without recording.
 tuireel preview
 tuireel preview my-demo.tuireel.jsonc
 tuireel preview --verbose
-tuireel preview --debug
 ```
 
 ### record
@@ -126,8 +125,6 @@ tuireel composite -c my-demo.tuireel.jsonc
 tuireel composite --format gif
 tuireel composite --cursor-size 4
 tuireel composite --no-cursor --no-hud
-tuireel composite --verbose
-tuireel composite --debug
 ```
 
 flags: `-c, --config <path>`, `--format <mp4|webm|gif>`, `--cursor-size <n>`, `--no-cursor`, `--no-hud`, `--verbose`, `--debug`
@@ -230,9 +227,9 @@ step objects live in `steps: []` and are a discriminated union on `step.type`.
 
 ## reference files
 
-- `skills/tuireel/steps-reference.md`
-- `skills/tuireel/examples.md`
-- `README.md`
+- [skills/tuireel/steps-reference.md](./steps-reference.md)
+- [skills/tuireel/examples.md](./examples.md)
+- [README.md](../../README.md)
 
 ## for repo contributors
 
