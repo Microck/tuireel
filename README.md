@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  Produce polished terminal demo videos from declarative configs.
+  produce polished terminal demo videos from declarative configs.
 </p>
 
 <p align="center">
@@ -15,15 +15,17 @@
   <a href="https://nodejs.org/"><img src="https://img.shields.io/node/v/tuireel" alt="node version"></a>
 </p>
 
+<!-- assets/branding/banner.png -->
+
 ---
 
-Tuireel executes scripted terminal interactions in a virtual PTY, captures frames, and renders polished videos (MP4, WebM, GIF) with optional cursor overlays, keystroke HUD, and sound effects. No manual recording or editing required.
+tuireel executes scripted terminal interactions in a virtual pty, captures frames, and renders polished videos (mp4, webm, gif) with optional cursor overlays, keystroke hud, and sound effects. no manual recording or editing required.
 
-Define steps in a JSONC config (typing, key presses, launches, waits, pauses) and Tuireel drives a headless terminal session, captures screenshots at configurable FPS, and encodes the result with ffmpeg.
+define steps in a jsonc config (typing, key presses, launches, waits, pauses) and tuireel drives a headless terminal session, captures screenshots at configurable fps, and encodes the result with ffmpeg.
 
-[Documentation](https://tuireel.micr.dev) | [GitHub](https://github.com/Microck/tuireel)
+[documentation](https://tuireel.micr.dev) | [github](https://github.com/Microck/tuireel)
 
-## Quick Start
+## quick start
 
 ```bash
 npm install -g tuireel   # or: npx tuireel / bunx tuireel
@@ -31,7 +33,7 @@ tuireel init              # scaffold a demo config
 tuireel record            # record your first demo
 ```
 
-The generated config is a JSONC file describing your demo steps:
+the generated config is a jsonc file describing your demo steps:
 
 ```jsonc
 {
@@ -45,11 +47,11 @@ The generated config is a JSONC file describing your demo steps:
 }
 ```
 
-## Usage
+## usage
 
-### Init
+### init
 
-Scaffold a new demo config:
+scaffold a new demo config:
 
 ```bash
 tuireel init
@@ -57,11 +59,11 @@ tuireel init -o my-demo.tuireel.jsonc
 tuireel init --force       # overwrite existing config
 ```
 
-This creates a `.tuireel.jsonc` with a `$schema` for IDE autocompletion.
+this creates a `.tuireel.jsonc` with a `$schema` for ide autocompletion.
 
-### Record
+### record
 
-Record a demo from config:
+record a demo from config:
 
 ```bash
 tuireel record
@@ -72,9 +74,9 @@ tuireel record --verbose
 tuireel record --debug
 ```
 
-### Preview
+### preview
 
-Run a config in a visible terminal without recording:
+run a config in a visible terminal without recording:
 
 ```bash
 tuireel preview
@@ -82,9 +84,9 @@ tuireel preview my-demo.tuireel.jsonc
 tuireel preview --verbose
 ```
 
-### Composite
+### composite
 
-Re-render overlays on an existing recording without re-recording:
+re-render overlays on an existing recording without re-recording:
 
 ```bash
 tuireel composite
@@ -94,16 +96,16 @@ tuireel composite --cursor-size 4
 tuireel composite --no-cursor --no-hud
 ```
 
-### Validate
+### validate
 
-Check a config file for errors without running it:
+check a config file for errors without running it:
 
 ```bash
 tuireel validate
 tuireel validate my-demo.tuireel.jsonc
 ```
 
-### Help and Version
+### help and version
 
 ```bash
 tuireel --help
@@ -111,46 +113,46 @@ tuireel --version
 tuireel record --help
 ```
 
-## Step Types
+## step types
 
-| Type         | Key Fields             | Description                                          |
+| type         | key fields             | description                                          |
 | ------------ | ---------------------- | ---------------------------------------------------- |
-| `launch`     | `command`              | Start a terminal program (e.g. `vim`, `htop`, `npm`) |
-| `type`       | `text`, `speed?`       | Type text into the terminal character by character   |
-| `press`      | `key`                  | Send a key press (Enter, Tab, Ctrl+C, Escape, etc.)  |
-| `wait`       | `pattern`, `timeout?`  | Wait for text/regex to appear in terminal output     |
-| `pause`      | `duration`             | Pause for a fixed duration in milliseconds           |
-| `scroll`     | `direction`, `amount?` | Scroll the terminal view up or down                  |
-| `click`      | `pattern`              | Click on matching text in the terminal               |
-| `screenshot` | `output`               | Capture a PNG screenshot at this point               |
-| `resize`     | `cols`, `rows`         | Resize the terminal dimensions mid-recording         |
-| `set-env`    | `key`, `value`         | Set an environment variable before next command      |
+| `launch`     | `command`              | start a terminal program (e.g. `vim`, `htop`, `npm`) |
+| `type`       | `text`, `speed?`       | type text into the terminal character by character   |
+| `press`      | `key`                  | send a key press (enter, tab, ctrl+c, escape, etc.)  |
+| `wait`       | `pattern`, `timeout?`  | wait for text/regex to appear in terminal output     |
+| `pause`      | `duration`             | pause for a fixed duration in milliseconds           |
+| `scroll`     | `direction`, `amount?` | scroll the terminal view up or down                  |
+| `click`      | `pattern`              | click on matching text in the terminal               |
+| `screenshot` | `output`               | capture a png screenshot at this point               |
+| `resize`     | `cols`, `rows`         | resize the terminal dimensions mid-recording         |
+| `set-env`    | `key`, `value`         | set an environment variable before next command      |
 
-All steps can be used with `$include` to share common setup sequences across configs.
+all steps can be used with `$include` to share common setup sequences across configs.
 
-## Config Options
+## config options
 
-### Top-level
+### top-level
 
-| Field                | Default      | Description                                           |
+| field                | default      | description                                           |
 | -------------------- | ------------ | ----------------------------------------------------- |
-| `$schema`            | -            | JSON Schema URL for IDE autocompletion                |
-| `preset`             | -            | Preset name (`polished`, `minimal`, `demo`, `silent`) |
-| `output`             | `output.mp4` | Output file path                                      |
-| `format`             | `mp4`        | Output format (`mp4`, `webm`, `gif`)                  |
-| `theme`              | -            | Terminal color theme (name or inline object)          |
-| `sound`              | -            | Sound effect configuration                            |
-| `cursor`             | -            | Cursor overlay settings                               |
-| `hud`                | -            | Keystroke HUD overlay settings                        |
-| `fps`                | `30`         | Capture frame rate                                    |
-| `cols`               | `80`         | Terminal width in columns                             |
-| `rows`               | `24`         | Terminal height in rows                               |
-| `defaultWaitTimeout` | -            | Default timeout for `wait` steps (ms)                 |
-| `steps`              | required     | Array of step objects                                 |
+| `$schema`            | -            | json schema url for ide autocompletion                |
+| `preset`             | -            | preset name (`polished`, `minimal`, `demo`, `silent`) |
+| `output`             | `output.mp4` | output file path                                      |
+| `format`             | `mp4`        | output format (`mp4`, `webm`, `gif`)                  |
+| `theme`              | -            | terminal color theme (name or inline object)          |
+| `sound`              | -            | sound effect configuration                            |
+| `cursor`             | -            | cursor overlay settings                               |
+| `hud`                | -            | keystroke hud overlay settings                        |
+| `fps`                | `30`         | capture frame rate                                    |
+| `cols`               | `80`         | terminal width in columns                             |
+| `rows`               | `24`         | terminal height in rows                               |
+| `defaultWaitTimeout` | -            | default timeout for `wait` steps (ms)                 |
+| `steps`              | required     | array of step objects                                 |
 
-### Multi-video config
+### multi-video config
 
-For projects with multiple demos, use the multi-video format:
+for projects with multiple demos, use the multi-video format:
 
 ```jsonc
 {
@@ -180,27 +182,27 @@ For projects with multiple demos, use the multi-video format:
 }
 ```
 
-The `defaults` object is merged into each video definition. Per-video fields override defaults.
+the `defaults` object is merged into each video definition. per-video fields override defaults.
 
-| Field           | Default   | Description                    |
+| field           | default   | description                    |
 | --------------- | --------- | ------------------------------ |
-| `name`          | required  | Video identifier               |
-| `output`        | required  | Output file path               |
-| `steps`         | required  | Array of step objects          |
-| `preset`        | inherited | Preset override for this video |
-| `format`        | inherited | Output format override         |
-| `theme`         | inherited | Theme override                 |
-| `sound`         | inherited | Sound configuration override   |
-| `cursor`        | inherited | Cursor overlay override        |
-| `hud`           | inherited | Keystroke HUD override         |
-| `fps`           | inherited | Frame rate override            |
-| `cols` / `rows` | inherited | Terminal dimensions override   |
+| `name`          | required  | video identifier               |
+| `output`        | required  | output file path               |
+| `steps`         | required  | array of step objects          |
+| `preset`        | inherited | preset override for this video |
+| `format`        | inherited | output format override         |
+| `theme`         | inherited | theme override                 |
+| `sound`         | inherited | sound configuration override   |
+| `cursor`        | inherited | cursor overlay override        |
+| `hud`           | inherited | keystroke hud override         |
+| `fps`           | inherited | frame rate override            |
+| `cols` / `rows` | inherited | terminal dimensions override   |
 
-## Presets
+## presets
 
-Presets bundle presentation defaults (theme, sound, cursor, HUD) so you don't have to configure each one individually.
+presets bundle presentation defaults (theme, sound, cursor, hud) so you don't have to configure each one individually.
 
-| Preset     | Theme       | Sound Effects | Cursor  | HUD     |
+| preset     | theme       | sound effects | cursor  | hud     |
 | ---------- | ----------- | ------------- | ------- | ------- |
 | `polished` | Catppuccin  | Click + Key   | Visible | Visible |
 | `demo`     | Dracula     | Click + Key   | Visible | Visible |
@@ -215,11 +217,11 @@ Presets bundle presentation defaults (theme, sound, cursor, HUD) so you don't ha
 }
 ```
 
-Preset values can be overridden by explicit fields in your config.
+preset values can be overridden by explicit fields in your config.
 
-## Themes
+## themes
 
-Tuireel ships with 8 built-in terminal color themes:
+tuireel ships with 8 built-in terminal color themes:
 
 - `dracula`
 - `catppuccin`
@@ -230,15 +232,15 @@ Tuireel ships with 8 built-in terminal color themes:
 - `nord`
 - `gruvbox-dark`
 
-Use a theme by name or provide a custom theme object with `background`, `foreground`, `cursor`, and full 16-color ANSI palette:
+use a theme by name or provide a custom theme object with `background`, `foreground`, `cursor`, and full 16-color ansi palette:
 
-By name:
+by name:
 
 ```jsonc
 { "theme": "catppuccin" }
 ```
 
-Or inline with full ANSI palette:
+or inline with full ansi palette:
 
 ```jsonc
 {
@@ -256,9 +258,9 @@ Or inline with full ANSI palette:
 }
 ```
 
-## Sound Effects
+## sound effects
 
-Tuireel includes built-in sound effects for key presses and clicks, with 4 variants each. Add a background music track with volume control.
+tuireel includes built-in sound effects for key presses and clicks, with 4 variants each. add a background music track with volume control.
 
 ```jsonc
 {
@@ -274,15 +276,15 @@ Tuireel includes built-in sound effects for key presses and clicks, with 4 varia
 }
 ```
 
-## Development
+## development
 
-### Prerequisites
+### prerequisites
 
-- [Node.js](https://nodejs.org/) 18+
+- [node.js](https://nodejs.org/) 18+
 - [pnpm](https://pnpm.io/) 10+ (`corepack enable`)
-- [ffmpeg](https://ffmpeg.org/) on PATH
+- [ffmpeg](https://ffmpeg.org/) on path
 
-### Setup
+### setup
 
 ```bash
 git clone https://github.com/Microck/tuireel.git
@@ -291,38 +293,38 @@ pnpm install
 pnpm build
 ```
 
-### Common Commands
+### common commands
 
-| Command                              | Description                    |
+| command                              | description                    |
 | ------------------------------------ | ------------------------------ |
-| `pnpm build`                         | Build all packages (via Turbo) |
-| `pnpm dev`                           | Watch mode for all packages    |
-| `pnpm test`                          | Run all tests (via Vitest)     |
-| `pnpm lint`                          | Lint all packages              |
-| `pnpm benchmark`                     | Run performance benchmarks     |
-| `pnpm publish:smoke`                 | Run publish smoke tests        |
-| `turbo build --filter=@tuireel/core` | Build only core                |
-| `turbo build --filter=tuireel`       | Build only CLI                 |
+| `pnpm build`                         | build all packages (via turbo) |
+| `pnpm dev`                           | watch mode for all packages    |
+| `pnpm test`                          | run all tests (via vitest)     |
+| `pnpm lint`                          | lint all packages              |
+| `pnpm benchmark`                     | run performance benchmarks     |
+| `pnpm publish:smoke`                 | run publish smoke tests        |
+| `turbo build --filter=@tuireel/core` | build only core                |
+| `turbo build --filter=tuireel`       | build only cli                 |
 
-### CI/CD
+### ci/cd
 
-Three GitHub Actions workflows run on every push to `main` and on pull requests:
+three github actions workflows run on every push to `main` and on pull requests:
 
 - **CI** - lint, build, type-check, and test
-- **Video Smoke Tests** - records MP4, WebM, and GIF outputs and validates them with ffprobe
-- **Release** - automated publishing via [Changesets](https://github.com/changesets/changesets) with npm OIDC trusted publishing and post-publish validation
+- **Video Smoke Tests** - records mp4, webm, and gif outputs and validates them with ffprobe
+- **Release** - automated publishing via [changesets](https://github.com/changesets/changesets) with npm oidc trusted publishing and post-publish validation
 
-## Packages
+## packages
 
-| Package                          | Description                                          |
+| package                          | description                                          |
 | -------------------------------- | ---------------------------------------------------- |
-| [`tuireel`](packages/cli)        | CLI interface for recording terminal demos           |
-| [`@tuireel/core`](packages/core) | Recording engine, compositing pipeline, and overlays |
+| [`tuireel`](packages/cli)        | cli interface for recording terminal demos           |
+| [`@tuireel/core`](packages/core) | recording engine, compositing pipeline, and overlays |
 
-## Contributing
+## contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, code style, and PR process.
+see [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, code style, and pr process.
 
-## License
+## license
 
 [Apache 2.0](./LICENSE)
