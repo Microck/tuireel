@@ -11,7 +11,7 @@ See: `.planning/PROJECT.md`
 Phase: 24 - README Refresh + Link Hygiene (complete)
 Plan: 24-01 complete (1/1); All phases done
 Status: v1.15 milestone shipped
-Last activity: 2026-03-05 - Completed quick task 008: Fix CI test timeout in run 22739610221
+Last activity: 2026-03-06 - Completed quick task 009: Make README lowercase tone (microck style)
 
 Progress: v1.15 complete (Phase 20: 2/2, Phase 21: 1/1, Phase 22: 1/1, Phase 23: 1/1, Phase 24: 1/1)
 
@@ -67,16 +67,17 @@ Recent decisions:
 
 ### Quick Tasks Completed
 
-| #   | Description                               | Date       | Commit  | Directory                                                                                             |
-| --- | ----------------------------------------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| 001 | GitHub repo creation + npm publish        | 2026-03-04 | 1254e25 | [001-github-npm-publish](./quick/001-github-npm-publish/)                                             |
-| 002 | Expand README following webreel structure | 2026-03-05 | 260eb67 | [002-expand-readme](./quick/002-expand-readme/)                                                       |
-| 003 | Replace all emdashes in README            | 2026-03-05 | 4761b11 | [003-replace-all-emdashes-in-readme](./quick/003-replace-all-emdashes-in-readme/)                     |
-| 004 | Remove logo-light + add beige outline     | 2026-03-05 | 633cc0e | [004-logo-remove-light-variant-add-beige-stro](./quick/004-logo-remove-light-variant-add-beige-stro/) |
-| 005 | Fix logo-dark stroke + lock dark variant  | 2026-03-05 | cd6f95c | [005-fix-logo-dark-stroke-ensure-dark-variant](./quick/005-fix-logo-dark-stroke-ensure-dark-variant/) |
-| 006 | Single logo + filter outline + verifier   | 2026-03-05 | b713d2c | [006-branding-single-original-logo-svg-with-o](./quick/006-branding-single-original-logo-svg-with-o/) |
-| 007 | Fix failing GitHub Actions lint run       | 2026-03-05 | 37ab3cb | [007-fix-failing-github-actions-run-227396102](./quick/007-fix-failing-github-actions-run-227396102/) |
-| 008 | Fix CI test timeout in run 22739610221    | 2026-03-05 | eab1010 | [008-fix-ci-test-timeout-in-run-22739610221](./quick/008-fix-ci-test-timeout-in-run-22739610221/)     |
+| #   | Description                                | Date       | Commit  | Directory                                                                                             |
+| --- | ------------------------------------------ | ---------- | ------- | ----------------------------------------------------------------------------------------------------- |
+| 001 | GitHub repo creation + npm publish         | 2026-03-04 | 1254e25 | [001-github-npm-publish](./quick/001-github-npm-publish/)                                             |
+| 002 | Expand README following webreel structure  | 2026-03-05 | 260eb67 | [002-expand-readme](./quick/002-expand-readme/)                                                       |
+| 003 | Replace all emdashes in README             | 2026-03-05 | 4761b11 | [003-replace-all-emdashes-in-readme](./quick/003-replace-all-emdashes-in-readme/)                     |
+| 004 | Remove logo-light + add beige outline      | 2026-03-05 | 633cc0e | [004-logo-remove-light-variant-add-beige-stro](./quick/004-logo-remove-light-variant-add-beige-stro/) |
+| 005 | Fix logo-dark stroke + lock dark variant   | 2026-03-05 | cd6f95c | [005-fix-logo-dark-stroke-ensure-dark-variant](./quick/005-fix-logo-dark-stroke-ensure-dark-variant/) |
+| 006 | Single logo + filter outline + verifier    | 2026-03-05 | b713d2c | [006-branding-single-original-logo-svg-with-o](./quick/006-branding-single-original-logo-svg-with-o/) |
+| 007 | Fix failing GitHub Actions lint run        | 2026-03-05 | 37ab3cb | [007-fix-failing-github-actions-run-227396102](./quick/007-fix-failing-github-actions-run-227396102/) |
+| 008 | Fix CI test timeout in run 22739610221     | 2026-03-05 | eab1010 | [008-fix-ci-test-timeout-in-run-22739610221](./quick/008-fix-ci-test-timeout-in-run-22739610221/)     |
+| 009 | Make README lowercase tone (microck style) | 2026-03-06 | 000a2b2 | [009-make-readme-lowercase-tone-microck-style](./quick/009-make-readme-lowercase-tone-microck-style/) |
 
 ## Blockers/Concerns Carried Forward
 
