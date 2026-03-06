@@ -1,103 +1,157 @@
 ---
 name: tuireel
-description: Best practices and architecture reference for the tuireel monorepo. Use when working with tuireel source code, extending the CLI or @tuireel/core, or updating the JSONC config format and step types.
+description: Record scripted terminal demo videos with tuireel. Generates mp4/webm/gif from a .tuireel.jsonc script, with optional cursor overlay, keystroke hud, and sound effects. Use when you want to author a config, record/preview/validate/composite a demo, or debug a recording.
 ---
 
 # tuireel
 
-Record scripted terminal videos as MP4/WebM/GIF with optional cursor overlay, keystroke HUD, and sound effects. Steps are defined in `.tuireel.jsonc` (JSONC) and executed in a virtual PTY session.
+tuireel executes scripted terminal interactions in a virtual pty, captures frames, and renders videos (mp4, webm, gif). you define steps in a jsonc config, then iterate on the script until the recording looks right.
 
-## Project structure
+## when to use
 
-pnpm monorepo with Turbo at the root:
+use this skill when the user says things like:
+
+- "record a terminal demo video"
+- "create a .tuireel.jsonc"
+- "tuireel init" / "tuireel record" / "tuireel preview" / "tuireel validate" / "tuireel composite"
+- "my recording is failing" / "wait step times out" / "ffmpeg download is stuck"
+- "add a new step type" / "how do i write a click/wait/resize step"
+
+## installation
+
+```bash
+npm install -g tuireel
+
+# or run without installing globally
+npx tuireel --help
+bunx tuireel --help
+```
+
+## prerequisites
+
+- supported platforms: macos and linux (on windows, use wsl)
+- ffmpeg: tuireel auto-downloads an ffmpeg binary on first run and caches it at `~/.tuireel/bin/ffmpeg`
+- archive tools: the ffmpeg download path requires either `unzip` (macos zip) or `tar` (linux .tar.xz)
+
+env overrides:
+
+- `TUIREEL_HOME` controls where `tuireel init` writes `schema.json` (default: `~/.tuireel/schema.json`)
+
+note: `.planning/research/PITFALLS.md` mentions `TUIREEL_FFMPEG_PATH` as a possible ci override, but tuireel does not currently read that env var. if you need to avoid downloads, install ffmpeg via your system package manager and make sure `ffmpeg` is on `PATH`.
+
+## .gitignore
+
+recording runs create a `.tuireel/` folder in your project (raw recordings + timelines for composite). ignore it:
 
 ```
-packages/
-  core/   # @tuireel/core - config/schema, session execution, recording, compositing
-  cli/    # tuireel CLI
+.tuireel/
 ```
 
-Both packages are ESM (`"type": "module"`) and compiled with `tsup`.
+## quick start
 
-## @tuireel/core
+minimal author loop: init -> preview -> record.
 
-Primary exports (see `packages/core/src/index.ts` and `packages/core/src/config/index.ts`):
+```bash
+tuireel init
 
-| Area            | Exports                                                                                                                                                                   | Notes                                                                        |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Config + schema | `generateJsonSchema`, `loadConfig`, `loadSingleConfig`, `validateConfig`, `ConfigValidationError`, `STEP_TYPES`, `OUTPUT_FORMATS`, Zod schemas + types                    | Schema lives in `packages/core/src/config/schema.ts` and is used by the CLI. |
-| Runtime         | `record`, `preview`, `compose`, `watchAndRecord`, `resolveOutputPath`                                                                                                     | `record()` captures frames, then composes overlays into the final output.    |
-| Sound           | `resolveSfxPath`, `ensureSoundAssets`, `extractSoundEvents`, `finalizeMp4WithSound`, `finalizeWebmWithSound`, `mixAudioTracks`, `buildAudioMixArgs`, `buildFullAudioArgs` | Sound effects + audio mixing helpers.                                        |
-| Timeline        | `InteractionTimeline` + timeline types                                                                                                                                    | Timeline artifacts are written alongside raw recordings.                     |
+# edit .tuireel.jsonc
 
-### Recording artifacts
+tuireel preview            # run the script in a visible terminal
+tuireel record             # record to your configured output
+```
 
-`record()` writes per-run artifacts in the current working directory (see `packages/core/src/recorder.ts`):
+defaults:
 
-- `.tuireel/raw/<recordingName>.mp4`
-- `.tuireel/timelines/<recordingName>.timeline.json`
+- default config path is `.tuireel.jsonc` (most commands accept an optional positional path)
+- default output is `output.mp4` unless you set `output` in the config
 
-`composite` reads those artifacts to re-render overlays without re-recording.
+## cli commands
 
-### ffmpeg
+all commands accept an optional positional config path (default: `.tuireel.jsonc`) unless noted.
 
-Tuireel downloads an ffmpeg binary on-demand and caches it under `~/.tuireel/bin/ffmpeg` (see `packages/core/src/ffmpeg/downloader.ts`).
+### init
 
-## tuireel CLI
+scaffold a starter config and generate a local json schema for editor autocomplete.
 
-Built with Commander. Entry point: `packages/cli/src/index.ts`.
+```bash
+tuireel init
+tuireel init -o my-demo.tuireel.jsonc
+tuireel init --force
+```
 
-| Command     | Source                                   | Description                                                                          |
-| ----------- | ---------------------------------------- | ------------------------------------------------------------------------------------ |
-| `init`      | `packages/cli/src/commands/init.ts`      | Create a starter `.tuireel.jsonc` config and generate a local JSON schema file.      |
-| `validate`  | `packages/cli/src/commands/validate.ts`  | Validate a config file (includes JSONC parse errors with line/column when possible). |
-| `preview`   | `packages/cli/src/commands/preview.ts`   | Run steps in a visible terminal without recording.                                   |
-| `record`    | `packages/cli/src/commands/record.ts`    | Record a TUI session to video.                                                       |
-| `composite` | `packages/cli/src/commands/composite.ts` | Composite overlays onto an existing recording.                                       |
+flags: `-o, --output <path>`, `-f, --force`
 
-### Default config path
+### validate
 
-Most commands accept an optional positional config path and default to `.tuireel.jsonc`.
+check a config file for errors without running it.
 
-### CLI flags (spot-check sources before documenting new ones)
+```bash
+tuireel validate
+tuireel validate my-demo.tuireel.jsonc
+```
 
-- `init`: `-o, --output <path>`, `-f, --force`; generates schema at `$TUIREEL_HOME/schema.json` or `~/.tuireel/schema.json`
-- `record`: `--format <mp4|webm|gif>`, `-w, --watch`, `--verbose`, `--debug`
-- `preview`: `--verbose`, `--debug`
-- `composite`: `-c, --config <path>` (override positional), `--format <mp4|webm|gif>`, `--cursor-size <n>`, `--no-cursor`, `--no-hud`, `--verbose`, `--debug`
+### preview
 
-## Config format
+run steps in a visible terminal without recording.
 
-The config schema and loader live in:
+```bash
+tuireel preview
+tuireel preview my-demo.tuireel.jsonc
+tuireel preview --verbose
+tuireel preview --debug
+```
 
-- `packages/core/src/config/schema.ts`
-- `packages/core/src/config/loader.ts`
-- `packages/core/src/config/resolver.ts`
+### record
 
-Configs are JSONC and are parsed with `jsonc-parser` using `allowTrailingComma: true`.
+record one or more videos from config.
 
-### Single-video config (.tuireel.jsonc)
+```bash
+tuireel record
+tuireel record my-demo.tuireel.jsonc
+tuireel record --format webm
+tuireel record --watch
+tuireel record --verbose
+tuireel record --debug
+```
 
-Top-level fields (see `packages/core/src/config/schema.ts`):
+flags: `--format <mp4|webm|gif>`, `-w, --watch`, `--verbose`, `--debug`
 
-| Field                | Type                     | Notes                                                                 |
-| -------------------- | ------------------------ | --------------------------------------------------------------------- |
-| `$schema`            | string                   | Optional; `tuireel init` writes a `file://.../schema.json` reference. |
-| `preset`             | one of `PRESET_NAMES`    | Optional preset resolver applies before validation.                   |
-| `format`             | `mp4` \| `webm` \| `gif` | Default `mp4`.                                                        |
-| `output`             | string                   | Default `output.mp4`.                                                 |
-| `theme`              | string or theme object   | Optional.                                                             |
-| `sound`              | object                   | Optional sound config.                                                |
-| `cursor`             | object                   | Optional; currently `{ visible?: boolean }`.                          |
-| `hud`                | object                   | Optional; currently `{ visible?: boolean }`.                          |
-| `defaultWaitTimeout` | number                   | Optional default for `wait.timeout` (ms).                             |
-| `fps`                | number                   | Default 30.                                                           |
-| `cols` / `rows`      | number                   | Default 80x24.                                                        |
-| `steps`              | array                    | Required; may include `$include` directives (see below).              |
+### composite
 
-### Multi-video config
+re-render overlays on an existing recording without re-recording (useful for tweaking cursor/hud/sound settings).
 
-For multiple recordings in one file (see `packages/core/src/config/schema.ts`):
+```bash
+tuireel composite
+tuireel composite -c my-demo.tuireel.jsonc
+tuireel composite --format gif
+tuireel composite --cursor-size 4
+tuireel composite --no-cursor --no-hud
+tuireel composite --verbose
+tuireel composite --debug
+```
+
+flags: `-c, --config <path>`, `--format <mp4|webm|gif>`, `--cursor-size <n>`, `--no-cursor`, `--no-hud`, `--verbose`, `--debug`
+
+## config structure
+
+configs are jsonc (comments and trailing commas allowed). there are two formats.
+
+single-video config:
+
+```jsonc
+{
+  "preset": "polished",
+  "output": "demo.mp4",
+  "steps": [
+    { "type": "launch", "command": "bash" },
+    { "type": "type", "text": "echo 'hello from tuireel'" },
+    { "type": "press", "key": "Enter" },
+    { "type": "pause", "duration": 1200 },
+  ],
+}
+```
+
+multi-video config (defaults + videos array):
 
 ```jsonc
 {
@@ -111,6 +165,7 @@ For multiple recordings in one file (see `packages/core/src/config/schema.ts`):
       "name": "install",
       "output": "videos/install.mp4",
       "steps": [
+        { "type": "launch", "command": "bash" },
         { "type": "type", "text": "npm install tuireel" },
         { "type": "press", "key": "Enter" },
       ],
@@ -119,68 +174,70 @@ For multiple recordings in one file (see `packages/core/src/config/schema.ts`):
 }
 ```
 
-`defaults` is merged into each item in `videos`, and per-video fields override defaults.
-
-### $include
-
-Inside any `steps` array, you can include steps from another JSONC file by adding an object like:
+sharing steps with `$include`:
 
 ```jsonc
-{ "$include": "./common.steps.jsonc" }
+{
+  "output": "include-demo.mp4",
+  "steps": [
+    { "$include": "./shared/setup.steps.jsonc" },
+    { "type": "type", "text": "echo 'main demo starts here'" },
+    { "type": "press", "key": "Enter" },
+  ],
+}
 ```
 
-The include file must itself be a JSONC object with a `steps` array:
+include files must be objects with a `steps` array:
 
 ```jsonc
 { "steps": [{ "type": "press", "key": "Enter" }] }
 ```
 
-Resolution details (see `packages/core/src/config/resolver.ts`):
+## step types
 
-- Include paths are resolved relative to the including file.
-- Includes can nest.
-- Circular includes are rejected.
+step objects live in `steps: []` and are a discriminated union on `step.type`.
 
-### Step types
+| type         | key fields             | purpose                                             |
+| ------------ | ---------------------- | --------------------------------------------------- |
+| `launch`     | `command`              | start a terminal program (shell, tui app, etc.)     |
+| `type`       | `text`, `speed?`       | type text character by character                    |
+| `press`      | `key`                  | send a key press or combo (e.g. `Enter`, `Ctrl+C`)  |
+| `wait`       | `pattern`, `timeout?`  | wait for text/regex to appear in terminal output    |
+| `pause`      | `duration`             | pause for a fixed duration in milliseconds          |
+| `scroll`     | `direction`, `amount?` | scroll the terminal view up/down                    |
+| `click`      | `pattern`              | click on matching text in the terminal view         |
+| `screenshot` | `output`               | write a png screenshot at this point                |
+| `resize`     | `cols`, `rows`         | resize the terminal dimensions mid-run              |
+| `set-env`    | `key`, `value`         | set an environment variable before subsequent steps |
 
-Step types are a discriminated union on `step.type` (see `STEP_TYPES` in `packages/core/src/config/schema.ts`).
+## tips
 
-| Type         | Required fields | Optional fields | Notes                                                                                  |
-| ------------ | --------------- | --------------- | -------------------------------------------------------------------------------------- |
-| `launch`     | `command`       | -               | Must appear at least once; used to start the session.                                  |
-| `type`       | `text`          | `speed`         | `speed` is ms per char (default 50).                                                   |
-| `press`      | `key`           | -               | Key combos are strings like `Ctrl+C` (passed through to the session).                  |
-| `wait`       | `pattern`       | `timeout`       | `pattern` can be a string or `{ "regex": string, "flags"?: string }`. Timeouts are ms. |
-| `pause`      | `duration`      | -               | Milliseconds.                                                                          |
-| `scroll`     | `direction`     | `amount`        | `direction` is `up` or `down`; `amount` defaults to 3.                                 |
-| `click`      | `pattern`       | -               | Clicks matching text in the terminal view.                                             |
-| `screenshot` | `output`        | -               | Writes a PNG at this point in the run.                                                 |
-| `resize`     | `cols`, `rows`  | -               | Resizes terminal dimensions mid-run.                                                   |
-| `set-env`    | `key`, `value`  | -               | `key` must match `/^[A-Za-z_][A-Za-z0-9_]*$/`.                                         |
+- author loop: `tuireel validate` -> `tuireel preview` -> `tuireel record`
+- start with explicit waits: prefer `wait` over long `pause` when you can key off terminal output
+- use `--verbose` to see step-by-step progress; use `--debug` to see internal timing and ffmpeg commands
+- for quick iteration, use `tuireel record --watch` so edits trigger a new recording
+- use `tuireel composite` to tweak overlays (cursor/hud/sound) without re-running the terminal session
 
-## Adding a new step type
+## troubleshooting
 
-To add a new step type, keep schema, execution, and docs in lockstep:
+- "config not found": most commands default to `.tuireel.jsonc`. either run `tuireel init` or pass the config path explicitly: `tuireel record path/to/file.jsonc`
+- waits timing out: confirm the terminal actually prints the text you are waiting for. add `--verbose`, and consider using a regex pattern for variable output
+- ffmpeg download problems:
+  - ensure `unzip` (macos) or `tar` (linux) is installed
+  - retry on a clean network (first run downloads to `~/.tuireel/bin/ffmpeg`)
+  - if downloads are blocked, install ffmpeg via `brew install ffmpeg` / `apt install ffmpeg` and ensure it is on `PATH`
+- composite errors about missing raw/timeline artifacts: you must run `tuireel record` first. composite reads from `.tuireel/raw/` and `.tuireel/timelines/` in your current working directory
 
-1. Update `packages/core/src/config/schema.ts`:
-   - Extend `STEP_TYPES` (the `stepTypes` tuple)
-   - Add a Zod schema for the new step
-   - Add the schema to `stepSchema` (discriminated union)
-2. Update execution:
-   - Add a case in `packages/core/src/executor/step-executor.ts`
-   - Implement the step in `packages/core/src/executor/steps/`
-3. Update docs/examples:
-   - `README.md` step types + config examples
-   - Any CLI help text that should mention the new capability
+## reference files
 
-## Testing
+- `skills/tuireel/steps-reference.md`
+- `skills/tuireel/examples.md`
+- `README.md`
 
-- Root: `pnpm test` (Turbo runs package tests)
-- Lint: `pnpm lint`
-- Build: `pnpm build`
+## for repo contributors
 
-## Conventions
+if you are changing the cli or config format, keep docs + schema + runtime in sync:
 
-- Prefer describing config formats by pointing at `packages/core/src/config/schema.ts` and `packages/core/src/config/loader.ts`.
-- Default config filename is `.tuireel.jsonc`.
-- Repo-local artifacts are written under `.tuireel/` in the current working directory.
+- `packages/cli/src/commands/*.ts`
+- `packages/core/src/config/schema.ts`
+- `packages/core/src/executor/*`
