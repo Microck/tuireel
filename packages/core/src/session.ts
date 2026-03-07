@@ -1,9 +1,7 @@
-import {
-  renderTerminalToImage,
-  type RenderImageOptions,
-} from "ghostty-opentui/image";
+import { renderTerminalToImage, type RenderImageOptions } from "ghostty-opentui/image";
 import { launchTerminal, type Key, type Session } from "tuistory";
 
+import { getTerminalEnvOverrides, getTerminalResponses } from "./terminal-responder.js";
 import type { ThemeConfig } from "./themes/schema.js";
 
 export interface SessionConfig {
@@ -225,14 +223,27 @@ export class TuireelSession {
 }
 
 export async function createSession(config: SessionConfig): Promise<TuireelSession> {
+  const cols = config.cols ?? 80;
+  const rows = config.rows ?? 24;
+
+  const env = {
+    ...config.env,
+    ...getTerminalEnvOverrides(),
+  };
+
   const session = await launchTerminal({
     command: config.command,
-    cols: config.cols,
-    rows: config.rows,
-    env: config.env,
+    cols,
+    rows,
+    env,
   });
 
-  const tuireelSession = new TuireelSession(session, config.theme, config.env);
+  const tuireelSession = new TuireelSession(session, config.theme, env);
+
+  // Send proactive terminal capability responses so TUI frameworks don't hang
+  // waiting for query replies that ghostty-opentui's display-only terminal drops.
+  tuireelSession.writeRaw(getTerminalResponses(cols, rows));
+  await tuireelSession.waitIdle({ timeout: 100 });
 
   if (config.theme) {
     await tuireelSession.applyTheme(config.theme);

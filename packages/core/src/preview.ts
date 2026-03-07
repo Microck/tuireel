@@ -3,6 +3,7 @@ import { launchTerminal } from "tuistory";
 import type { TuireelConfig, TuireelStep } from "./config/schema.js";
 import { executeSteps } from "./executor/step-executor.js";
 import { createSession, TuireelSession } from "./session.js";
+import { getTerminalEnvOverrides, getTerminalResponses } from "./terminal-responder.js";
 import { resolveTheme } from "./themes/resolve.js";
 
 const SUMMARY_TEXT_LIMIT = 30;
@@ -10,7 +11,9 @@ const SUMMARY_TEXT_LIMIT = 30;
 type LaunchStep = Extract<TuireelStep, { type: "launch" }>;
 
 function assertNever(step: never): never {
-  throw new Error(`Unsupported step type: ${JSON.stringify(step)}. Try: check available step types in the docs or run 'tuireel validate'.`);
+  throw new Error(
+    `Unsupported step type: ${JSON.stringify(step)}. Try: check available step types in the docs or run 'tuireel validate'.`,
+  );
 }
 
 function isLaunchStep(step: TuireelStep): step is LaunchStep {
@@ -20,7 +23,9 @@ function isLaunchStep(step: TuireelStep): step is LaunchStep {
 function getLaunchCommand(config: TuireelConfig): string {
   const launchStep = config.steps.find(isLaunchStep);
   if (!launchStep) {
-    throw new Error("Config must include at least one 'launch' step. Try: add a step like { \"type\": \"launch\", \"command\": \"bash\" } to your config.");
+    throw new Error(
+      'Config must include at least one \'launch\' step. Try: add a step like { "type": "launch", "command": "bash" } to your config.',
+    );
   }
 
   return launchStep.command;
@@ -94,17 +99,26 @@ async function createPreviewSession(config: {
 }): Promise<TuireelSession> {
   type LaunchTerminalOptions = Parameters<typeof launchTerminal>[0] & { visible?: boolean };
 
+  const env = {
+    ...config.env,
+    ...getTerminalEnvOverrides(),
+  };
+
   const launchOptions: LaunchTerminalOptions = {
     command: config.command,
     cols: config.cols,
     rows: config.rows,
-    env: config.env,
+    env,
     visible: true,
   };
 
   try {
     const session = await launchTerminal(launchOptions);
-    const previewSession = new TuireelSession(session, config.theme, config.env);
+    const previewSession = new TuireelSession(session, config.theme, env);
+
+    // Send proactive terminal capability responses for TUI framework compatibility.
+    previewSession.writeRaw(getTerminalResponses(config.cols, config.rows));
+    await previewSession.waitIdle({ timeout: 100 });
 
     if (config.theme) {
       await previewSession.applyTheme(config.theme);
@@ -116,11 +130,12 @@ async function createPreviewSession(config: {
       throw error;
     }
 
+    // Fallback path: createSession() already handles env overrides + responses
     return createSession({
       command: config.command,
       cols: config.cols,
       rows: config.rows,
-      env: config.env,
+      env,
       theme: config.theme,
     });
   }
