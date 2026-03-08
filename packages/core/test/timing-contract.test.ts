@@ -64,6 +64,39 @@ describe("timing contract compatibility", () => {
     });
   });
 
+  it("flags capture cadence changes as a timing mismatch", () => {
+    const timeline = createTimelineData({
+      timingContract: {
+        version: 1,
+        outputFps: 30,
+        captureFps: 12,
+        wallClockDurationMs: 14_000,
+        rawFrameCount: 168,
+        outputFrameCount: 420,
+        terminalFrameCount: 4,
+        deliveryProfile: "readable-1080p",
+      },
+    });
+
+    expect(
+      assessTimingCompatibility(timeline, {
+        fps: 30,
+        captureFps: 8,
+        deliveryProfile: "social-quick-share",
+        format: "webm",
+      }),
+    ).toMatchObject({
+      kind: "timing-mismatch",
+      mismatches: [
+        {
+          field: "captureFps",
+          expected: 12,
+          actual: 8,
+        },
+      ],
+    });
+  });
+
   it("flags output cadence changes as a timing mismatch", () => {
     const timeline = createTimelineData({
       timingContract: {
@@ -99,14 +132,21 @@ describe("timing contract compatibility", () => {
 
     expect(
       assessTimingCompatibility(legacyTimeline, {
-        fps: 30,
-        captureFps: 12,
+        format: "gif",
+        deliveryProfile: "readable-1080p",
+        outputSize: {
+          width: 1920,
+          height: 1080,
+          padding: 96,
+        },
       }),
-    ).toMatchObject({
+    ).toEqual({
       kind: "legacy-fallback",
       fallback: "allow-packaging-only",
       outputFps: 30,
       reason: "missing-timing-contract",
+      message:
+        "Saved timeline has no timingContract. Allow packaging-only recomposite changes, but require a fresh record for timing changes.",
     });
   });
 });
