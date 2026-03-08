@@ -1,16 +1,21 @@
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { promisify } from "node:util";
 
 import { Command } from "commander";
 import { afterEach, describe, expect, it } from "vitest";
 
+import { ensureFfmpeg, type TimelineData } from "../../core/src/index.js";
 import { validateConfig } from "../../core/src/config/parser.js";
+import { registerCompositeCommand } from "../src/commands/composite.js";
 import { registerInitCommand } from "../src/commands/init.js";
 import { registerValidateCommand } from "../src/commands/validate.js";
 import { createProgram } from "../src/index.js";
 
 const tempDirectories: string[] = [];
+const execFileAsync = promisify(execFile);
 
 afterEach(async () => {
   process.exitCode = undefined;
@@ -47,6 +52,125 @@ async function withNonInteractiveStdin<T>(run: () => Promise<T>): Promise<T> {
       configurable: true,
       value: originalIsTTY,
     });
+  }
+}
+
+async function runFfmpeg(ffmpegPath: string, args: string[]): Promise<void> {
+  await execFileAsync(ffmpegPath, args, {
+    maxBuffer: 10 * 1024 * 1024,
+  });
+}
+
+function createTimingContractTimelineData(overrides: Partial<TimelineData> = {}): TimelineData {
+  return {
+    fps: 30,
+    width: 320,
+    height: 180,
+    frameCount: 30,
+    theme: {
+      cursor: {
+        color: "#ffffff",
+        size: 18,
+      },
+      hud: {
+        background: "#111827cc",
+        color: "#f9fafb",
+        fontSize: 16,
+        fontFamily: "monospace",
+        borderRadius: 8,
+        position: "bottom",
+      },
+    },
+    frames: [
+      {
+        frameIndex: 0,
+        timeMs: 0,
+        cursor: { x: 40, y: 36, visible: true },
+        hud: null,
+      },
+    ],
+    events: [],
+    terminalFrames: [0],
+    timingContract: {
+      version: 1,
+      outputFps: 30,
+      captureFps: 12,
+      wallClockDurationMs: 1_000,
+      rawFrameCount: 12,
+      outputFrameCount: 30,
+      terminalFrameCount: 1,
+      deliveryProfile: "readable-1080p",
+    },
+    ...overrides,
+  };
+}
+
+async function createCompositeFixture(options: {
+  configText: string;
+  timelineData?: TimelineData;
+}): Promise<{
+  directory: string;
+  configPath: string;
+  outputPath: string;
+}> {
+  const directory = await makeTempDirectory();
+  const ffmpegPath = await ensureFfmpeg();
+  const configPath = join(directory, "demo.tuireel.jsonc");
+  const outputPath = join(directory, "demo.mp4");
+  const recordingsDirectory = join(directory, ".tuireel");
+  const rawDirectory = join(recordingsDirectory, "raw");
+  const timelineDirectory = join(recordingsDirectory, "timelines");
+  const rawPath = join(rawDirectory, "demo.mp4");
+  const timelinePath = join(timelineDirectory, "demo.timeline.json");
+
+  await writeFile(configPath, options.configText, "utf8");
+  await writeFile(join(directory, ".tuireel.jsonc"), options.configText, "utf8");
+  await mkdir(rawDirectory, { recursive: true });
+  await mkdir(timelineDirectory, { recursive: true });
+
+  await runFfmpeg(ffmpegPath, [
+    "-y",
+    "-f",
+    "lavfi",
+    "-i",
+    "color=c=#1f2937:s=320x180:d=1",
+    "-r",
+    "12",
+    rawPath,
+  ]);
+
+  await writeFile(
+    timelinePath,
+    `${JSON.stringify(options.timelineData ?? createTimingContractTimelineData(), null, 2)}\n`,
+    "utf8",
+  );
+
+  return { directory, configPath, outputPath };
+}
+
+async function captureConsole(run: () => Promise<number>): Promise<{
+  exitCode: number;
+  stdout: string[];
+  stderr: string[];
+}> {
+  const stdout: string[] = [];
+  const stderr: string[] = [];
+  const originalLog = console.log;
+  const originalError = console.error;
+
+  console.log = (...values: unknown[]) => {
+    stdout.push(values.map((value) => String(value)).join(" "));
+  };
+  console.error = (...values: unknown[]) => {
+    stderr.push(values.map((value) => String(value)).join(" "));
+  };
+
+  try {
+    const exitCode = await run();
+    return { exitCode, stdout, stderr };
+  } finally {
+    console.log = originalLog;
+    console.error = originalError;
   }
 }
 
@@ -344,4 +468,116 @@ describe("cli commands", () => {
     expect(helpOutput).toContain("preview");
     expect(helpOutput).toContain("composite");
   });
+
+  it("composite allows packaging-only recomposition from saved timing artifacts", async () => {
+    const config = `{
+  "output": "demo.mp4",
+  "deliveryProfile": "readable-1080p",
+  "format": "gif",
+  "captureFps": 12,
+  "theme": "dracula",
+  "trim": { "leadingStatic": true },
+  "outputSize": { "width": 640, "height": 360, "padding": 24 },
+  "steps": [{ "type": "launch", "command": "echo hello" }]
+}\n`;
+    const fixture = await createCompositeFixture({ configText: config });
+    const program = new Command();
+    registerCompositeCommand(program);
+
+    const originalCwd = process.cwd();
+    process.chdir(fixture.directory);
+
+    try {
+      const result = await captureConsole(() =>
+        runProgram(program, ["composite", fixture.configPath]),
+      );
+
+      expect(result.exitCode).toBe(0);
+      expect(result.stderr).toEqual([]);
+      expect(await stat(join(fixture.directory, "demo.gif"))).toMatchObject({
+        size: expect.any(Number),
+      });
+      expect(result.stdout.join("\n")).toContain("Composite complete:");
+    } finally {
+      process.chdir(originalCwd);
+    }
+  }, 120_000);
+
+  it("composite rejects timing-affecting changes with rerun guidance", async () => {
+    const config = `{
+  "output": "demo.mp4",
+  "deliveryProfile": "readable-1080p",
+  "fps": 24,
+  "captureFps": 12,
+  "steps": [{ "type": "launch", "command": "echo hello" }]
+}\n`;
+    const fixture = await createCompositeFixture({ configText: config });
+    const program = new Command();
+    registerCompositeCommand(program);
+
+    const originalCwd = process.cwd();
+    process.chdir(fixture.directory);
+
+    try {
+      const result = await captureConsole(() =>
+        runProgram(program, ["composite", fixture.configPath]),
+      );
+
+      expect(result.exitCode).toBe(1);
+      expect(result.stderr.join("\n")).toContain("Re-run `tuireel record`");
+      expect(result.stderr.join("\n")).toContain("output fps 30");
+      expect(result.stderr.join("\n")).toContain("requested output fps 24");
+    } finally {
+      process.chdir(originalCwd);
+    }
+  });
+
+  it("composite treats legacy timelines conservatively", async () => {
+    const baseConfig = `{
+  "output": "demo.mp4",
+  "trim": { "leadingStatic": true },
+  "steps": [{ "type": "launch", "command": "echo hello" }]
+}\n`;
+    const legacyTimeline = createTimingContractTimelineData();
+    delete legacyTimeline.timingContract;
+
+    const fixture = await createCompositeFixture({
+      configText: baseConfig,
+      timelineData: legacyTimeline,
+    });
+    const program = new Command();
+    registerCompositeCommand(program);
+    const originalCwd = process.cwd();
+    process.chdir(fixture.directory);
+
+    try {
+      const packagingOnly = await captureConsole(() =>
+        runProgram(program, ["composite", fixture.configPath]),
+      );
+      expect(packagingOnly.exitCode).toBe(0);
+      expect(await stat(fixture.outputPath)).toMatchObject({ size: expect.any(Number) });
+
+      const timingConfigPath = join(fixture.directory, "timing-change.tuireel.jsonc");
+      await writeFile(
+        timingConfigPath,
+        `{
+  "output": "demo.mp4",
+  "deliveryProfile": "readable-1080p",
+  "fps": 24,
+  "captureFps": 12,
+  "steps": [{ "type": "launch", "command": "echo hello" }]
+}\n`,
+        "utf8",
+      );
+
+      const timingChange = await captureConsole(() =>
+        runProgram(program, ["composite", timingConfigPath]),
+      );
+      expect(timingChange.exitCode).toBe(1);
+      expect(timingChange.stderr.join("\n")).toContain("legacy timing metadata");
+      expect(timingChange.stderr.join("\n")).toContain("Re-run `tuireel record`");
+    } finally {
+      process.chdir(originalCwd);
+    }
+  }, 120_000);
 });
