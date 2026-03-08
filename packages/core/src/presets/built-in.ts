@@ -9,7 +9,7 @@ export type PresetName = (typeof PRESET_NAMES)[number];
  * never output behavior (steps, output path, format).
  */
 export type PresetConfig = Partial<
-  Omit<TuireelConfig, "steps" | "output" | "$schema" | "format">
+  Omit<TuireelConfig, "steps" | "output" | "$schema" | "format" | "deliveryProfile">
 >;
 
 export const BUILT_IN_PRESETS: Record<PresetName, PresetConfig> = {

@@ -1,5 +1,12 @@
 export { generateJsonSchema } from "./generate-schema.js";
 export {
+  BUILT_IN_DELIVERY_PROFILES,
+  DELIVERY_PROFILE_NAMES,
+  resolveDeliveryProfile,
+  type DeliveryProfileConfig,
+  type DeliveryProfileName,
+} from "../delivery-profiles/index.js";
+export {
   ConfigValidationError,
   loadConfig,
   loadSingleConfig,
@@ -11,6 +18,7 @@ export {
   OUTPUT_FORMATS,
   configInputSchema,
   configSchema,
+  deliveryProfileSchema,
   includeStepSchema,
   multiVideoConfigSchema,
   singleVideoInputConfigSchema,

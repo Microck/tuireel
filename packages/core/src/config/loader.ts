@@ -1,12 +1,9 @@
 import { readFile } from "node:fs/promises";
 
-import {
-  parse as parseJsonc,
-  printParseErrorCode,
-  type ParseError,
-} from "jsonc-parser";
+import { parse as parseJsonc, printParseErrorCode, type ParseError } from "jsonc-parser";
 import { ZodError } from "zod";
 
+import { resolveDeliveryProfile } from "../delivery-profiles/resolve.js";
 import { resolvePreset } from "../presets/resolve.js";
 import { resolveMultiConfig } from "./resolver.js";
 import {
@@ -43,9 +40,7 @@ function formatIssuePath(path: ReadonlyArray<PropertyKey>): string {
     return "$";
   }
 
-  return path
-    .map((part) => (typeof part === "symbol" ? part.toString() : String(part)))
-    .join(".");
+  return path.map((part) => (typeof part === "symbol" ? part.toString() : String(part))).join(".");
 }
 
 function mapJsoncParseErrors(errors: ParseError[]): ConfigIssue[] {
@@ -125,11 +120,7 @@ function findInvalidStepTypeIssues(rawConfig: unknown): ConfigIssue[] {
         return [];
       }
 
-      return mapInvalidStepTypeIssues(
-        video.steps,
-        `videos.${videoIndex}.steps.`,
-        allowedStepTypes,
-      );
+      return mapInvalidStepTypeIssues(video.steps, `videos.${videoIndex}.steps.`, allowedStepTypes);
     });
   }
 
@@ -150,9 +141,10 @@ function parseConfig(rawConfig: string): unknown {
 }
 
 function parseInputConfig(rawConfig: unknown): TuireelInputConfig {
-  const schema = isRecord(rawConfig) && Object.hasOwn(rawConfig, "videos")
-    ? multiVideoConfigSchema
-    : singleVideoInputConfigSchema;
+  const schema =
+    isRecord(rawConfig) && Object.hasOwn(rawConfig, "videos")
+      ? multiVideoConfigSchema
+      : singleVideoInputConfigSchema;
 
   const result = schema.safeParse(rawConfig);
 
@@ -163,6 +155,10 @@ function parseInputConfig(rawConfig: unknown): TuireelInputConfig {
   return result.data;
 }
 
+function applyProfileResolution(rawConfig: Record<string, unknown>): Record<string, unknown> {
+  return resolveDeliveryProfile(resolvePreset(rawConfig));
+}
+
 function stripSchemaField(config: TuireelConfig): TuireelConfig {
   const { $schema: _schema, ...rest } = config;
   return rest;
@@ -170,14 +166,14 @@ function stripSchemaField(config: TuireelConfig): TuireelConfig {
 
 function parseSingleConfig(rawConfig: string): TuireelConfig {
   const parsedConfig = parseConfig(rawConfig);
-  const presetResolved = resolvePreset(parsedConfig as Record<string, unknown>);
+  const profileResolved = applyProfileResolution(parsedConfig as Record<string, unknown>);
 
-  const stepTypeIssues = findInvalidStepTypeIssues(presetResolved);
+  const stepTypeIssues = findInvalidStepTypeIssues(profileResolved);
   if (stepTypeIssues.length > 0) {
     throw new ConfigValidationError(stepTypeIssues);
   }
 
-  const result = configSchema.safeParse(presetResolved);
+  const result = configSchema.safeParse(profileResolved);
   if (!result.success) {
     throw new ConfigValidationError(mapZodIssues(result.error));
   }
@@ -197,12 +193,11 @@ function validateResolvedConfigs(
   const validatedConfigs: TuireelConfig[] = [];
 
   for (const [index, config] of resolvedConfigs.entries()) {
-    const result = configSchema.safeParse(config);
+    const profileResolved = applyProfileResolution(config);
+    const result = configSchema.safeParse(profileResolved);
     if (!result.success) {
       const pathPrefix = isMultiVideo ? `videos.${index}` : "";
-      issues.push(
-        ...mapZodIssues(result.error).map((issue) => prefixIssuePath(issue, pathPrefix)),
-      );
+      issues.push(...mapZodIssues(result.error).map((issue) => prefixIssuePath(issue, pathPrefix)));
       continue;
     }
 
@@ -216,16 +211,19 @@ function validateResolvedConfigs(
   return validatedConfigs;
 }
 
-async function loadConfigFromString(rawConfig: string, configPath: string): Promise<TuireelConfig[]> {
+async function loadConfigFromString(
+  rawConfig: string,
+  configPath: string,
+): Promise<TuireelConfig[]> {
   const parsedConfig = parseConfig(rawConfig);
-  const presetResolved = resolvePreset(parsedConfig as Record<string, unknown>);
+  const profileResolved = applyProfileResolution(parsedConfig as Record<string, unknown>);
 
-  const stepTypeIssues = findInvalidStepTypeIssues(presetResolved);
+  const stepTypeIssues = findInvalidStepTypeIssues(profileResolved);
   if (stepTypeIssues.length > 0) {
     throw new ConfigValidationError(stepTypeIssues);
   }
 
-  const inputConfig = parseInputConfig(presetResolved);
+  const inputConfig = parseInputConfig(profileResolved);
   const isMultiVideo = "videos" in inputConfig;
 
   try {
@@ -277,7 +275,9 @@ export async function loadSingleConfig(configPath: string): Promise<TuireelConfi
 
   const [config] = configs;
   if (!config) {
-    throw new Error("No configuration resolved from input file. Try: check the config file is not empty and contains valid JSON.");
+    throw new Error(
+      "No configuration resolved from input file. Try: check the config file is not empty and contains valid JSON.",
+    );
   }
 
   return config;

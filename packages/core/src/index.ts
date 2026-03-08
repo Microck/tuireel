@@ -1,4 +1,5 @@
 export * from "./config/index.js";
+export * from "./delivery-profiles/index.js";
 export * from "./ffmpeg/index.js";
 export { Logger, LogLevel, createLogger } from "./logger.js";
 export { PRESET_NAMES } from "./presets/index.js";
