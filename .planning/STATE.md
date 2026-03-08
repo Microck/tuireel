@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Human Demo Feel
 status: in_progress
-stopped_at: Completed 25-02-PLAN.md
-last_updated: "2026-03-08T17:33:07.744Z"
-last_activity: 2026-03-08 - Completed 25-02 init/docs timing contract rollout
+stopped_at: Completed 25-03-PLAN.md
+last_updated: "2026-03-08T17:51:11.117Z"
+last_activity: 2026-03-08 - Completed 25-03 timing contract persistence
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 12
-  completed_plans: 2
-  percent: 87
+  completed_plans: 3
+  percent: 89
 ---
 
 # Project State: Tuireel
@@ -25,29 +25,30 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 ## Current Position
 
 Phase: 25 of 29 (Timing Contract and Profiles)
-Plan: 2 of 4
+Plan: 3 of 4
 Status: In progress
-Last activity: 2026-03-08 - Completed 25-02 init/docs timing contract rollout
+Last activity: 2026-03-08 - Completed 25-03 timing contract persistence
 
-Progress: [█████████░] 87%
+Progress: [█████████░] 89%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 68
-- Current milestone plans completed: 2
-- Total execution time: 13 min
+- Total plans completed: 70
+- Current milestone plans completed: 3
+- Total execution time: 23 min
 
 **By Milestone:**
 
-| Milestone    | Plans | Status      |
-| ------------ | ----- | ----------- | ------- |
-| v1.0         | 23/23 | Complete    |
-| v1.1         | 38/38 | Complete    |
-| v1.15        | 5/5   | Complete    |
-| v1.2         | 2/12  | In progress |
-| Phase 25 P02 | 4 min | 3 tasks     | 8 files |
+| Milestone    | Plans  | Status      |
+| ------------ | ------ | ----------- | ------- |
+| v1.0         | 23/23  | Complete    |
+| v1.1         | 38/38  | Complete    |
+| v1.15        | 5/5    | Complete    |
+| v1.2         | 3/12   | In progress |
+| Phase 25 P02 | 4 min  | 3 tasks     | 8 files |
+| Phase 25 P03 | 10 min | 2 tasks     | 7 files |
 
 ## Accumulated Context
 
@@ -65,6 +66,8 @@ Recent decisions affecting v1.2:
 - [Phase 25]: Default tuireel init to readable-1080p so delivery profiles become the first author-facing workflow.
 - [Phase 25]: Prompt for delivery profile before optional preset so timing intent is chosen before visual polish.
 - [Phase 25]: Keep README, docs, and skill examples aligned on stacked preset plus deliveryProfile examples and corrected cadence language.
+- [Phase 25]: Keep TimelineData.fps as the backward-compatible output cadence alias while adding a versioned timingContract object for explicit inspection. — This preserves existing artifact readers while giving later composite and diagnostics flows one explicit timing contract boundary.
+- [Phase 25]: Compare only timing-affecting fields in the shared compatibility helper and return an explicit legacy fallback when saved artifacts predate timingContract. — Packaging-only changes should stay recomposite-safe, and legacy artifacts need an explicit non-guessing path for later CLI enforcement.
 
 ### Pending Todos
 
@@ -77,6 +80,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-08T17:33:07.737Z
-Stopped at: Completed 25-02-PLAN.md
+Last session: 2026-03-08T17:51:11.107Z
+Stopped at: Completed 25-03-PLAN.md
 Resume file: None

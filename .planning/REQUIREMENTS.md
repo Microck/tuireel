@@ -17,7 +17,7 @@
 - [x] **CAP-01**: Author can configure raw capture cadence independently from final output FPS
 - [ ] **CAP-02**: Recorded demos capture extra real terminal states during typing and other visible transitions so short interactions do not collapse into one visual jump
 - [ ] **CAP-03**: Final output plays back at smooth target FPS without changing authored wall-clock timing
-- [ ] **CAP-04**: `record` and `composite` preserve enough timing metadata to regenerate smooth final motion from saved artifacts
+- [x] **CAP-04**: `record` and `composite` preserve enough timing metadata to regenerate smooth final motion from saved artifacts
 
 ### Readability
 
@@ -61,7 +61,7 @@
 | CAP-01      | Phase 25 | Complete |
 | CAP-02      | Phase 28 | Pending |
 | CAP-03      | Phase 28 | Pending |
-| CAP-04      | Phase 25 | Pending |
+| CAP-04      | Phase 25 | Complete |
 | READ-01     | Phase 27 | Pending |
 | READ-02     | Phase 27 | Pending |
 | READ-03     | Phase 25 | Complete |
