@@ -43,7 +43,14 @@ v1.2 turns Tuireel's next quality gap into five delivery boundaries: lock the pa
 2. Author can choose a named output preset for a common delivery target and get the expected timing/render profile without hand-tuning low-level knobs.
 3. A saved recording can be recomposited later and preserve the same timing intent and motion behavior as the original run.
 
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+
+- [ ] `25-01-PLAN.md` - Add the core delivery-profile schema, resolver, and precedence contract.
+- [ ] `25-02-PLAN.md` - Make `init`, docs, and examples teach delivery profiles and split fps/captureFps semantics correctly.
+- [ ] `25-03-PLAN.md` - Persist explicit timing contracts and compatibility helpers in saved artifacts.
+- [ ] `25-04-PLAN.md` - Enforce recomposite timing compatibility in `composite` and CLI tests.
 
 ### Phase 26: Human Pacing Engine
 
@@ -144,7 +151,7 @@ Archive:
 
 | Phase                                 | Plans Complete | Status      | Completed |
 | ------------------------------------- | -------------- | ----------- | --------- |
-| 25. Timing Contract and Profiles      | 0/TBD          | Not started | -         |
+| 25. Timing Contract and Profiles      | 0/4            | Not started | -         |
 | 26. Human Pacing Engine               | 0/TBD          | Not started | -         |
 | 27. Readable 1080p Defaults           | 0/TBD          | Not started | -         |
 | 28. Capture Fidelity and Final Motion | 0/TBD          | Not started | -         |
