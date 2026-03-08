@@ -98,7 +98,12 @@ Plans:
 2. Final output plays at the target FPS while preserving the authored wall-clock timing of the demo.
 3. Viewers see smoother motion in the finished video without fake in-between terminal glyph frames.
 
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+
+- [ ] `28-01-PLAN.md` — Widen capture heuristic to always capture typed characters and add post-step captureNow() hooks for press/scroll/wait.
+- [ ] `28-02-PLAN.md` — Fix outputFrameCount to be timeline-driven, ensuring wall-clock timing preserved under dense capture.
 
 ### Phase 29: Diagnostics and Acceptance Gates
 
@@ -163,5 +168,5 @@ Archive:
 | 25. Timing Contract and Profiles      | 0/4            | Not started | -         |
 | 26. Human Pacing Engine               | 0/TBD          | Not started | -         |
 | 27. Readable 1080p Defaults           | 0/TBD          | Not started | -         |
-| 28. Capture Fidelity and Final Motion | 0/TBD          | Not started | -         |
+| 28. Capture Fidelity and Final Motion | 0/2            | Not started | -         |
 | 29. Diagnostics and Acceptance Gates  | 0/TBD          | Not started | -         |
