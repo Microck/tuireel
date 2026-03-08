@@ -1,49 +1,81 @@
 # Requirements: Tuireel
 
-**Milestone:** v1.15 Brand Refresh & Docs Hosting
-**Defined:** 2026-03-05
+**Milestone:** v1.2 Human Demo Feel
+**Defined:** 2026-03-08
 **Core Value:** TUI tool authors can produce polished demo videos from a declarative script, without manual screen recording, editing, or post-production.
 
-## v1.15 Requirements
+## v1.2 Requirements
 
-### Branding Refresh
+### Human Timing
 
-- [ ] **BRND-06**: New logo asset set (light/dark SVG) is integrated and referenced consistently across README and docs
-- [ ] **BRND-07**: New color palette is defined as canonical tokens and applied consistently across repo + docs
-- [ ] **BRND-08**: README banner and OG/social card assets are regenerated to match the new logo + palette
-- [ ] **BRND-09**: Favicon derived from the new logo is wired for both GitHub (repo) and Mintlify docs
+- [ ] **PACE-01**: Author can apply a deterministic cadence profile so typed text follows human-feeling timing without per-script hand tuning
+- [ ] **PACE-02**: Author can apply intentional pause behavior for startup, settle, read, and idle moments
+- [ ] **PACE-03**: Author can override timing behavior for specific `type` and `pause` steps without breaking the milestone pacing model
 
-### Documentation Hosting
+### Capture and Motion
 
-- [ ] **DOCS-17**: Mintlify docs are hosted at `https://tuireel.micr.dev` and all canonical links point to that domain
-- [ ] **DOCS-18**: Mintlify docs theme (logo + colors + favicon) matches the v1.15 brand system
+- [ ] **CAP-01**: Author can configure raw capture cadence independently from final output FPS
+- [ ] **CAP-02**: Recorded demos capture extra real terminal states during typing and other visible transitions so short interactions do not collapse into one visual jump
+- [ ] **CAP-03**: Final output plays back at smooth target FPS without changing authored wall-clock timing
+- [ ] **CAP-04**: `record` and `composite` preserve enough timing metadata to regenerate smooth final motion from saved artifacts
 
-### Repository Surface
+### Readability
 
-- [ ] **REPO-06**: README resembles Webreel's README structure and tone while keeping Tuireel commands/claims accurate
-- [ ] **REPO-07**: README + docs pages link to `https://tuireel.micr.dev` (no stale docs domains remain in-repo)
+- [ ] **READ-01**: Author can use a readable 1080p render preset that keeps terminal text legible in final output
+- [ ] **READ-02**: Author can use framing defaults that keep the terminal window naturally sized within a 1080p canvas
+- [ ] **READ-03**: Author can choose named output presets for common delivery targets without losing readability guarantees
 
-## Future Requirements (Deferred)
+### Diagnostics
 
-- DOCS-11..DOCS-16 (extended docs + versioning) from v1.1 archive
-- CI-06..CI-07 (extended CI verification) from v1.1 archive
-- PRST-05 (custom presets) from v1.1 archive
+- [ ] **DIAG-04**: Author can run acceptance fixtures that verify typing cadence, pause behavior, readability, and smooth output on representative demos
+- [ ] **DIAG-05**: Author can inspect pacing stats for one run, including raw frame count, durations, and output metadata
+- [ ] **DIAG-06**: Author can dump raw rendered frames for a recording when diagnosing fidelity issues
 
-## Out of Scope (Explicit)
+## v2 Requirements
 
-- Recording/encoding pipeline changes (core engine work)
-- New terminal themes/presets/features beyond what is required to refresh branding
-- Reworking CI/publish smoke gates beyond keeping docs links accurate
+### Human Polish
+
+- **PACE-04**: Author can enable typo-and-correction behavior as an explicit storytelling effect
+- **PACE-05**: Author can use higher-level narrative pacing helpers for long-form demos
+
+### Motion Experiments
+
+- **CAP-05**: Author can opt into advanced terminal-safe smoothing experiments beyond repeated real frame states
+
+## Out of Scope
+
+| Feature                                                | Reason                                                              |
+| ------------------------------------------------------ | ------------------------------------------------------------------- |
+| Browser automation or browser capture                  | Tuireel remains a PTY-native terminal recorder, not a WebReel clone |
+| Random timing jitter as the default humanization model | The milestone should stay deterministic and testable                |
+| Optical-flow or glyph interpolation                    | Fake smoothness would hide sparse raw capture instead of fixing it  |
+| Built-in video editor or cinematic effects             | Not core to human-feeling terminal demos                            |
 
 ## Traceability
 
 | Requirement | Phase | Status  |
 | ----------- | ----- | ------- |
-| BRND-06     | 20    | Pending |
-| BRND-07     | 20    | Pending |
-| BRND-08     | 21    | Pending |
-| BRND-09     | 21    | Pending |
-| DOCS-17     | 22    | Pending |
-| DOCS-18     | 23    | Pending |
-| REPO-06     | 24    | Pending |
-| REPO-07     | 24    | Pending |
+| PACE-01     | TBD   | Pending |
+| PACE-02     | TBD   | Pending |
+| PACE-03     | TBD   | Pending |
+| CAP-01      | TBD   | Pending |
+| CAP-02      | TBD   | Pending |
+| CAP-03      | TBD   | Pending |
+| CAP-04      | TBD   | Pending |
+| READ-01     | TBD   | Pending |
+| READ-02     | TBD   | Pending |
+| READ-03     | TBD   | Pending |
+| DIAG-04     | TBD   | Pending |
+| DIAG-05     | TBD   | Pending |
+| DIAG-06     | TBD   | Pending |
+
+**Coverage:**
+
+- v1.2 requirements: 13 total
+- Mapped to phases: 0
+- Unmapped: 13
+
+---
+
+_Requirements defined: 2026-03-08_
+_Last updated: 2026-03-08 after v1.2 milestone definition_
