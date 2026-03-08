@@ -3,11 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 
-import {
-  ConfigValidationError,
-  loadConfig,
-  validateConfig,
-} from "../src/config/parser.js";
+import { ConfigValidationError, loadConfig, validateConfig } from "../src/config/parser.js";
 import { generateJsonSchema } from "../src/config/generate-schema.js";
 
 const VALID_MINIMAL_CONFIG = `{
@@ -42,9 +38,7 @@ const tempDirectories: string[] = [];
 
 afterEach(async () => {
   await Promise.all(
-    tempDirectories.splice(0).map((directory) =>
-      rm(directory, { recursive: true, force: true }),
-    ),
+    tempDirectories.splice(0).map((directory) => rm(directory, { recursive: true, force: true })),
   );
 });
 
@@ -104,9 +98,11 @@ function stepVariantsFromConfigVariant(
   configVariant: Record<string, unknown>,
 ): Array<Record<string, unknown>> {
   const properties = configVariant.properties as Record<string, unknown> | undefined;
-  const stepsSchema = properties?.steps as {
-    items?: Record<string, unknown>;
-  } | undefined;
+  const stepsSchema = properties?.steps as
+    | {
+        items?: Record<string, unknown>;
+      }
+    | undefined;
 
   if (!stepsSchema?.items) {
     throw new Error("Expected steps schema on single-video config variant");
@@ -428,7 +424,9 @@ describe("config parser", () => {
       }),
     );
 
-    expect(error.issues.some((issue) => issue.path.includes("theme.colors.brightWhite"))).toBe(true);
+    expect(error.issues.some((issue) => issue.path.includes("theme.colors.brightWhite"))).toBe(
+      true,
+    );
     expect(error.message).toMatch(/#RRGGBB/i);
   });
 
@@ -459,6 +457,7 @@ describe("config parser", () => {
     const singleProperties = (singleVideoVariant?.properties ?? {}) as Record<string, unknown>;
     expect(singleProperties).toEqual(
       expect.objectContaining({
+        deliveryProfile: expect.any(Object),
         format: expect.any(Object),
         output: expect.any(Object),
         theme: expect.any(Object),
@@ -474,6 +473,26 @@ describe("config parser", () => {
       expect.objectContaining({
         defaults: expect.any(Object),
         videos: expect.any(Object),
+      }),
+    );
+
+    const defaultsSchema = multiProperties.defaults as Record<string, unknown>;
+    const defaultsProperties = (defaultsSchema.properties ?? {}) as Record<string, unknown>;
+    expect(defaultsProperties).toEqual(
+      expect.objectContaining({
+        deliveryProfile: expect.any(Object),
+        fps: expect.any(Object),
+        captureFps: expect.any(Object),
+      }),
+    );
+
+    const videosSchema = multiProperties.videos as { items?: Record<string, unknown> };
+    const videoProperties = (videosSchema.items?.properties ?? {}) as Record<string, unknown>;
+    expect(videoProperties).toEqual(
+      expect.objectContaining({
+        deliveryProfile: expect.any(Object),
+        fps: expect.any(Object),
+        captureFps: expect.any(Object),
       }),
     );
 
