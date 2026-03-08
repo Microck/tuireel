@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Human Demo Feel
 status: in_progress
-stopped_at: Completed 25-03-PLAN.md
-last_updated: "2026-03-08T17:51:11.117Z"
-last_activity: 2026-03-08 - Completed 25-03 timing contract persistence
+stopped_at: Completed 25-04-PLAN.md
+last_updated: "2026-03-08T18:05:39.641Z"
+last_activity: 2026-03-08 - Completed 25-04 recomposite timing enforcement
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 12
-  completed_plans: 3
-  percent: 89
+  completed_plans: 4
+  percent: 90
 ---
 
 # Project State: Tuireel
@@ -20,24 +20,24 @@ progress:
 
 See: `.planning/PROJECT.md` (updated 2026-03-08)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script, without manual screen recording, editing, or post-production.
-**Current focus:** Phase 25 - Timing Contract and Profiles
+**Current focus:** Phase 25 complete - ready for Phase 26 Human Pacing Engine
 
 ## Current Position
 
 Phase: 25 of 29 (Timing Contract and Profiles)
-Plan: 3 of 4
-Status: In progress
-Last activity: 2026-03-08 - Completed 25-03 timing contract persistence
+Plan: 4 of 4
+Status: Complete
+Last activity: 2026-03-08 - Completed 25-04 recomposite timing enforcement
 
-Progress: [█████████░] 89%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 70
-- Current milestone plans completed: 3
-- Total execution time: 23 min
+- Total plans completed: 71
+- Current milestone plans completed: 4
+- Total execution time: 33 min
 
 **By Milestone:**
 
@@ -46,9 +46,10 @@ Progress: [█████████░] 89%
 | v1.0         | 23/23  | Complete    |
 | v1.1         | 38/38  | Complete    |
 | v1.15        | 5/5    | Complete    |
-| v1.2         | 3/12   | In progress |
+| v1.2         | 4/12   | In progress |
 | Phase 25 P02 | 4 min  | 3 tasks     | 8 files |
 | Phase 25 P03 | 10 min | 2 tasks     | 7 files |
+| Phase 25 P04 | 10 min | 2 tasks     | 3 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,8 @@ Recent decisions affecting v1.2:
 - [Phase 25]: Keep README, docs, and skill examples aligned on stacked preset plus deliveryProfile examples and corrected cadence language.
 - [Phase 25]: Keep TimelineData.fps as the backward-compatible output cadence alias while adding a versioned timingContract object for explicit inspection. — This preserves existing artifact readers while giving later composite and diagnostics flows one explicit timing contract boundary.
 - [Phase 25]: Compare only timing-affecting fields in the shared compatibility helper and return an explicit legacy fallback when saved artifacts predate timingContract. — Packaging-only changes should stay recomposite-safe, and legacy artifacts need an explicit non-guessing path for later CLI enforcement.
+- [Phase 25]: Validate recomposite requests against saved timingContract metadata before compose() runs. — Composite should preserve recorded pacing by default and fail before packaging work when timing intent drifts.
+- [Phase 25]: Treat explicit legacy fps, captureFps, or deliveryProfile requests as timing changes that require a fresh record. — Legacy timelines do not encode enough timing metadata to safely adopt new pacing settings during recomposition.
 
 ### Pending Todos
 
@@ -80,6 +83,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-08T17:51:11.107Z
-Stopped at: Completed 25-03-PLAN.md
+Last session: 2026-03-08T18:05:39.635Z
+Stopped at: Completed 25-04-PLAN.md
 Resume file: None

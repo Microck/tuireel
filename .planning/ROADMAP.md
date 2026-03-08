@@ -24,7 +24,7 @@ v1.2 turns Tuireel's next quality gap into five delivery boundaries: lock the pa
 - Integer phases (25, 26, 27): Planned milestone work
 - Decimal phases (25.1, 25.2): Urgent insertions if needed later
 
-- [ ] **Phase 25: Timing Contract and Profiles** - Separate capture/output semantics, named delivery presets, and recomposite-safe timing metadata.
+- [x] **Phase 25: Timing Contract and Profiles** - Separate capture/output semantics, named delivery presets, and recomposite-safe timing metadata. (completed 2026-03-08)
 - [ ] **Phase 26: Human Pacing Engine** - Deliver deterministic cadence, pause beats, and scoped timing overrides.
 - [ ] **Phase 27: Readable 1080p Defaults** - Make 1080p terminal output legible and naturally framed by default.
 - [ ] **Phase 28: Capture Fidelity and Final Motion** - Capture more real terminal states and package them into smooth playback without changing authored timing.
@@ -171,7 +171,7 @@ Archive:
 
 | Phase                                 | Plans Complete | Status      | Completed |
 | ------------------------------------- | -------------- | ----------- | --------- |
-| 25. Timing Contract and Profiles      | 3/4 | In Progress|  |
+| 25. Timing Contract and Profiles      | 4/4 | Complete   | 2026-03-08 |
 | 26. Human Pacing Engine               | 0/TBD          | Not started | -         |
 | 27. Readable 1080p Defaults           | 0/TBD          | Not started | -         |
 | 28. Capture Fidelity and Final Motion | 0/2            | Not started | -         |
