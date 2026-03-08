@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Human Demo Feel
 status: in_progress
-stopped_at: Completed 25-01-PLAN.md
-last_updated: "2026-03-08T17:16:00.400Z"
-last_activity: 2026-03-08 - Completed 25-01 delivery-profile timing contract work
+stopped_at: Completed 25-02-PLAN.md
+last_updated: "2026-03-08T17:33:07.744Z"
+last_activity: 2026-03-08 - Completed 25-02 init/docs timing contract rollout
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 12
-  completed_plans: 1
-  percent: 86
+  completed_plans: 2
+  percent: 87
 ---
 
 # Project State: Tuireel
@@ -25,28 +25,29 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 ## Current Position
 
 Phase: 25 of 29 (Timing Contract and Profiles)
-Plan: 1 of 4
+Plan: 2 of 4
 Status: In progress
-Last activity: 2026-03-08 - Completed 25-01 delivery-profile timing contract work
+Last activity: 2026-03-08 - Completed 25-02 init/docs timing contract rollout
 
-Progress: [█████████░] 86%
+Progress: [█████████░] 87%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 67
-- Current milestone plans completed: 1
-- Total execution time: 9 min
+- Total plans completed: 68
+- Current milestone plans completed: 2
+- Total execution time: 13 min
 
 **By Milestone:**
 
-| Milestone | Plans | Status      |
-| --------- | ----- | ----------- |
-| v1.0      | 23/23 | Complete    |
-| v1.1      | 38/38 | Complete    |
-| v1.15     | 5/5   | Complete    |
-| v1.2      | 1/12  | In progress |
+| Milestone    | Plans | Status      |
+| ------------ | ----- | ----------- | ------- |
+| v1.0         | 23/23 | Complete    |
+| v1.1         | 38/38 | Complete    |
+| v1.15        | 5/5   | Complete    |
+| v1.2         | 2/12  | In progress |
+| Phase 25 P02 | 4 min | 3 tasks     | 8 files |
 
 ## Accumulated Context
 
@@ -61,6 +62,9 @@ Recent decisions affecting v1.2:
 - [Phase 25]: Keep `preset` visual-only and add a separate `deliveryProfile` field for timing/readability defaults. — This preserves the shipped preset mental model while giving Phase 25 one authoritative timing/readability layer.
 - [Phase 25]: Resolve delivery profiles in the shared loader so single-video and multi-video flows keep the same precedence rules. — Applying resolution in one loader path avoids drift between record, watch, preview, and future composite timing enforcement.
 - [Phase 25]: Treat explicit `fps`, `captureFps`, and readability fields as authoritative over profile defaults. — Authors need named profiles for fast setup without losing direct control over raw capture cadence or final delivery cadence.
+- [Phase 25]: Default tuireel init to readable-1080p so delivery profiles become the first author-facing workflow.
+- [Phase 25]: Prompt for delivery profile before optional preset so timing intent is chosen before visual polish.
+- [Phase 25]: Keep README, docs, and skill examples aligned on stacked preset plus deliveryProfile examples and corrected cadence language.
 
 ### Pending Todos
 
@@ -73,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-08T17:16:00.329Z
-Stopped at: Completed 25-01-PLAN.md
+Last session: 2026-03-08T17:33:07.737Z
+Stopped at: Completed 25-02-PLAN.md
 Resume file: None
