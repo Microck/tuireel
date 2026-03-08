@@ -81,7 +81,11 @@ Plans:
 2. Default framing keeps the terminal window naturally sized within a 1080p canvas instead of feeling cramped, tiny, or over-zoomed.
 3. Authors can rely on the built-in 1080p defaults to keep typical terminal sessions readable across representative demo fixtures.
 
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+
+- [ ] `27-01-PLAN.md` — Tune readable-1080p profile defaults and prove readability with fixture tests and compositor framing assertions.
 
 ### Phase 28: Capture Fidelity and Final Motion
 
