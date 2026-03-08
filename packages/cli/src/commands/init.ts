@@ -4,12 +4,13 @@ import { dirname, resolve } from "node:path";
 import { createInterface } from "node:readline";
 import { pathToFileURL } from "node:url";
 
-import { generateJsonSchema, PRESET_NAMES } from "@tuireel/core";
+import { DELIVERY_PROFILE_NAMES, generateJsonSchema, PRESET_NAMES } from "@tuireel/core";
 import type { Command } from "commander";
 
 const DEFAULT_CONFIG_PATH = ".tuireel.jsonc";
 const SCHEMA_DIRECTORY = ".tuireel";
 const SCHEMA_FILENAME = "schema.json";
+const DEFAULT_DELIVERY_PROFILE = "readable-1080p";
 
 interface InitOptions {
   output: string;
@@ -45,6 +46,45 @@ const PRESET_DESCRIPTIONS: Record<string, string> = {
   silent: "no overlays, no sound",
 };
 
+const DELIVERY_PROFILE_DESCRIPTIONS: Record<string, string> = {
+  "readable-1080p": "30fps output + 12fps capture + roomy 1080p framing",
+  "social-quick-share": "30fps output + lighter capture for quick share clips",
+  "high-motion-demo": "60fps output + 24fps capture for dense terminal motion",
+};
+
+async function promptDeliveryProfile(): Promise<string> {
+  if (!process.stdin.isTTY) {
+    return DEFAULT_DELIVERY_PROFILE;
+  }
+
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+
+  console.log("\nChoose a delivery profile:");
+  for (const [index, name] of DELIVERY_PROFILE_NAMES.entries()) {
+    const desc = DELIVERY_PROFILE_DESCRIPTIONS[name] ?? "";
+    console.log(`  ${index + 1}. ${name}  - ${desc}`);
+  }
+
+  return new Promise<string>((resolve) => {
+    rl.question(`\nEnter number or press Enter for ${DEFAULT_DELIVERY_PROFILE}: `, (answer) => {
+      rl.close();
+      const trimmed = answer.trim();
+      if (trimmed === "") {
+        resolve(DEFAULT_DELIVERY_PROFILE);
+        return;
+      }
+
+      const index = parseInt(trimmed, 10) - 1;
+      if (index >= 0 && index < DELIVERY_PROFILE_NAMES.length) {
+        resolve(DELIVERY_PROFILE_NAMES[index]);
+        return;
+      }
+
+      resolve(DEFAULT_DELIVERY_PROFILE);
+    });
+  });
+}
+
 async function promptPreset(): Promise<string | undefined> {
   if (!process.stdin.isTTY) {
     return undefined;
@@ -77,16 +117,16 @@ async function promptPreset(): Promise<string | undefined> {
   });
 }
 
-function createStarterConfig(schemaPath: string, preset?: string): string {
+function createStarterConfig(schemaPath: string, deliveryProfile: string, preset?: string): string {
   const schemaUrl = pathToFileURL(schemaPath).href;
   const presetLine = preset ? `\n  "preset": "${preset}",` : "";
 
   return `// Tuireel recording configuration (JSONC supports comments).
 // Edit steps below, then run: tuireel validate .tuireel.jsonc
 {
-  "$schema": "${schemaUrl}",${presetLine}
+  "$schema": "${schemaUrl}",
+  "deliveryProfile": "${deliveryProfile}",${presetLine}
   "output": "demo.mp4",
-  "fps": 30,
   "cols": 80,
   "rows": 24,
   "steps": [
@@ -114,9 +154,7 @@ export function registerInitCommand(program: Command): void {
       const outputExists = await exists(outputPath);
 
       if (outputExists && !options.force) {
-        console.error(
-          `Config already exists at ${outputPath}. Use --force to overwrite.`,
-        );
+        console.error(`Config already exists at ${outputPath}. Use --force to overwrite.`);
         process.exitCode = 1;
         return;
       }
@@ -131,12 +169,18 @@ export function registerInitCommand(program: Command): void {
       const schema = generateJsonSchema();
       await writeFile(`${schemaPath}`, `${JSON.stringify(schema, null, 2)}\n`, "utf8");
 
+      const deliveryProfileChoice = await promptDeliveryProfile();
       const presetChoice = await promptPreset();
 
       await mkdir(dirname(outputPath), { recursive: true });
-      await writeFile(outputPath, createStarterConfig(schemaPath, presetChoice), "utf8");
+      await writeFile(
+        outputPath,
+        createStarterConfig(schemaPath, deliveryProfileChoice, presetChoice),
+        "utf8",
+      );
 
       console.log(`Created config: ${outputPath}`);
+      console.log(`Using delivery profile: ${deliveryProfileChoice}`);
       if (presetChoice) {
         console.log(`Using preset: ${presetChoice}`);
       }
