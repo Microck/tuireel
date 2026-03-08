@@ -11,7 +11,7 @@ See: `.planning/PROJECT.md`
 Phase: 24 - README Refresh + Link Hygiene (complete)
 Plan: 24-01 complete (1/1); All phases done
 Status: v1.15 milestone shipped
-Last activity: 2026-03-06 - Completed quick task 014: Support any type of TUI (terminal responder)
+Last activity: 2026-03-08 - Completed quick task 015: Analyze how WebReel demos are produced
 
 Progress: v1.15 complete (Phase 20: 2/2, Phase 21: 1/1, Phase 22: 1/1, Phase 23: 1/1, Phase 24: 1/1)
 
@@ -83,6 +83,7 @@ Recent decisions:
 | 012 | Rewrite tuireel SKILL.md (user-facing)             | 2026-03-06 | d5d51f0 | [012-rewrite-tuireel-skill-md](./quick/012-rewrite-tuireel-skill-md/)                                 |
 | 013 | Make a demo video for tuireel using tuireel itself | 2026-03-06 | ba396c4 | [013-make-a-demo-video-for-tuireel-using-tuir](./quick/13-make-a-demo-video-for-tuireel-using-tuir/)  |
 | 014 | Support any type of TUI (terminal responder)       | 2026-03-06 | 5edca45 | [014-tuireel-should-support-any-type-of-tuis-](./quick/14-tuireel-should-support-any-type-of-tuis-/)  |
+| 015 | Analyze how WebReel demos are produced             | 2026-03-08 | 49274ae | [015-analyze-and-research-how-webreel-s-demo-](./quick/15-analyze-and-research-how-webreel-s-demo-/)  |
 
 ## Blockers/Concerns Carried Forward
 
@@ -90,6 +91,6 @@ Recent decisions:
 
 ## Session Continuity
 
-- Last session: 2026-03-06
-- Stopped at: v1.15 milestone shipped — all phases complete; quick task 014 finished
+- Last session: 2026-03-08
+- Stopped at: v1.15 milestone shipped - all phases complete; quick task 015 finished
 - Resume file: Use `/gsd-new-milestone` to define the next milestone
