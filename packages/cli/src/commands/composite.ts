@@ -4,12 +4,15 @@ import { basename, dirname, extname, isAbsolute, join, resolve } from "node:path
 import {
   OUTPUT_FORMATS,
   LogLevel,
+  assessTimingCompatibility,
   createLogger,
   compose,
   loadSingleConfig,
   resolveOutputPath,
+  resolveTheme,
   type OutputFormat,
   type SoundConfig,
+  type TimingMismatch,
   type TimelineData,
 } from "@tuireel/core";
 import { InvalidArgumentError, type Command } from "commander";
@@ -60,6 +63,21 @@ async function fileExists(filePath: string): Promise<boolean> {
 
     throw error;
   }
+}
+
+function hasExplicitLegacyTimingRequest(rawConfigText: string): boolean {
+  return /"(?:fps|captureFps|deliveryProfile)"\s*:/.test(rawConfigText);
+}
+
+function describeTimingMismatch(mismatches: TimingMismatch[]): string {
+  const detail = mismatches
+    .map((mismatch) => {
+      const label = mismatch.field === "outputFps" ? "output fps" : "capture fps";
+      return `saved ${label} ${mismatch.expected}, requested ${label} ${mismatch.actual}`;
+    })
+    .join("; ");
+
+  return `Saved recording timing does not match this composite request (${detail}). Re-run \`tuireel record\` if you want different pacing.`;
 }
 
 function recordingNameFromOutput(outputPath: string): string {
@@ -129,8 +147,10 @@ export function registerCompositeCommand(program: Command): void {
       const logger = createLogger(logLevel);
 
       try {
+        const rawConfigText = await readFile(configPath, "utf8");
         const config = await loadSingleConfig(configPath);
         const resolvedSound = resolveSoundConfig(config.sound, configPath);
+        const resolvedTheme = config.theme ? resolveTheme(config.theme) : undefined;
         const recordingName = recordingNameFromOutput(config.output);
         const artifacts = resolveRecordingArtifacts(recordingName);
 
@@ -153,20 +173,40 @@ export function registerCompositeCommand(program: Command): void {
         const outputPath = selectedFormat
           ? resolveOutputPath(config.output, selectedFormat)
           : config.output;
+        const compatibility = assessTimingCompatibility(timelineData, config);
+
+        if (compatibility.kind === "timing-mismatch") {
+          throw new Error(describeTimingMismatch(compatibility.mismatches));
+        }
+
+        if (
+          compatibility.kind === "legacy-fallback" &&
+          hasExplicitLegacyTimingRequest(rawConfigText)
+        ) {
+          throw new Error(
+            "Saved recording has legacy timing metadata and this composite request includes timing-affecting fields (fps, captureFps, or deliveryProfile). Re-run `tuireel record` if you want different pacing.",
+          );
+        }
 
         console.log(`Compositing from ${artifacts.rawVideoPath}`);
 
+        const hudVisible = options.hud && (config.hud?.visible ?? true);
+        const cursorVisible = options.cursor && (config.cursor?.visible ?? true);
+
         await compose(
           artifacts.rawVideoPath,
-          options.hud ? timelineData : stripHudFromTimeline(timelineData),
+          hudVisible ? timelineData : stripHudFromTimeline(timelineData),
           outputPath,
           {
             format: selectedFormat,
             cursorConfig: {
               size: options.cursorSize,
-              visible: options.cursor,
+              visible: cursorVisible,
             },
             sound: resolvedSound,
+            trimLeadingStatic: config.trim?.leadingStatic,
+            outputSize: config.outputSize,
+            backgroundColor: resolvedTheme?.background,
             logger,
           },
         );

@@ -4,6 +4,7 @@ export * from "./ffmpeg/index.js";
 export { Logger, LogLevel, createLogger } from "./logger.js";
 export { PRESET_NAMES } from "./presets/index.js";
 export type { PresetName } from "./presets/index.js";
+export { resolveTheme } from "./themes/index.js";
 export { compose } from "./compositor.js";
 export { preview } from "./preview.js";
 export { record } from "./recorder.js";
