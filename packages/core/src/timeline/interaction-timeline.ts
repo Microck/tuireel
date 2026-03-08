@@ -11,6 +11,7 @@ import type {
   TimelineTheme,
   TimelineThemeOverrides,
 } from "./types.js";
+import type { TimingContract } from "./timing-contract.js";
 
 const DEFAULT_FPS = 30;
 
@@ -82,6 +83,18 @@ function cloneTheme(theme: TimelineTheme): TimelineTheme {
   };
 }
 
+function cloneTimingContract(
+  timingContract: TimingContract | undefined,
+): TimingContract | undefined {
+  if (!timingContract) {
+    return undefined;
+  }
+
+  return {
+    ...timingContract,
+  };
+}
+
 function mergeTheme(overrides?: TimelineThemeOverrides): TimelineTheme {
   return {
     cursor: {
@@ -145,6 +158,8 @@ export class InteractionTimeline {
   private currentHud: HudState | null = null;
   private frames: FrameData[] = [];
   private events: SoundEvent[] = [];
+  private terminalFrames: number[] = [];
+  private timingContract: TimingContract | undefined;
   private frameCount = 0;
 
   private readonly width: number;
@@ -189,6 +204,39 @@ export class InteractionTimeline {
   }
 
   tick(): void {
+    this.advanceToFrameCount(this.frameCount + 1);
+  }
+
+  advanceToTimeMs(elapsedMs: number): void {
+    const frameDurationMs = 1000 / this.fps;
+    const targetFrameCount = Math.max(1, Math.floor(elapsedMs / frameDurationMs) + 1);
+    this.advanceToFrameCount(targetFrameCount);
+  }
+
+  markTerminalFrame(): void {
+    const frameIndex = Math.max(0, this.frameCount - 1);
+    const previous = this.terminalFrames[this.terminalFrames.length - 1];
+    if (previous === frameIndex) {
+      return;
+    }
+    this.terminalFrames.push(frameIndex);
+  }
+
+  getTerminalFrames(): number[] {
+    return [...this.terminalFrames];
+  }
+
+  setTimingContract(timingContract: TimingContract): void {
+    this.timingContract = cloneTimingContract(timingContract);
+  }
+
+  private advanceToFrameCount(targetFrameCount: number): void {
+    while (this.frameCount < targetFrameCount) {
+      this.tickOnce();
+    }
+  }
+
+  private tickOnce(): void {
     if (this.cursorPath && this.pathIndex < this.cursorPath.length) {
       const point = this.cursorPath[this.pathIndex];
       this.pathIndex += 1;
@@ -269,6 +317,8 @@ export class InteractionTimeline {
       theme: cloneTheme(this.theme),
       frames: this.frames.map(cloneFrame),
       events: this.events.map(cloneEvent),
+      terminalFrames: [...this.terminalFrames],
+      timingContract: cloneTimingContract(this.timingContract),
     };
   }
 
@@ -284,6 +334,8 @@ export class InteractionTimeline {
 
     timeline.frames = json.frames.map(cloneFrame);
     timeline.events = json.events.map(cloneEvent);
+    timeline.terminalFrames = [...(json.terminalFrames ?? [])];
+    timeline.timingContract = cloneTimingContract(json.timingContract);
     timeline.frameCount = json.frameCount ?? inferredFrameCount(json.frames);
 
     const latestFrame = timeline.getFrames()[timeline.frameCount - 1];

@@ -1,3 +1,5 @@
+import type { TimingContract } from "./timing-contract.js";
+
 export interface CursorState {
   x: number;
   y: number;
@@ -49,6 +51,8 @@ export interface TimelineData {
   theme: TimelineTheme;
   frames: FrameData[];
   events: SoundEvent[];
+  terminalFrames?: number[];
+  timingContract?: TimingContract;
 }
 
 export interface CursorPoint {

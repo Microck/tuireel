@@ -22,6 +22,14 @@ export {
   type SfxConfig,
 } from "./sound.js";
 export { InteractionTimeline } from "./timeline/interaction-timeline.js";
+export {
+  assessTimingCompatibility,
+  buildTimingContract,
+  type TimingCompatibilityCandidate,
+  type TimingCompatibilityResult,
+  type TimingContract,
+  type TimingMismatch,
+} from "./timeline/timing-contract.js";
 export type {
   CursorState,
   FrameData,

@@ -1,5 +1,6 @@
 import { mkdir } from "node:fs/promises";
 import { basename, extname, join, resolve } from "node:path";
+import { setTimeout as delay } from "node:timers/promises";
 
 import sharp from "sharp";
 
@@ -11,8 +12,10 @@ import { createLogger, type Logger } from "./logger.js";
 import { FrameCapturer } from "./capture/frame-capturer.js";
 import { FfmpegEncoder } from "./encoding/encoder.js";
 import { computeCursorPath } from "./overlay/bezier.js";
+import type { TuireelSession } from "./session.js";
 import { resolveTheme } from "./themes/resolve.js";
 import { InteractionTimeline } from "./timeline/interaction-timeline.js";
+import { buildTimingContract } from "./timeline/timing-contract.js";
 import { resolveOutputPath } from "./utils/output-path.js";
 
 const DEFAULT_FPS = 30;
@@ -22,6 +25,10 @@ const TIMELINE_RECORDING_DIR = "timelines";
 const DEFAULT_FRAME_WIDTH = 1280;
 const DEFAULT_FRAME_HEIGHT = 720;
 const CURSOR_MARGIN = 24;
+const INITIAL_FRAME_TIMEOUT_MS = 15_000;
+const INITIAL_FRAME_RETRY_DELAY_MS = 100;
+const RECORDING_SCREENSHOT_FORMAT = "png";
+const RAW_CAPTURE_CRF = 10;
 
 const CURSOR_ANCHORS = [
   { x: 0.18, y: 0.2 },
@@ -150,6 +157,23 @@ function resolveCursorTarget(
   return { x, y };
 }
 
+function shouldCaptureTypedCharacter(charIndex: number, textLength: number): boolean {
+  if (textLength <= 2) {
+    return true;
+  }
+
+  const midpointIndex = Math.floor((textLength - 1) / 2);
+  if (textLength <= 5) {
+    return charIndex === midpointIndex;
+  }
+
+  if (charIndex === textLength - 1 || charIndex === midpointIndex) {
+    return true;
+  }
+
+  return textLength > 8 && charIndex > 0 && charIndex % 4 === 0;
+}
+
 async function resolveFrameDimensions(
   initialFrame: Buffer,
   fallbackCols: number,
@@ -164,6 +188,26 @@ async function resolveFrameDimensions(
     width: metadata.width ?? fallbackWidth,
     height: metadata.height ?? fallbackHeight,
   };
+}
+
+function isTransientInitialFrameError(error: unknown): boolean {
+  return error instanceof Error && error.message.includes("No content to render");
+}
+
+async function captureInitialFrame(session: TuireelSession): Promise<Buffer> {
+  const deadline = Date.now() + INITIAL_FRAME_TIMEOUT_MS;
+
+  while (true) {
+    try {
+      return await session.screenshot(RECORDING_SCREENSHOT_FORMAT);
+    } catch (error) {
+      if (!isTransientInitialFrameError(error) || Date.now() >= deadline) {
+        throw error;
+      }
+
+      await delay(INITIAL_FRAME_RETRY_DELAY_MS);
+    }
+  }
 }
 
 export interface RecordOptions {
@@ -235,6 +279,7 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
     throwIfInterrupted();
 
     const fps = config.fps ?? DEFAULT_FPS;
+    const captureFps = config.captureFps ?? fps;
     const launchCommand = getLaunchCommand(config);
     const resolvedTheme = config.theme ? resolveTheme(config.theme) : undefined;
 
@@ -249,7 +294,7 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
     await mkdir(artifacts.timelineDirectory, { recursive: true });
 
     log.setTotalSteps(config.steps.length);
-    log.verbose(`Recording "${recordingName}" at ${fps}fps`);
+    log.verbose(`Recording "${recordingName}" at ${fps}fps output (${captureFps}fps capture)`);
 
     const sessionStart = Date.now();
     session = await createSession({
@@ -261,7 +306,7 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
     log.timing("session create", Date.now() - sessionStart);
     throwIfInterrupted();
 
-    const firstFrame = await session.screenshot();
+    const firstFrame = await captureInitialFrame(session);
     const frameDimensions = await resolveFrameDimensions(firstFrame, config.cols, config.rows);
 
     const timeline = new InteractionTimeline(frameDimensions.width, frameDimensions.height, {
@@ -273,6 +318,8 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
       },
     });
 
+    const recordingStart = Date.now();
+
     let currentCursor = {
       x: Math.round(frameDimensions.width / 2),
       y: Math.round(frameDimensions.height / 2),
@@ -280,22 +327,31 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
 
     encoder = new FfmpegEncoder({
       ffmpegPath,
-      fps,
+      fps: captureFps,
       format: "mp4",
       outputPath: artifacts.rawVideoPath,
+      crf: RAW_CAPTURE_CRF,
+      inputCodec: RECORDING_SCREENSHOT_FORMAT,
     });
     log.debug(`ffmpeg encoder: ${ffmpegPath} -> ${artifacts.rawVideoPath}`);
     throwIfInterrupted();
 
     let frameCount = 0;
 
+    await encoder.writeFrame(firstFrame);
+    frameCount += 1;
+    timeline.advanceToTimeMs(0);
+    timeline.markTerminalFrame();
+
     capturer = new FrameCapturer({
       session,
       encoder,
-      fps,
+      fps: captureFps,
+      screenshotFormat: RECORDING_SCREENSHOT_FORMAT,
       onFrame: () => {
         frameCount++;
-        timeline.tick();
+        timeline.advanceToTimeMs(Date.now() - recordingStart);
+        timeline.markTerminalFrame();
       },
     });
 
@@ -306,8 +362,13 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
       await executeSteps(session, config.steps, {
         defaultWaitTimeout: config.defaultWaitTimeout,
         onStepStart: (step, index) => {
+          timeline.advanceToTimeMs(Date.now() - recordingStart);
           stepTimings[index] = Date.now();
           log.step(step.type, step.type === "launch" ? `"${launchCommand}"` : undefined);
+
+          if (step.type === "type") {
+            capturer?.pause();
+          }
 
           if (step.type !== "launch") {
             const target = resolveCursorTarget(
@@ -328,23 +389,40 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
             if (hudVisible) {
               timeline.showHud(labels);
             }
-            timeline.addEvent("key");
+            if (step.type === "press") {
+              timeline.addEvent("key");
+            }
           } else if (hudVisible) {
             timeline.hideHud();
           }
         },
         onStepComplete: (step, index) => {
+          timeline.advanceToTimeMs(Date.now() - recordingStart);
           const startTime = stepTimings[index];
           if (startTime !== undefined) {
             log.timing(`step ${index + 1}`, Date.now() - startTime);
+          }
+
+          if (step.type === "type") {
+            capturer?.resume();
           }
 
           if (step.type === "type" || step.type === "press") {
             timeline.hideHud();
           }
         },
+        onTypeCharacter: async ({ charIndex, step }) => {
+          timeline.advanceToTimeMs(Date.now() - recordingStart);
+          timeline.addEvent("key");
+
+          if (!shouldCaptureTypedCharacter(charIndex, step.text.length)) {
+            return;
+          }
+
+          await capturer?.waitForIdle();
+          await capturer?.captureNow();
+        },
       });
-      await session.waitIdle();
     })();
 
     runSteps.catch(() => {
@@ -363,13 +441,33 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
       );
     }
 
+    log.debug("steps finished; stopping frame capturer");
+    timeline.advanceToTimeMs(Date.now() - recordingStart);
     await capturer.stop();
+    log.debug("frame capturer stopped");
+    session.close();
+    log.debug("terminal session closed");
+
     log.stat("Captured frames", frameCount);
 
     log.verbose("Encoding raw video...");
     const encodeStart = Date.now();
+    log.debug("finalizing ffmpeg encoder");
     await encoder.finalize();
+    log.debug("ffmpeg encoder finalized");
     log.timing("raw encode", Date.now() - encodeStart);
+
+    timeline.setTimingContract(
+      buildTimingContract({
+        outputFps: fps,
+        captureFps,
+        wallClockDurationMs: Date.now() - recordingStart,
+        rawFrameCount: frameCount,
+        outputFrameCount: timeline.getFrameCount(),
+        terminalFrameCount: timeline.getTerminalFrames().length,
+        deliveryProfile: config.deliveryProfile,
+      }),
+    );
 
     timeline.save(artifacts.timelinePath);
 
@@ -379,6 +477,9 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
       format: config.format,
       sound: config.sound,
       cursorConfig: config.cursor ? { visible: config.cursor.visible ?? true } : undefined,
+      trimLeadingStatic: config.trim?.leadingStatic,
+      outputSize: config.outputSize,
+      backgroundColor: resolvedTheme?.background,
       logger: options.logger,
     });
     log.timing("compositing", Date.now() - composeStart);
