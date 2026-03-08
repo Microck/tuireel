@@ -61,14 +61,10 @@ describe("typeStep", () => {
   });
 
   it("uses the profile base speed when no explicit speed override is provided", async () => {
+    const defaultTimings = await characterTimings();
     const timings = await characterTimings({ profile });
-    const expectedFirst = charDelay(profile.baseSpeedMs, {
-      text: "ab",
-      char: "a",
-      index: 0,
-    });
 
-    expect(timings[0]).toBeGreaterThanOrEqual(expectedFirst - 15);
+    expect(timings[0]).toBeGreaterThan(defaultTimings[0] + 25);
   });
 
   it("lets the per-step speed override win over the profile base speed", async () => {

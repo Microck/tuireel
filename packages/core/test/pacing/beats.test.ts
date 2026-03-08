@@ -125,14 +125,15 @@ describe("executeSteps pacing beats", () => {
 
   it("does not add beats next to authored pause steps", async () => {
     const session = new FakeSession();
+    const authoredPause = { type: "pause", duration: 15 } as const;
 
     const elapsed = await elapsedMs(async () => {
-      await executeSteps(session as never, [step("launch"), step("pause"), step("press")], {
+      await executeSteps(session as never, [step("launch"), authoredPause, step("press")], {
         pacing: testProfile,
       });
     });
 
-    expect(elapsed).toBeGreaterThanOrEqual(15);
+    expect(elapsed).toBeGreaterThanOrEqual(authoredPause.duration);
     expect(elapsed).toBeLessThan(testProfile.beats.startup + 10);
   });
 });
