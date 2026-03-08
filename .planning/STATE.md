@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Human Demo Feel
 status: in_progress
-stopped_at: Completed 26-01-PLAN.md
-last_updated: "2026-03-08T20:51:03.585Z"
-last_activity: 2026-03-08 - Completed 26-01 cadence profiles and pacing schema
+stopped_at: Completed 26-02-PLAN.md
+last_updated: "2026-03-08T21:02:19.272Z"
+last_activity: 2026-03-08 - Completed 26-02 beat injection and profile-aware type pacing
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 13
-  completed_plans: 6
-  percent: 91
+  completed_plans: 7
+  percent: 93
 ---
 
 # Project State: Tuireel
@@ -20,24 +20,24 @@ progress:
 
 See: `.planning/PROJECT.md` (updated 2026-03-08)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script, without manual screen recording, editing, or post-production.
-**Current focus:** Phase 26 Human Pacing Engine in progress
+**Current focus:** Phase 27 Readable 1080p Defaults ready to start
 
 ## Current Position
 
-Phase: 26 of 29 (Human Pacing Engine)
-Plan: 1 of 2
-Status: In Progress
-Last activity: 2026-03-08 - Completed 26-01 cadence profiles and pacing schema
+Phase: 27 of 29 (Readable 1080p Defaults)
+Plan: 1 of 1
+Status: Ready
+Last activity: 2026-03-08 - Completed 26-02 beat injection and profile-aware type pacing
 
-Progress: [█████████░] 91%
+Progress: [█████████░] 93%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 73
-- Current milestone plans completed: 6
-- Total execution time: 41 min
+- Total plans completed: 74
+- Current milestone plans completed: 7
+- Total execution time: 46 min
 
 **By Milestone:**
 
@@ -46,12 +46,13 @@ Progress: [█████████░] 91%
 | v1.0         | 23/23  | Complete    |
 | v1.1         | 38/38  | Complete    |
 | v1.15        | 5/5    | Complete    |
-| v1.2         | 6/12   | In progress |
+| v1.2         | 7/12   | In progress |
 | Phase 25 P02 | 4 min  | 3 tasks     | 8 files |
 | Phase 25 P03 | 10 min | 2 tasks     | 7 files |
 | Phase 25 P04 | 10 min | 2 tasks     | 3 files |
 | Phase 25 P05 | 4 min  | 2 tasks     | 2 files |
 | Phase 26 P01 | 4 min  | 2 tasks     | 7 files |
+| Phase 26 P02 | 5 min  | 2 tasks     | 6 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,8 @@ Recent decisions affecting v1.2:
 - [Phase 25]: Lock the legacy helper message and allow-packaging-only fallback semantics in core tests while treating captureFps drift as a timing mismatch. — CLI and future diagnostics need one conservative shared timing contract for legacy artifacts and capture cadence changes.
 - [Phase 26]: Support both named pacing profiles and inline pacing objects in the config schema.
 - [Phase 26]: Keep charDelay backward compatible by preserving the legacy constants whenever no pacing profile is provided.
+- [Phase 26]: Keep automatic beats opt-in through ExecuteStepsOptions.pacing so scripts without pacing stay unchanged.
+- [Phase 26]: Resolve type speed per step as speed override first, then profile baseSpeedMs, then the legacy default.
 
 ### Pending Todos
 
@@ -89,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-08T20:51:03.580Z
-Stopped at: Completed 26-01-PLAN.md
+Last session: 2026-03-08T21:01:50.821Z
+Stopped at: Completed 26-02-PLAN.md
 Resume file: None
