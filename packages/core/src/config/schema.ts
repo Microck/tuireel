@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { DELIVERY_PROFILE_NAMES, type DeliveryProfileName } from "../delivery-profiles/built-in.js";
 import { PRESET_NAMES } from "../presets/built-in.js";
 import { themeSchema } from "../themes/schema.js";
 
@@ -17,6 +18,7 @@ const stepTypes = [
 ] as const;
 const outputFormats = ["mp4", "webm", "gif"] as const;
 const ENV_VAR_KEY_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
+const DELIVERY_PROFILE_NAME_SET = new Set<DeliveryProfileName>(DELIVERY_PROFILE_NAMES);
 const soundEffectSchema = z.union([
   z.literal(1),
   z.literal(2),
@@ -24,6 +26,17 @@ const soundEffectSchema = z.union([
   z.literal(4),
   z.string(),
 ]);
+
+export const deliveryProfileSchema = z.string().superRefine((value, context) => {
+  if (DELIVERY_PROFILE_NAME_SET.has(value as DeliveryProfileName)) {
+    return;
+  }
+
+  context.addIssue({
+    code: z.ZodIssueCode.custom,
+    message: `Unknown delivery profile "${value}". Use one of: ${DELIVERY_PROFILE_NAMES.join(", ")}.`,
+  });
+});
 
 const soundSchema = z
   .object({
@@ -51,17 +64,35 @@ const hudSchema = z
   })
   .optional();
 
+const trimSchema = z
+  .object({
+    leadingStatic: z.boolean().optional(),
+  })
+  .optional();
+
+const outputSizeSchema = z
+  .object({
+    width: z.number().int().positive().multipleOf(2),
+    height: z.number().int().positive().multipleOf(2),
+    padding: z.number().int().nonnegative().optional(),
+  })
+  .optional();
+
 const baseConfigFields = {
   $schema: z.string().optional(),
   preset: z.enum(PRESET_NAMES).optional(),
+  deliveryProfile: deliveryProfileSchema.optional(),
   format: z.enum(outputFormats).default("mp4"),
   output: z.string().default("output.mp4"),
   theme: z.union([z.string(), themeSchema]).optional(),
   sound: soundSchema,
   cursor: cursorSchema,
   hud: hudSchema,
+  trim: trimSchema,
+  outputSize: outputSizeSchema,
   defaultWaitTimeout: z.number().positive().optional(),
   fps: z.number().int().positive().default(30),
+  captureFps: z.number().int().positive().optional(),
   cols: z.number().int().positive().default(80),
   rows: z.number().int().positive().default(24),
 } satisfies Record<string, z.ZodTypeAny>;
@@ -178,13 +209,17 @@ export const videoDefinitionSchema = z.object({
   output: z.string().min(1),
   steps: stepArraySchema,
   preset: z.enum(PRESET_NAMES).optional(),
+  deliveryProfile: deliveryProfileSchema.optional(),
   format: z.enum(outputFormats).optional(),
   theme: z.union([z.string(), themeSchema]).optional(),
   sound: soundSchema,
   cursor: cursorSchema,
   hud: hudSchema,
+  trim: trimSchema,
+  outputSize: outputSizeSchema,
   defaultWaitTimeout: z.number().positive().optional(),
   fps: z.number().int().positive().optional(),
+  captureFps: z.number().int().positive().optional(),
   cols: z.number().int().positive().optional(),
   rows: z.number().int().positive().optional(),
 });
@@ -195,10 +230,7 @@ export const multiVideoConfigSchema = z.object({
   videos: z.array(videoDefinitionSchema).min(1),
 });
 
-export const configInputSchema = z.union([
-  singleVideoInputConfigSchema,
-  multiVideoConfigSchema,
-]);
+export const configInputSchema = z.union([singleVideoInputConfigSchema, multiVideoConfigSchema]);
 
 export type TuireelConfig = z.infer<typeof configSchema>;
 export type TuireelStep = z.infer<typeof stepSchema>;
