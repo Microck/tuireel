@@ -171,7 +171,7 @@ Archive:
 
 | Phase                                 | Plans Complete | Status      | Completed |
 | ------------------------------------- | -------------- | ----------- | --------- |
-| 25. Timing Contract and Profiles      | 0/4            | Not started | -         |
+| 25. Timing Contract and Profiles      | 1/4 | In Progress|  |
 | 26. Human Pacing Engine               | 0/TBD          | Not started | -         |
 | 27. Readable 1080p Defaults           | 0/TBD          | Not started | -         |
 | 28. Capture Fidelity and Final Motion | 0/2            | Not started | -         |
