@@ -6,6 +6,8 @@ Notes:
 
 - Config files are JSONC (comments and trailing commas allowed).
 - `pause.duration` is milliseconds.
+- `deliveryProfile` is the profile-first way to pick timing + readability defaults.
+- `fps` is final output cadence; `captureFps` is raw terminal capture cadence.
 
 ## Minimal hello-world
 
@@ -13,6 +15,7 @@ Type a command in a shell and wait briefly before ending the recording.
 
 ```jsonc
 {
+  "deliveryProfile": "readable-1080p",
   "output": "demo.mp4",
   "steps": [
     { "type": "launch", "command": "bash" },
@@ -64,7 +67,9 @@ Record multiple videos from one file.
 ```jsonc
 {
   "defaults": {
+    "deliveryProfile": "readable-1080p",
     "preset": "polished",
+    "captureFps": 12,
     "cols": 120,
     "rows": 30,
   },

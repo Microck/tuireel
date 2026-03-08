@@ -9,7 +9,8 @@ Tuireel uses JSONC (JSON with Comments) configuration files, typically named `.t
 ## General
 
 <ResponseField name="$schema" type="string" required={false}>
-  Path or URL to the JSON Schema file for editor autocompletion. Generated automatically by `tuireel init`.
+  Path or URL to the JSON Schema file for editor autocompletion. Generated automatically by `tuireel
+  init`.
 </ResponseField>
 
 <ResponseField name="format" type='"mp4" | "webm" | "gif"' required={false} default="mp4">
@@ -20,8 +21,22 @@ Tuireel uses JSONC (JSON with Comments) configuration files, typically named `.t
   Output file path for the recording.
 </ResponseField>
 
+<ResponseField
+  name="deliveryProfile"
+  type='"readable-1080p" | "social-quick-share" | "high-motion-demo"'
+  required={false}
+>
+  Named timing + readability bundle for common delivery goals. This is the normal authoring path:
+  pick a delivery target first, then override `fps`, `captureFps`, or sizing fields only when
+  needed.
+</ResponseField>
+
 <ResponseField name="fps" type="integer" required={false} default={30}>
-  Frames per second for the recording. Must be a positive integer.
+  Final output cadence for the rendered video. Must be a positive integer.
+</ResponseField>
+
+<ResponseField name="captureFps" type="integer" required={false}>
+  Raw capture cadence for terminal state sampling before Tuireel renders the final output at `fps`.
 </ResponseField>
 
 <ResponseField name="cols" type="integer" required={false} default={80}>
@@ -35,49 +50,51 @@ Tuireel uses JSONC (JSON with Comments) configuration files, typically named `.t
 ## Presentation
 
 <ResponseField name="preset" type='"polished" | "minimal" | "demo" | "silent"' required={false}>
-  Apply a built-in presentation preset. Presets configure theme, sound, cursor, and HUD defaults in one line. See [Presets](/presets) for details.
+  Apply a built-in presentation preset. Presets configure theme, sound, cursor, and HUD defaults in one line. They stay visual-only, so you can stack them with `deliveryProfile`. See [Presets](/presets) for details.
 
-  | Preset | Theme | Sound | Cursor | HUD |
-  |--------|-------|-------|--------|-----|
-  | `polished` | Catppuccin | Click + Key | Visible | Visible |
-  | `minimal` | Tokyo Night | None | Visible | Hidden |
-  | `demo` | Dracula | Click + Key | Visible | Visible |
-  | `silent` | Default | None | Hidden | Hidden |
+| Preset     | Theme       | Sound       | Cursor  | HUD     |
+| ---------- | ----------- | ----------- | ------- | ------- |
+| `polished` | Catppuccin  | Click + Key | Visible | Visible |
+| `minimal`  | Tokyo Night | None        | Visible | Hidden  |
+| `demo`     | Dracula     | Click + Key | Visible | Visible |
+| `silent`   | Default     | None        | Hidden  | Hidden  |
+
 </ResponseField>
 
 <ResponseField name="theme" type="string | ThemeConfig" required={false}>
   Terminal color theme. Pass a built-in theme name as a string, or an inline theme object.
 
-  ```jsonc
-  // Built-in theme by name
-  "theme": "catppuccin"
+```jsonc
+// Built-in theme by name
+"theme": "catppuccin"
 
-  // Inline theme object
-  "theme": {
-    "background": "#1E1E2E",
-    "foreground": "#CDD6F4",
-    "colors": {
-      "black": "#45475A",
-      "red": "#F38BA8",
-      "green": "#A6E3A1",
-      "yellow": "#F9E2AF",
-      "blue": "#89B4FA",
-      "magenta": "#F5C2E7",
-      "cyan": "#94E2D5",
-      "white": "#BAC2DE",
-      "brightBlack": "#585B70",
-      "brightRed": "#F38BA8",
-      "brightGreen": "#A6E3A1",
-      "brightYellow": "#F9E2AF",
-      "brightBlue": "#89B4FA",
-      "brightMagenta": "#F5C2E7",
-      "brightCyan": "#94E2D5",
-      "brightWhite": "#A6ADC8"
-    }
+// Inline theme object
+"theme": {
+  "background": "#1E1E2E",
+  "foreground": "#CDD6F4",
+  "colors": {
+    "black": "#45475A",
+    "red": "#F38BA8",
+    "green": "#A6E3A1",
+    "yellow": "#F9E2AF",
+    "blue": "#89B4FA",
+    "magenta": "#F5C2E7",
+    "cyan": "#94E2D5",
+    "white": "#BAC2DE",
+    "brightBlack": "#585B70",
+    "brightRed": "#F38BA8",
+    "brightGreen": "#A6E3A1",
+    "brightYellow": "#F9E2AF",
+    "brightBlue": "#89B4FA",
+    "brightMagenta": "#F5C2E7",
+    "brightCyan": "#94E2D5",
+    "brightWhite": "#A6ADC8"
   }
-  ```
+}
+```
 
-  See [Themes](/themes) for the full `ThemeConfig` schema and available built-in themes.
+See [Themes](/themes) for the full `ThemeConfig` schema and available built-in themes.
+
 </ResponseField>
 
 <ResponseField name="cursor" type="object" required={false}>
@@ -130,17 +147,20 @@ Tuireel uses JSONC (JSON with Comments) configuration files, typically named `.t
     <ResponseField name="effectsVolume" type="number" required={false} default={0.5}>
       Volume for sound effects. Range: `0` (silent) to `1` (full volume).
     </ResponseField>
+
   </Expandable>
 </ResponseField>
 
 ## Behavior
 
 <ResponseField name="defaultWaitTimeout" type="number" required={false}>
-  Default timeout in milliseconds for `wait` steps that don't specify their own timeout. Must be a positive number.
+  Default timeout in milliseconds for `wait` steps that don't specify their own timeout. Must be a
+  positive number.
 </ResponseField>
 
 <ResponseField name="steps" type="Step[]" required>
-  Array of step objects defining the recording script. Must contain at least one step. See [Steps Reference](/steps-reference) for all step types.
+  Array of step objects defining the recording script. Must contain at least one step. See [Steps
+  Reference](/steps-reference) for all step types.
 </ResponseField>
 
 ## Multi-Video Configuration
@@ -150,10 +170,12 @@ Tuireel also supports a multi-video config format for recording multiple videos 
 ```jsonc
 {
   "defaults": {
+    "deliveryProfile": "readable-1080p",
+    "captureFps": 12,
     "fps": 30,
     "cols": 80,
     "rows": 24,
-    "preset": "polished"
+    "preset": "polished",
   },
   "videos": [
     {
@@ -163,8 +185,8 @@ Tuireel also supports a multi-video config format for recording multiple videos 
         { "type": "launch", "command": "bash" },
         { "type": "type", "text": "npm install mypackage" },
         { "type": "press", "key": "Enter" },
-        { "type": "pause", "duration": 3 }
-      ]
+        { "type": "pause", "duration": 3 },
+      ],
     },
     {
       "name": "usage",
@@ -173,10 +195,10 @@ Tuireel also supports a multi-video config format for recording multiple videos 
         { "type": "launch", "command": "bash" },
         { "type": "type", "text": "mypackage --help" },
         { "type": "press", "key": "Enter" },
-        { "type": "pause", "duration": 2 }
-      ]
-    }
-  ]
+        { "type": "pause", "duration": 2 },
+      ],
+    },
+  ],
 }
 ```
 
@@ -189,9 +211,11 @@ A full single-video config using all available options:
 ```jsonc
 {
   "$schema": "file:///home/user/.tuireel/schema.json",
+  "deliveryProfile": "readable-1080p",
   "preset": "polished",
   "format": "mp4",
   "output": "demo.mp4",
+  "captureFps": 12,
   "fps": 30,
   "cols": 100,
   "rows": 30,
@@ -202,7 +226,7 @@ A full single-video config using all available options:
     "effects": { "click": 1, "key": 2 },
     "track": "./background.mp3",
     "trackVolume": 0.2,
-    "effectsVolume": 0.6
+    "effectsVolume": 0.6,
   },
   "defaultWaitTimeout": 10000,
   "steps": [
@@ -210,7 +234,7 @@ A full single-video config using all available options:
     { "type": "type", "text": "echo 'Hello, world!'" },
     { "type": "press", "key": "Enter" },
     { "type": "wait", "pattern": "Hello, world!" },
-    { "type": "pause", "duration": 2000 }
-  ]
+    { "type": "pause", "duration": 2000 },
+  ],
 }
 ```

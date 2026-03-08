@@ -13,10 +13,13 @@ Instead of a single config object, define a `videos` array to produce multiple r
 ```jsonc
 {
   "defaults": {
+    "deliveryProfile": "readable-1080p",
+    "preset": "polished",
     "theme": "catppuccin",
     "cols": 80,
     "rows": 24,
     "fps": 30,
+    "captureFps": 12,
   },
   "videos": [
     {
@@ -46,27 +49,30 @@ Instead of a single config object, define a `videos` array to produce multiple r
 ### How It Works
 
 - Each video entry gets its own output file and recording
-- The `defaults` object provides shared settings - any field you'd normally put at the top level (theme, sound, cursor, HUD, cols, rows, fps, etc.)
+- The `defaults` object provides shared settings - any field you'd normally put at the top level (`deliveryProfile`, `preset`, theme, sound, cursor, HUD, `fps`, `captureFps`, cols, rows, etc.)
 - Each video can override any default with its own value
 - Every video must have a `name` (used for identification) and `output` (output file path)
 - Each video must define its own `steps` array
+- `fps` always means final output cadence, while `captureFps` is the raw terminal capture cadence
 
 ### Video Definition Fields
 
-| Field    | Type                 | Required | Description                      |
-| -------- | -------------------- | -------- | -------------------------------- |
-| `name`   | `string`             | Yes      | Unique name for this video       |
-| `output` | `string`             | Yes      | Output file path                 |
-| `steps`  | `array`              | Yes      | Steps for this video             |
-| `preset` | `string`             | No       | Override preset for this video   |
-| `format` | `string`             | No       | Override format (mp4, webm, gif) |
-| `theme`  | `string` or `object` | No       | Override theme                   |
-| `sound`  | `object`             | No       | Override sound config            |
-| `cursor` | `object`             | No       | Override cursor config           |
-| `hud`    | `object`             | No       | Override HUD config              |
-| `fps`    | `number`             | No       | Override FPS                     |
-| `cols`   | `number`             | No       | Override terminal width          |
-| `rows`   | `number`             | No       | Override terminal height         |
+| Field             | Type                 | Required | Description                           |
+| ----------------- | -------------------- | -------- | ------------------------------------- |
+| `name`            | `string`             | Yes      | Unique name for this video            |
+| `output`          | `string`             | Yes      | Output file path                      |
+| `steps`           | `array`              | Yes      | Steps for this video                  |
+| `deliveryProfile` | `string`             | No       | Override timing + readability profile |
+| `preset`          | `string`             | No       | Override preset for this video        |
+| `format`          | `string`             | No       | Override format (mp4, webm, gif)      |
+| `theme`           | `string` or `object` | No       | Override theme                        |
+| `sound`           | `object`             | No       | Override sound config                 |
+| `cursor`          | `object`             | No       | Override cursor config                |
+| `hud`             | `object`             | No       | Override HUD config                   |
+| `fps`             | `number`             | No       | Override final output cadence         |
+| `captureFps`      | `number`             | No       | Override raw capture cadence          |
+| `cols`            | `number`             | No       | Override terminal width               |
+| `rows`            | `number`             | No       | Override terminal height              |
 
 ## Step Includes
 
@@ -117,6 +123,8 @@ Combine both features for maximum reuse:
 ```jsonc
 {
   "defaults": {
+    "deliveryProfile": "social-quick-share",
+    "preset": "demo",
     "theme": "dracula",
     "cursor": { "visible": true },
   },

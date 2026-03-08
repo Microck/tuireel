@@ -38,7 +38,7 @@ npx tuireel
     tuireel init
     ```
 
-    This creates a starter config with a simple example. You can optionally choose a preset (like `polished` or `demo`) during init.
+    This creates a starter config with a simple example. Tuireel starts with a delivery profile (`readable-1080p` by default), then lets you optionally add a visual preset like `polished` or `demo`.
 
   </Step>
 
@@ -47,6 +47,8 @@ npx tuireel
 
     ```jsonc
     {
+      "deliveryProfile": "readable-1080p",
+      "preset": "polished",
       "output": "demo.mp4",
       "cols": 80,
       "rows": 24,
@@ -90,10 +92,11 @@ npx tuireel
 
 ## Add Polish with Presets
 
-Want instant polish? Add a preset to your config:
+Want instant polish? Stack a visual preset on top of your delivery profile:
 
 ```jsonc
 {
+  "deliveryProfile": "readable-1080p",
   "preset": "polished",
   "output": "demo.mp4",
   "steps": [
@@ -105,7 +108,7 @@ Want instant polish? Add a preset to your config:
 }
 ```
 
-The `polished` preset applies the Catppuccin theme, enables cursor overlay, HUD, and sound effects - all in one line.
+The `polished` preset applies the Catppuccin theme, enables cursor overlay, HUD, and sound effects - all in one line. The delivery profile separately controls readability defaults and timing: `fps` is the final output cadence, while `captureFps` is the raw terminal capture cadence behind it.
 
 Available presets: `polished`, `minimal`, `demo`, `silent`.
 

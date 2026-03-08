@@ -23,7 +23,27 @@ Add the `preset` field to your config:
 }
 ```
 
-Presets never control output behavior - they don't set `steps`, `output`, `format`, or `$schema`. They only set visual and audio presentation.
+Presets never control output behavior - they don't set `steps`, `output`, `format`, `$schema`, `fps`, or `captureFps`. They only set visual and audio presentation.
+
+## Stack Presets with Delivery Profiles
+
+Use `deliveryProfile` for timing + readability defaults, then add `preset` for the visual layer:
+
+```jsonc
+{
+  "deliveryProfile": "readable-1080p",
+  "preset": "polished",
+  "output": "demo.mp4",
+  "steps": [
+    { "type": "launch", "command": "bash" },
+    { "type": "type", "text": "npm create tuireel-demo" },
+    { "type": "press", "key": "Enter" },
+    { "type": "pause", "duration": 2 },
+  ],
+}
+```
+
+In that stack, `deliveryProfile` sets the recording target (`fps`, `captureFps`, and readability-oriented sizing), while `preset` still only affects theme, sound, cursor, and HUD.
 
 ## Built-in Presets
 
@@ -115,11 +135,12 @@ You can also swap the theme while keeping everything else:
 
 ## Presets in `tuireel init`
 
-When you run `tuireel init` interactively (in a TTY), you're prompted to select a preset:
+When you run `tuireel init` interactively (in a TTY), you're prompted for a delivery profile first, then an optional preset:
 
 ```bash
 tuireel init
+# ? Select a delivery profile: (readable-1080p, social-quick-share, high-motion-demo)
 # ? Select a preset: (polished, minimal, demo, silent)
 ```
 
-The chosen preset is written into your generated `.tuireel.jsonc` config. In non-interactive mode (piped input), the preset prompt is skipped.
+The generated config always includes a delivery profile, and only includes `preset` when you opt into one. In non-interactive mode (piped input), Tuireel keeps the profile-first default and skips the optional preset prompt.

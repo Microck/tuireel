@@ -21,14 +21,14 @@
 
 tuireel executes scripted terminal interactions in a virtual pty, captures frames, and renders polished videos (mp4, webm, gif) with optional cursor overlays, keystroke hud, and sound effects. no manual recording or editing required.
 
-define steps in a jsonc config (typing, key presses, launches, waits, pauses) and tuireel drives a headless terminal session, captures screenshots at configurable fps, and encodes the result with ffmpeg.
+define steps in a jsonc config (typing, key presses, launches, waits, pauses) and tuireel drives a headless terminal session, captures raw terminal states at configurable `captureFps`, then encodes the final video at the output `fps` you want viewers to see.
 
 [documentation](https://tuireel.micr.dev) | [github](https://github.com/Microck/tuireel)
 
 <p align="center">
-  <video src="assets/demos/meta-demo.mp4" controls width="600"></video>
+  <video src="assets/demos/opencode-demo.mp4" controls width="600"></video>
   <br>
-  <em>watch tuireel create this demo (meta recursion)</em>
+  <em>watch tuireel capture a real opencode TUI flow at 1080p</em>
 </p>
 
 ## quick start
@@ -43,6 +43,7 @@ the generated config is a jsonc file describing your demo steps:
 
 ```jsonc
 {
+  "deliveryProfile": "readable-1080p",
   "preset": "polished",
   "output": "demo.mp4",
   "steps": [
@@ -52,6 +53,8 @@ the generated config is a jsonc file describing your demo steps:
   ],
 }
 ```
+
+`deliveryProfile` is the profile-first workflow for timing plus readability defaults. `preset` stays visual-only, so you can stack both when you want a polished look and a named delivery target.
 
 ## usage
 
@@ -65,7 +68,7 @@ tuireel init -o my-demo.tuireel.jsonc
 tuireel init --force       # overwrite existing config
 ```
 
-this creates a `.tuireel.jsonc` with a `$schema` for ide autocompletion.
+this creates a `.tuireel.jsonc` with a `$schema` for ide autocompletion, a default `deliveryProfile`, and an optional visual `preset` if you choose one interactively.
 
 ### record
 
@@ -140,21 +143,23 @@ all steps can be used with `$include` to share common setup sequences across con
 
 ### top-level
 
-| field                | default      | description                                           |
-| -------------------- | ------------ | ----------------------------------------------------- |
-| `$schema`            | -            | json schema url for ide autocompletion                |
-| `preset`             | -            | preset name (`polished`, `minimal`, `demo`, `silent`) |
-| `output`             | `output.mp4` | output file path                                      |
-| `format`             | `mp4`        | output format (`mp4`, `webm`, `gif`)                  |
-| `theme`              | -            | terminal color theme (name or inline object)          |
-| `sound`              | -            | sound effect configuration                            |
-| `cursor`             | -            | cursor overlay settings                               |
-| `hud`                | -            | keystroke hud overlay settings                        |
-| `fps`                | `30`         | capture frame rate                                    |
-| `cols`               | `80`         | terminal width in columns                             |
-| `rows`               | `24`         | terminal height in rows                               |
-| `defaultWaitTimeout` | -            | default timeout for `wait` steps (ms)                 |
-| `steps`              | required     | array of step objects                                 |
+| field                | default      | description                                                      |
+| -------------------- | ------------ | ---------------------------------------------------------------- |
+| `$schema`            | -            | json schema url for ide autocompletion                           |
+| `preset`             | -            | preset name (`polished`, `minimal`, `demo`, `silent`)            |
+| `deliveryProfile`    | -            | named timing + readability bundle (for example `readable-1080p`) |
+| `output`             | `output.mp4` | output file path                                                 |
+| `format`             | `mp4`        | output format (`mp4`, `webm`, `gif`)                             |
+| `theme`              | -            | terminal color theme (name or inline object)                     |
+| `sound`              | -            | sound effect configuration                                       |
+| `cursor`             | -            | cursor overlay settings                                          |
+| `hud`                | -            | keystroke hud overlay settings                                   |
+| `fps`                | `30`         | final output cadence for the rendered video                      |
+| `captureFps`         | -            | raw capture cadence for terminal state sampling                  |
+| `cols`               | `80`         | terminal width in columns                                        |
+| `rows`               | `24`         | terminal height in rows                                          |
+| `defaultWaitTimeout` | -            | default timeout for `wait` steps (ms)                            |
+| `steps`              | required     | array of step objects                                            |
 
 ### multi-video config
 
@@ -163,6 +168,7 @@ for projects with multiple demos, use the multi-video format:
 ```jsonc
 {
   "defaults": {
+    "deliveryProfile": "readable-1080p",
     "preset": "polished",
     "cols": 120,
     "rows": 30,
@@ -190,23 +196,25 @@ for projects with multiple demos, use the multi-video format:
 
 the `defaults` object is merged into each video definition. per-video fields override defaults.
 
-| field           | default   | description                    |
-| --------------- | --------- | ------------------------------ |
-| `name`          | required  | video identifier               |
-| `output`        | required  | output file path               |
-| `steps`         | required  | array of step objects          |
-| `preset`        | inherited | preset override for this video |
-| `format`        | inherited | output format override         |
-| `theme`         | inherited | theme override                 |
-| `sound`         | inherited | sound configuration override   |
-| `cursor`        | inherited | cursor overlay override        |
-| `hud`           | inherited | keystroke hud override         |
-| `fps`           | inherited | frame rate override            |
-| `cols` / `rows` | inherited | terminal dimensions override   |
+| field             | default   | description                           |
+| ----------------- | --------- | ------------------------------------- |
+| `name`            | required  | video identifier                      |
+| `output`          | required  | output file path                      |
+| `steps`           | required  | array of step objects                 |
+| `preset`          | inherited | preset override for this video        |
+| `format`          | inherited | output format override                |
+| `theme`           | inherited | theme override                        |
+| `sound`           | inherited | sound configuration override          |
+| `cursor`          | inherited | cursor overlay override               |
+| `hud`             | inherited | keystroke hud override                |
+| `deliveryProfile` | inherited | timing + readability profile override |
+| `fps`             | inherited | final output cadence override         |
+| `captureFps`      | inherited | raw capture cadence override          |
+| `cols` / `rows`   | inherited | terminal dimensions override          |
 
 ## presets
 
-presets bundle presentation defaults (theme, sound, cursor, hud) so you don't have to configure each one individually.
+presets bundle presentation defaults (theme, sound, cursor, hud) so you don't have to configure each one individually. they do not change timing behavior, so they stack cleanly with `deliveryProfile`.
 
 | preset     | theme       | sound effects | cursor  | hud     |
 | ---------- | ----------- | ------------- | ------- | ------- |
@@ -217,13 +225,14 @@ presets bundle presentation defaults (theme, sound, cursor, hud) so you don't ha
 
 ```jsonc
 {
+  "deliveryProfile": "readable-1080p",
   "preset": "polished",
   "output": "demo.mp4",
   "steps": [...]
 }
 ```
 
-preset values can be overridden by explicit fields in your config.
+preset values can be overridden by explicit fields in your config, and `deliveryProfile` can independently set default `fps`, `captureFps`, and readability-oriented sizing.
 
 ## themes
 
