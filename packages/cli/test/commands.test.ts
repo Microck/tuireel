@@ -7,9 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { validateConfig } from "../../core/src/config/parser.js";
 import { registerInitCommand } from "../src/commands/init.js";
-import {
-  registerValidateCommand,
-} from "../src/commands/validate.js";
+import { registerValidateCommand } from "../src/commands/validate.js";
 import { createProgram } from "../src/index.js";
 
 const tempDirectories: string[] = [];
@@ -17,9 +15,7 @@ const tempDirectories: string[] = [];
 afterEach(async () => {
   process.exitCode = undefined;
   await Promise.all(
-    tempDirectories.splice(0).map((directory) =>
-      rm(directory, { recursive: true, force: true }),
-    ),
+    tempDirectories.splice(0).map((directory) => rm(directory, { recursive: true, force: true })),
   );
 });
 
@@ -35,6 +31,23 @@ async function runProgram(program: Command, args: string[]): Promise<number> {
   const exitCode = process.exitCode ?? 0;
   process.exitCode = undefined;
   return exitCode;
+}
+
+async function withNonInteractiveStdin<T>(run: () => Promise<T>): Promise<T> {
+  const originalIsTTY = process.stdin.isTTY;
+  Object.defineProperty(process.stdin, "isTTY", {
+    configurable: true,
+    value: false,
+  });
+
+  try {
+    return await run();
+  } finally {
+    Object.defineProperty(process.stdin, "isTTY", {
+      configurable: true,
+      value: originalIsTTY,
+    });
+  }
 }
 
 function waitPatternAlternativesFromStepsSchema(
@@ -82,9 +95,11 @@ function stepVariantsFromConfigVariant(
   configVariant: Record<string, unknown>,
 ): Array<Record<string, unknown>> {
   const properties = configVariant.properties as Record<string, unknown> | undefined;
-  const stepsSchema = properties?.steps as {
-    items?: Record<string, unknown>;
-  } | undefined;
+  const stepsSchema = properties?.steps as
+    | {
+        items?: Record<string, unknown>;
+      }
+    | undefined;
 
   if (!stepsSchema?.items) {
     throw new Error("Expected steps schema in single-video config variant");
@@ -109,14 +124,19 @@ describe("cli commands", () => {
       const program = new Command();
       registerInitCommand(program);
 
-      const exitCode = await runProgram(program, ["init", "--output", configPath]);
+      const exitCode = await withNonInteractiveStdin(() =>
+        runProgram(program, ["init", "--output", configPath]),
+      );
 
       expect(exitCode).toBe(0);
 
       const rawConfig = await readFile(configPath, "utf8");
       expect(rawConfig).toContain("$schema");
+      expect(rawConfig).toContain('"deliveryProfile": "readable-1080p"');
+      expect(rawConfig).not.toContain('"preset"');
 
       const parsedConfig = validateConfig(rawConfig);
+      expect(parsedConfig.deliveryProfile).toBe("readable-1080p");
       expect(parsedConfig.steps).toHaveLength(2);
       expect(parsedConfig.steps[0]).toMatchObject({
         type: "launch",
@@ -146,9 +166,11 @@ describe("cli commands", () => {
       const singleProperties = (singleVideoVariant?.properties ?? {}) as Record<string, unknown>;
       expect(singleProperties).toEqual(
         expect.objectContaining({
+          deliveryProfile: expect.any(Object),
           format: expect.any(Object),
           output: expect.any(Object),
           fps: expect.any(Object),
+          captureFps: expect.any(Object),
           cols: expect.any(Object),
           rows: expect.any(Object),
           steps: expect.any(Object),
@@ -245,20 +267,15 @@ describe("cli commands", () => {
     try {
       const initProgram = new Command();
       registerInitCommand(initProgram);
-      const initExitCode = await runProgram(initProgram, [
-        "init",
-        "--output",
-        configPath,
-      ]);
+      const initExitCode = await withNonInteractiveStdin(() =>
+        runProgram(initProgram, ["init", "--output", configPath]),
+      );
       expect(initExitCode).toBe(0);
 
       const validateProgram = new Command();
       registerValidateCommand(validateProgram);
 
-      const validateExitCode = await runProgram(validateProgram, [
-        "validate",
-        configPath,
-      ]);
+      const validateExitCode = await runProgram(validateProgram, ["validate", configPath]);
 
       expect(validateExitCode).toBe(0);
     } finally {
@@ -295,7 +312,11 @@ describe("cli commands", () => {
   it("validate exits 1 for malformed JSONC and shows line and column", async () => {
     const directory = await makeTempDirectory();
     const configPath = join(directory, "malformed.jsonc");
-    await writeFile(configPath, '{ "steps": [ { "type": "launch" "command": "echo hi" } ] }\n', "utf8");
+    await writeFile(
+      configPath,
+      '{ "steps": [ { "type": "launch" "command": "echo hi" } ] }\n',
+      "utf8",
+    );
 
     const errors: string[] = [];
     const validateProgram = new Command();
