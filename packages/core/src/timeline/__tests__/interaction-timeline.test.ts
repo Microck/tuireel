@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { InteractionTimeline } from "../interaction-timeline.js";
+import type { TimingContract } from "../timing-contract.js";
 import type { TimelineData } from "../types.js";
 
 describe("InteractionTimeline", () => {
@@ -31,13 +32,13 @@ describe("InteractionTimeline", () => {
     timeline.tick();
     timeline.tick();
 
-    expect(
-      timeline.getFrames().map((frame) => ({ x: frame.cursor.x, y: frame.cursor.y })),
-    ).toEqual([
-      { x: 10, y: 20 },
-      { x: 30, y: 40 },
-      { x: 50, y: 60 },
-    ]);
+    expect(timeline.getFrames().map((frame) => ({ x: frame.cursor.x, y: frame.cursor.y }))).toEqual(
+      [
+        { x: 10, y: 20 },
+        { x: 30, y: 40 },
+        { x: 50, y: 60 },
+      ],
+    );
   });
 
   it("round-trips serialized data via load", () => {
@@ -64,10 +65,22 @@ describe("InteractionTimeline", () => {
 
     try {
       const timeline = new InteractionTimeline(640, 360, { fps: 30 });
+      const timingContract: TimingContract = {
+        version: 1,
+        outputFps: 30,
+        captureFps: 12,
+        wallClockDurationMs: 67,
+        rawFrameCount: 2,
+        outputFrameCount: 2,
+        terminalFrameCount: 2,
+        deliveryProfile: "readable-1080p",
+      };
 
       timeline.showHud(["A"]);
       timeline.tick();
+      timeline.markTerminalFrame();
       timeline.addEvent("click");
+      timeline.setTimingContract(timingContract);
       timeline.save(filePath);
 
       const loaded = InteractionTimeline.fromFile(filePath);
@@ -75,6 +88,10 @@ describe("InteractionTimeline", () => {
 
       expect(loaded.toJSON()).toEqual(timeline.toJSON());
       expect(fileData).toEqual(timeline.toJSON());
+      expect(fileData).toMatchObject({
+        fps: 30,
+        timingContract,
+      });
     } finally {
       await rm(directory, { recursive: true, force: true });
     }
