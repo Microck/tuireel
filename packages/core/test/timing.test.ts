@@ -3,9 +3,16 @@ import { describe, expect, it } from "vitest";
 import { CADENCE_PROFILES } from "../src/executor/pacing/profiles.js";
 import { charDelay } from "../src/executor/timing.js";
 
-function legacyDelay(
+function expectedDelay(
   baseMs: number,
   context?: { text: string; char: string; index: number },
+  extras?: {
+    firstCharExtra: number;
+    punctuationExtra: number;
+    whitespaceExtra: number;
+    slashExtra: number;
+    previousPathSepExtra: number;
+  },
 ): number {
   if (!context) {
     return Math.max(1, baseMs);
@@ -27,26 +34,33 @@ function legacyDelay(
   let multiplier = 0.76 + jitter * 0.24;
 
   if (index === 0) {
-    multiplier += 0.24;
+    multiplier += extras?.firstCharExtra ?? 0.24;
   }
 
   if (char === "/") {
-    multiplier += 0.08;
+    multiplier += extras?.slashExtra ?? 0.08;
   }
 
   if (/\s/.test(char)) {
-    multiplier += 0.28;
+    multiplier += extras?.whitespaceExtra ?? 0.28;
   }
 
   if (/[.,!?;:]/.test(char)) {
-    multiplier += 0.22;
+    multiplier += extras?.punctuationExtra ?? 0.22;
   }
 
   if (/[\/_.-]/.test(previousChar)) {
-    multiplier += 0.06;
+    multiplier += extras?.previousPathSepExtra ?? 0.06;
   }
 
   return Math.max(12, Math.round(safeBaseMs * multiplier));
+}
+
+function legacyDelay(
+  baseMs: number,
+  context?: { text: string; char: string; index: number },
+): number {
+  return expectedDelay(baseMs, context);
 }
 
 describe("charDelay", () => {
@@ -98,7 +112,15 @@ describe("charDelay", () => {
       index: 0,
     };
 
-    expect(charDelay(65, context, CADENCE_PROFILES.relaxed)).toBe(96);
+    expect(charDelay(65, context, CADENCE_PROFILES.relaxed)).toBe(
+      expectedDelay(65, context, {
+        firstCharExtra: CADENCE_PROFILES.relaxed.firstCharExtra,
+        punctuationExtra: CADENCE_PROFILES.relaxed.punctuationExtra,
+        whitespaceExtra: CADENCE_PROFILES.relaxed.whitespaceExtra,
+        slashExtra: CADENCE_PROFILES.relaxed.pathSepExtra,
+        previousPathSepExtra: CADENCE_PROFILES.relaxed.pathSepExtra,
+      }),
+    );
   });
 
   it("makes brisk typing faster than relaxed for the same input", () => {

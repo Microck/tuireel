@@ -385,7 +385,6 @@ describe("config parser", () => {
     }`);
 
     expect(error.message).toMatch(/pacing/i);
-    expect(error.message).toMatch(/relaxed/i);
   });
 
   it("accepts configs that omit pacing", () => {

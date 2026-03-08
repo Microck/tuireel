@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { DELIVERY_PROFILE_NAMES, type DeliveryProfileName } from "../delivery-profiles/built-in.js";
+import { CADENCE_PROFILE_NAMES } from "../executor/pacing/profiles.js";
 import { PRESET_NAMES } from "../presets/built-in.js";
 import { themeSchema } from "../themes/schema.js";
 
@@ -78,6 +79,22 @@ const outputSizeSchema = z
   })
   .optional();
 
+const cadenceProfileSchema = z.object({
+  baseSpeedMs: z.number().positive(),
+  firstCharExtra: z.number().nonnegative(),
+  punctuationExtra: z.number().nonnegative(),
+  whitespaceExtra: z.number().nonnegative(),
+  pathSepExtra: z.number().nonnegative(),
+  beats: z.object({
+    startup: z.number().nonnegative(),
+    settle: z.number().nonnegative(),
+    read: z.number().nonnegative(),
+    idle: z.number().nonnegative(),
+  }),
+});
+
+const pacingSchema = z.union([z.enum(CADENCE_PROFILE_NAMES), cadenceProfileSchema]).optional();
+
 const baseConfigFields = {
   $schema: z.string().optional(),
   preset: z.enum(PRESET_NAMES).optional(),
@@ -90,6 +107,7 @@ const baseConfigFields = {
   hud: hudSchema,
   trim: trimSchema,
   outputSize: outputSizeSchema,
+  pacing: pacingSchema,
   defaultWaitTimeout: z.number().positive().optional(),
   fps: z.number().int().positive().default(30),
   captureFps: z.number().int().positive().optional(),
@@ -217,6 +235,7 @@ export const videoDefinitionSchema = z.object({
   hud: hudSchema,
   trim: trimSchema,
   outputSize: outputSizeSchema,
+  pacing: pacingSchema,
   defaultWaitTimeout: z.number().positive().optional(),
   fps: z.number().int().positive().optional(),
   captureFps: z.number().int().positive().optional(),
