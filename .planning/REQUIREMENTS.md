@@ -53,29 +53,29 @@
 
 ## Traceability
 
-| Requirement | Phase | Status  |
-| ----------- | ----- | ------- |
-| PACE-01     | TBD   | Pending |
-| PACE-02     | TBD   | Pending |
-| PACE-03     | TBD   | Pending |
-| CAP-01      | TBD   | Pending |
-| CAP-02      | TBD   | Pending |
-| CAP-03      | TBD   | Pending |
-| CAP-04      | TBD   | Pending |
-| READ-01     | TBD   | Pending |
-| READ-02     | TBD   | Pending |
-| READ-03     | TBD   | Pending |
-| DIAG-04     | TBD   | Pending |
-| DIAG-05     | TBD   | Pending |
-| DIAG-06     | TBD   | Pending |
+| Requirement | Phase    | Status  |
+| ----------- | -------- | ------- |
+| PACE-01     | Phase 26 | Pending |
+| PACE-02     | Phase 26 | Pending |
+| PACE-03     | Phase 26 | Pending |
+| CAP-01      | Phase 25 | Pending |
+| CAP-02      | Phase 28 | Pending |
+| CAP-03      | Phase 28 | Pending |
+| CAP-04      | Phase 25 | Pending |
+| READ-01     | Phase 27 | Pending |
+| READ-02     | Phase 27 | Pending |
+| READ-03     | Phase 25 | Pending |
+| DIAG-04     | Phase 29 | Pending |
+| DIAG-05     | Phase 29 | Pending |
+| DIAG-06     | Phase 29 | Pending |
 
 **Coverage:**
 
 - v1.2 requirements: 13 total
-- Mapped to phases: 0
-- Unmapped: 13
+- Mapped to phases: 13
+- Unmapped: 0
 
 ---
 
 _Requirements defined: 2026-03-08_
-_Last updated: 2026-03-08 after v1.2 milestone definition_
+_Last updated: 2026-03-08 after v1.2 roadmap creation_

@@ -5,104 +5,102 @@
 - ✅ **v1.0 MVP** - Phases 1-6 (shipped 2026-03-03)
 - ✅ **v1.1 Branding, Docs & Hardening** - Phases 7-19 (shipped 2026-03-05)
 - ✅ **v1.15 Brand Refresh & Docs Hosting** - Phases 20-24 (shipped 2026-03-05)
+- 🚧 **v1.2 Human Demo Feel** - Phases 25-29 (planned)
 
 ## Active Milestone
 
-### ✅ v1.15 Brand Refresh & Docs Hosting (Phases 20-24)
+### 🚧 v1.2 Human Demo Feel (Phases 25-29)
 
-**Milestone Goal:** Refresh Tuireel's public-facing identity (logo + palette + assets) and move the Mintlify docs to `https://tuireel.micr.dev`, with a README refresh aligned to Webreel's style.
+**Milestone Goal:** Make Tuireel demos feel human by improving pacing, pause behavior, capture fidelity, and 1080p readability without faking terminal motion.
 
-**Phases**
+## Overview
 
-- ✅ **Phase 20: Brand System Integration** - Canonical logo + palette tokens integrated across repo and docs surfaces. (completed 2026-03-05)
-- ✅ **Phase 21: Social + Icon Assets** - Banner/OG assets regenerated; favicon derived + wired for repo and docs. (completed 2026-03-05)
-- ✅ **Phase 22: Docs Domain Move** - Mintlify docs hosted on `https://tuireel.micr.dev` with canonical links set. (completed 2026-03-05)
-- ✅ **Phase 23: Docs Theme Alignment** - Docs theme matches v1.15 brand system (logo, colors, favicon). (completed 2026-03-05)
-- ✅ **Phase 24: README Refresh + Link Hygiene** - README matches Webreel structure and all in-repo links point to `https://tuireel.micr.dev`. (completed 2026-03-05)
+v1.2 turns Tuireel's next quality gap into five delivery boundaries: lock the pacing and artifact contract first, make typing and pauses feel intentional, keep 1080p output readable by default, capture enough real terminal states for smoother playback, then ship the debug and acceptance surface that proves the milestone works.
+
+## Phases
+
+**Phase Numbering:**
+
+- Integer phases (25, 26, 27): Planned milestone work
+- Decimal phases (25.1, 25.2): Urgent insertions if needed later
+
+- [ ] **Phase 25: Timing Contract and Profiles** - Separate capture/output semantics, named delivery presets, and recomposite-safe timing metadata.
+- [ ] **Phase 26: Human Pacing Engine** - Deliver deterministic cadence, pause beats, and scoped timing overrides.
+- [ ] **Phase 27: Readable 1080p Defaults** - Make 1080p terminal output legible and naturally framed by default.
+- [ ] **Phase 28: Capture Fidelity and Final Motion** - Capture more real terminal states and package them into smooth playback without changing authored timing.
+- [ ] **Phase 29: Diagnostics and Acceptance Gates** - Expose pacing/fidelity inspection tools and fixture-backed milestone verification.
 
 ## Phase Details
 
-### Phase 20: Brand System Integration
+### Phase 25: Timing Contract and Profiles
 
-**Goal**: Tuireel has a canonical v1.15 logo + palette system that renders consistently in the README and docs.
-**Depends on**: Phase 19 (prior milestone shipped)
-**Requirements**: BRND-06, BRND-07
+**Goal**: Authors can choose stable pacing and delivery semantics that survive recording and recompositing.
+**Depends on**: Phase 24 (prior milestone shipped)
+**Requirements**: CAP-01, CAP-04, READ-03
 **Success Criteria** (what must be TRUE):
 
-1. README and docs both display the new v1.15 logo (light/dark variants as applicable) with no broken asset references.
-2. The v1.15 color palette exists as canonical tokens and is visibly applied consistently (no mixed old/new colors across README/docs).
-3. A user can point to a single, documented source-of-truth location in-repo for the v1.15 palette tokens.
+1. Author can set raw capture cadence separately from final delivery FPS without ambiguity in config or presets.
+2. Author can choose a named output preset for a common delivery target and get the expected timing/render profile without hand-tuning low-level knobs.
+3. A saved recording can be recomposited later and preserve the same timing intent and motion behavior as the original run.
 
-**Plans**:
+**Plans**: TBD
 
-- ✅ `20-01` Brand system source-of-truth + docs wiring normalization
-- ✅ `20-02` Automated drift checks for palette + docs wiring
+### Phase 26: Human Pacing Engine
 
-### Phase 21: Social + Icon Assets
-
-**Goal**: All public-facing brand assets (banner/OG/favicon) match the v1.15 logo + palette and are wired where they are consumed.
-**Depends on**: Phase 20
-**Requirements**: BRND-08, BRND-09
+**Goal**: Recorded terminal interactions feel intentionally human instead of robotic.
+**Depends on**: Phase 25
+**Requirements**: PACE-01, PACE-02, PACE-03
 **Success Criteria** (what must be TRUE):
 
-1. The README banner and OG/social card assets exist in-repo and visually match the new v1.15 logo + palette.
-2. The Mintlify docs favicon is derived from the v1.15 logo and appears in the browser tab when viewing the docs.
-3. The repo surface references only the updated v1.15 banner/OG assets (no stale, older-brand images used for public previews).
+1. Typed text follows a deterministic human-feeling cadence profile without the author tuning every script step by hand.
+2. Startup, settle, read, and idle moments appear as intentional beats instead of flat uniform pauses.
+3. Author can override timing for specific `type` and `pause` steps while the rest of the recording still follows the selected pacing model.
 
-**Plans:**
+**Plans**: TBD
 
-- ✅ `21-01` Regenerate + commit v1.15 brand PNGs; verify all wiring
+### Phase 27: Readable 1080p Defaults
 
-### Phase 22: Docs Domain Move
-
-**Goal**: Mintlify docs are reachable at `https://tuireel.micr.dev` and canonical links point to that domain.
-**Depends on**: Phase 20
-**Requirements**: DOCS-17
+**Goal**: Default 1080p output is readable and naturally framed in finished demos.
+**Depends on**: Phase 25
+**Requirements**: READ-01, READ-02
 **Success Criteria** (what must be TRUE):
 
-1. Visiting `https://tuireel.micr.dev` loads the Mintlify docs (home page + at least one content page) without mixed-domain navigation.
-2. Viewing page source shows canonical links (and any sitemap/base URL configuration) pointing to `https://tuireel.micr.dev`.
+1. A standard 1080p demo render keeps terminal text legible in the exported video without per-demo readability tweaking.
+2. Default framing keeps the terminal window naturally sized within a 1080p canvas instead of feeling cramped, tiny, or over-zoomed.
+3. Authors can rely on the built-in 1080p defaults to keep typical terminal sessions readable across representative demo fixtures.
 
-**Plans:**
+**Plans**: TBD
 
-- ✅ `22-01` Dashboard + DNS + canonical config; verify docs live on custom domain
+### Phase 28: Capture Fidelity and Final Motion
 
-### Phase 23: Docs Theme Alignment
-
-**Goal**: The docs experience matches the v1.15 brand system (logo, colors, favicon).
-**Depends on**: Phase 22
-**Requirements**: DOCS-18
+**Goal**: Finished videos look smoother because Tuireel captures and replays more authentic terminal states.
+**Depends on**: Phase 26, Phase 27
+**Requirements**: CAP-02, CAP-03
 **Success Criteria** (what must be TRUE):
 
-1. The docs header/navigation displays the v1.15 logo.
-2. The docs UI uses the v1.15 palette for primary/accent styling in a way that is visibly consistent with the README.
-3. The docs favicon matches the v1.15 favicon asset.
+1. Short typing bursts and other visible transitions show intermediate real terminal states instead of collapsing into a single visual jump.
+2. Final output plays at the target FPS while preserving the authored wall-clock timing of the demo.
+3. Viewers see smoother motion in the finished video without fake in-between terminal glyph frames.
 
-**Plans:**
+**Plans**: TBD
 
-- ✅ `23-01` Add theme field, harden drift check, visual verification
+### Phase 29: Diagnostics and Acceptance Gates
 
-### Phase 24: README Refresh + Link Hygiene
-
-**Goal**: The repo front door matches Webreel's README style while keeping Tuireel information accurate and linking to the new docs domain.
-**Depends on**: Phase 22
-**Requirements**: REPO-06, REPO-07
+**Goal**: Authors can verify, inspect, and debug human-feeling demo output with concrete evidence.
+**Depends on**: Phase 28
+**Requirements**: DIAG-04, DIAG-05, DIAG-06
 **Success Criteria** (what must be TRUE):
 
-1. README structure/tone resembles Webreel's README while Tuireel commands, flags, and claims remain accurate.
-2. README links users to `https://tuireel.micr.dev` for docs, and a repo-wide link sweep finds no stale docs domains.
-3. Docs pages only reference `https://tuireel.micr.dev` as the docs base domain (no mixed old/new docs domains in navigation/content).
+1. Authors can run acceptance fixtures that verify pacing, readability, and smooth output behavior on representative demos.
+2. Authors can inspect one run's pacing stats, including raw frame count, durations, and output metadata, without digging through source code.
+3. Authors can dump raw rendered frames from a recording and compare them with final output when diagnosing fidelity issues.
 
-**Plans:** 1 plan
-
-Plans:
-
-- ✅ `24-01` — README rewrite to Webreel structure + repo-wide link sweep
+**Plans**: TBD
 
 ## Archived Milestones
 
 <details>
-<summary>✅ v1.0 MVP (Phases 1-6) — SHIPPED 2026-03-03</summary>
+<summary>✅ v1.0 MVP (Phases 1-6) - SHIPPED 2026-03-03</summary>
 
 Archive:
 
@@ -115,7 +113,7 @@ Archive:
 </details>
 
 <details>
-<summary>✅ v1.1 Branding, Docs & Hardening (Phases 7-19) — SHIPPED 2026-03-05</summary>
+<summary>✅ v1.1 Branding, Docs & Hardening (Phases 7-19) - SHIPPED 2026-03-05</summary>
 
 Archive:
 
@@ -128,16 +126,26 @@ Archive:
 
 </details>
 
-## Current Status
+<details>
+<summary>✅ v1.15 Brand Refresh & Docs Hosting (Phases 20-24) - SHIPPED 2026-03-05</summary>
 
-All milestones complete.
+Archive:
 
-Use `/gsd-new-milestone` to define the next milestone requirements and phases.
+- `.planning/MILESTONES.md`
+
+5 phases, 5 plans completed.
+
+</details>
 
 ## Progress
 
-| Milestone                          | Phases | Plans | Status   | Shipped    |
-| ---------------------------------- | ------ | ----- | -------- | ---------- |
-| v1.0 MVP                           | 1-6    | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening    | 7-19   | 38/38 | Complete | 2026-03-05 |
-| v1.15 Brand Refresh & Docs Hosting | 20-24  | 5/5   | Complete | 2026-03-05 |
+**Execution Order:**
+25 -> 26 -> 27 -> 28 -> 29
+
+| Phase                                 | Plans Complete | Status      | Completed |
+| ------------------------------------- | -------------- | ----------- | --------- |
+| 25. Timing Contract and Profiles      | 0/TBD          | Not started | -         |
+| 26. Human Pacing Engine               | 0/TBD          | Not started | -         |
+| 27. Readable 1080p Defaults           | 0/TBD          | Not started | -         |
+| 28. Capture Fidelity and Final Motion | 0/TBD          | Not started | -         |
+| 29. Diagnostics and Acceptance Gates  | 0/TBD          | Not started | -         |

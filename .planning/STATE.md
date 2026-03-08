@@ -2,96 +2,58 @@
 
 ## Project Reference
 
-See: `.planning/PROJECT.md`
-**Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** v1.2 Human Demo Feel - defining requirements and roadmap.
+See: `.planning/PROJECT.md` (updated 2026-03-08)
+**Core value:** TUI tool authors can produce polished demo videos from a declarative script, without manual screen recording, editing, or post-production.
+**Current focus:** Phase 25 - Timing Contract and Profiles
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: -
-Status: Defining requirements
-Last activity: 2026-03-08 - Milestone v1.2 started
+Phase: 25 of 29 (Timing Contract and Profiles)
+Plan: 0 of TBD
+Status: Ready to plan
+Last activity: 2026-03-08 - v1.2 roadmap created and requirement traceability mapped
 
-Progress: v1.2 planning in progress (requirements + roadmap)
-
-## Milestone Progress
-
-| Milestone                          | Phases | Plans | Status   | Shipped    |
-| ---------------------------------- | ------ | ----- | -------- | ---------- |
-| v1.0 MVP                           | 1-6    | 23/23 | Complete | 2026-03-03 |
-| v1.1 Branding, Docs & Hardening    | 7-19   | 38/38 | Complete | 2026-03-05 |
-| v1.15 Brand Refresh & Docs Hosting | 20-24  | 5/5   | Complete | 2026-03-05 |
-| v1.2 Human Demo Feel               | TBD    | TBD   | Defining | -          |
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
-**Velocity (v1.0):**
+**Velocity:**
 
-- Total plans completed: 23
-- 6 phases, 50 tasks
-- Shipped in <1 day
+- Total plans completed: 66
+- Current milestone plans completed: 0
+- Total execution time: -
 
-**v1.1:** 19 plans completed. Phase 7 complete (5 plans). Phase 8 complete: 08-01 (3 min), 08-02 (2 min), 08-03 (3 min), 08-04 (2 min). Phase 9 complete: 09-01 (8 min), 09-02 (8 min). Phase 10 complete: 10-01 (2 min), 10-02 (2 min), 10-03 (3 min). Phase 11: 11-01 (3 min), 11-02 (3 min). Phase 12: 12-01 (3 min), 12-02 (2 min), 12-03 (5 min).
+**By Milestone:**
 
-**Gap closure:** 13-01 (2 min), 13-02 (2 min), 13-03 (5 min), 14-01 (2 min), 14-02 (1 min), 14-03 (2 min), 15-01 (1 min), 15-02 (1 min), 16-01 (2 min), 16-02 (2 min), 17-01 (19 min), 17-02 (4 min), 17-03 (3 min).
+| Milestone | Plans | Status        |
+| --------- | ----- | ------------- |
+| v1.0      | 23/23 | Complete      |
+| v1.1      | 38/38 | Complete      |
+| v1.15     | 5/5   | Complete      |
+| v1.2      | 0/TBD | Ready to plan |
 
 ## Accumulated Context
 
 ### Decisions
 
-Decisions logged in PROJECT.md Key Decisions table.
-Recent decisions:
+Decisions are logged in `.planning/PROJECT.md`.
+Recent decisions affecting v1.2:
 
-- MIT license (confirmed in requirements)
-- Mintlify for docs (confirmed in requirements)
-- GitHub Actions for CI (confirmed in requirements)
-- Icon concept: film reel frame + terminal prompt (>\_) with sprocket holes
-- Color palette (v1.15): tokens `background`/`surface`/`primary`/`secondary`/`accent` in `assets/branding/palette.json`
-- Copyright holder: "Tuireel Contributors" (community project)
-- CI CLI invocation via node packages/cli/dist/index.js (deterministic, no workspace resolution)
-- CLI version sourced from own package.json via createRequire (no cross-package VERSION constants)
-- Publish smoke gate: packs tarballs, validates no workspace: refs, tests npx + bun execution before release
-- @tuireel/core publish allowlist includes assets/ so built-in SFX ship in package tarballs
-- Built-in SFX paths resolve package-relatively via import.meta.url/\_\_dirname before CWD fallbacks
-- Publish smoke now verifies core tarballs include required built-in SFX files before install checks
-- Publish smoke now records polished/demo presets in temp npx+bunx installs and asserts MP4 audio via ffmpeg stream mapping
-- Bun smoke runtime checks now execute through bun runtime command paths while preserving compatibility with Bun 1.3 CLI parsing
-- Bun smoke now compares installed `tuireel` + `@tuireel/core` package.json name/version/exports against packed tarballs and fails fast on mismatch
-- Bun smoke now verifies `resolveOutputPath` export via temp ESM probe before any CLI command and reports stderr snippets on failures
-- Publish smoke cleanup now deletes `packDir`, `npxDir`, and `bunDir` independently in best-effort mode
-- v1.1 milestone audit now records explicit Phase 08/09 verification coverage rows and no longer includes missing-verification blocker strings
-- v1.1 milestone audit now records explicit Phase 10/11/12 verification coverage rows and no longer includes missing-verification blocker strings
-- v1.1 milestone audit evidence now explicitly confirms CI-01 and CI-04 are not flagged as unsatisfied wiring gaps
-- Sound asset module-relative probing now uses explicit non-empty catch handling while preserving fallback candidate precedence
-- Compositor ffmpeg integration test now uses a scoped 120000ms per-test timeout so first-run binary setup latency does not fail CI defaults globally
+- Keep Tuireel PTY-native and two-pass; do not pivot toward browser recording.
+- Keep the milestone deterministic and testable; no random jitter as default humanization.
+- Improve motion by capturing more real terminal states, not by optical-flow or glyph interpolation.
 
-### Quick Tasks Completed
+### Pending Todos
 
-| #   | Description                                        | Date       | Commit  | Directory                                                                                             |
-| --- | -------------------------------------------------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| 001 | GitHub repo creation + npm publish                 | 2026-03-04 | 1254e25 | [001-github-npm-publish](./quick/001-github-npm-publish/)                                             |
-| 002 | Expand README following webreel structure          | 2026-03-05 | 260eb67 | [002-expand-readme](./quick/002-expand-readme/)                                                       |
-| 003 | Replace all emdashes in README                     | 2026-03-05 | 4761b11 | [003-replace-all-emdashes-in-readme](./quick/003-replace-all-emdashes-in-readme/)                     |
-| 004 | Remove logo-light + add beige outline              | 2026-03-05 | 633cc0e | [004-logo-remove-light-variant-add-beige-stro](./quick/004-logo-remove-light-variant-add-beige-stro/) |
-| 005 | Fix logo-dark stroke + lock dark variant           | 2026-03-05 | cd6f95c | [005-fix-logo-dark-stroke-ensure-dark-variant](./quick/005-fix-logo-dark-stroke-ensure-dark-variant/) |
-| 006 | Single logo + filter outline + verifier            | 2026-03-05 | b713d2c | [006-branding-single-original-logo-svg-with-o](./quick/006-branding-single-original-logo-svg-with-o/) |
-| 007 | Fix failing GitHub Actions lint run                | 2026-03-05 | 37ab3cb | [007-fix-failing-github-actions-run-227396102](./quick/007-fix-failing-github-actions-run-227396102/) |
-| 008 | Fix CI test timeout in run 22739610221             | 2026-03-05 | eab1010 | [008-fix-ci-test-timeout-in-run-22739610221](./quick/008-fix-ci-test-timeout-in-run-22739610221/)     |
-| 009 | Make README lowercase tone (microck style)         | 2026-03-06 | 000a2b2 | [009-make-readme-lowercase-tone-microck-style](./quick/009-make-readme-lowercase-tone-microck-style/) |
-| 010 | Create skills/tuireel/SKILL.md                     | 2026-03-06 | e0633a8 | [010-create-skills-folder-skill-md-webreel-st](./quick/010-create-skills-folder-skill-md-webreel-st/) |
-| 011 | Remove em dashes in docs + add skill refs          | 2026-03-06 | 99bacfd | [011-remove-em-dashes-from-readme-docs-add-sk](./quick/011-remove-em-dashes-from-readme-docs-add-sk/) |
-| 012 | Rewrite tuireel SKILL.md (user-facing)             | 2026-03-06 | d5d51f0 | [012-rewrite-tuireel-skill-md](./quick/012-rewrite-tuireel-skill-md/)                                 |
-| 013 | Make a demo video for tuireel using tuireel itself | 2026-03-06 | ba396c4 | [013-make-a-demo-video-for-tuireel-using-tuir](./quick/13-make-a-demo-video-for-tuireel-using-tuir/)  |
-| 014 | Support any type of TUI (terminal responder)       | 2026-03-06 | 5edca45 | [014-tuireel-should-support-any-type-of-tuis-](./quick/14-tuireel-should-support-any-type-of-tuis-/)  |
-| 015 | Analyze how WebReel demos are produced             | 2026-03-08 | 49274ae | [015-analyze-and-research-how-webreel-s-demo-](./quick/15-analyze-and-research-how-webreel-s-demo-/)  |
+None yet.
 
-## Blockers/Concerns Carried Forward
+### Blockers/Concerns
 
-- None.
+- Phase 28 likely needs fixture-driven capture budget validation before the policy is locked.
+- Phase 29 should prove readability and pacing with artifact-level acceptance checks, not only unit tests.
 
 ## Session Continuity
 
-- Last session: 2026-03-08
-- Stopped at: v1.2 milestone kickoff - requirements and roadmap pending
-- Resume file: Continue this milestone with requirements and roadmap work
+Last session: 2026-03-08 00:00
+Stopped at: Roadmap creation complete; Phase 25 is ready for planning
+Resume file: None
