@@ -24,7 +24,7 @@ v1.2 turns Tuireel's next quality gap into five delivery boundaries: lock the pa
 - Integer phases (25, 26, 27): Planned milestone work
 - Decimal phases (25.1, 25.2): Urgent insertions if needed later
 
-- [x] **Phase 25: Timing Contract and Profiles** - Separate capture/output semantics, named delivery presets, and recomposite-safe timing metadata. (completed 2026-03-08)
+- [x] **Phase 25: Timing Contract and Profiles** - Separate capture/output semantics, named delivery presets, and recomposite-safe timing metadata. (gap closure planned) (completed 2026-03-08)
 - [ ] **Phase 26: Human Pacing Engine** - Deliver deterministic cadence, pause beats, and scoped timing overrides.
 - [ ] **Phase 27: Readable 1080p Defaults** - Make 1080p terminal output legible and naturally framed by default.
 - [ ] **Phase 28: Capture Fidelity and Final Motion** - Capture more real terminal states and package them into smooth playback without changing authored timing.
@@ -43,7 +43,7 @@ v1.2 turns Tuireel's next quality gap into five delivery boundaries: lock the pa
 2. Author can choose a named output preset for a common delivery target and get the expected timing/render profile without hand-tuning low-level knobs.
 3. A saved recording can be recomposited later and preserve the same timing intent and motion behavior as the original run.
 
-**Plans**: 4 plans
+**Plans**: 5 plans
 
 Plans:
 
@@ -51,6 +51,7 @@ Plans:
 - [ ] `25-02-PLAN.md` - Make `init`, docs, and examples teach delivery profiles and split fps/captureFps semantics correctly.
 - [ ] `25-03-PLAN.md` - Persist explicit timing contracts and compatibility helpers in saved artifacts.
 - [ ] `25-04-PLAN.md` - Enforce recomposite timing compatibility in `composite` and CLI tests.
+- [ ] `25-05-PLAN.md` - Close the verification gap with core recomposite coverage for saved timing artifacts and legacy fallback semantics.
 
 ### Phase 26: Human Pacing Engine
 
@@ -171,7 +172,7 @@ Archive:
 
 | Phase                                 | Plans Complete | Status      | Completed |
 | ------------------------------------- | -------------- | ----------- | --------- |
-| 25. Timing Contract and Profiles      | 4/4 | Complete   | 2026-03-08 |
+| 25. Timing Contract and Profiles      | 5/5 | Complete   | 2026-03-08 |
 | 26. Human Pacing Engine               | 0/TBD          | Not started | -         |
 | 27. Readable 1080p Defaults           | 0/TBD          | Not started | -         |
 | 28. Capture Fidelity and Final Motion | 0/2            | Not started | -         |

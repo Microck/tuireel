@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Human Demo Feel
-status: in_progress
-stopped_at: Completed 25-04-PLAN.md
-last_updated: "2026-03-08T18:05:39.641Z"
-last_activity: 2026-03-08 - Completed 25-04 recomposite timing enforcement
+status: completed
+stopped_at: Completed 25-05-PLAN.md
+last_updated: "2026-03-08T18:44:32.259Z"
+last_activity: 2026-03-08 - Completed 25-05 core timing verification gap closure
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 12
-  completed_plans: 4
+  total_plans: 13
+  completed_plans: 5
   percent: 90
 ---
 
@@ -25,9 +25,9 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 ## Current Position
 
 Phase: 25 of 29 (Timing Contract and Profiles)
-Plan: 4 of 4
+Plan: 5 of 5
 Status: Complete
-Last activity: 2026-03-08 - Completed 25-04 recomposite timing enforcement
+Last activity: 2026-03-08 - Completed 25-05 core timing verification gap closure
 
 Progress: [█████████░] 90%
 
@@ -35,9 +35,9 @@ Progress: [█████████░] 90%
 
 **Velocity:**
 
-- Total plans completed: 71
-- Current milestone plans completed: 4
-- Total execution time: 33 min
+- Total plans completed: 72
+- Current milestone plans completed: 5
+- Total execution time: 37 min
 
 **By Milestone:**
 
@@ -46,10 +46,11 @@ Progress: [█████████░] 90%
 | v1.0         | 23/23  | Complete    |
 | v1.1         | 38/38  | Complete    |
 | v1.15        | 5/5    | Complete    |
-| v1.2         | 4/12   | In progress |
+| v1.2         | 5/12   | In progress |
 | Phase 25 P02 | 4 min  | 3 tasks     | 8 files |
 | Phase 25 P03 | 10 min | 2 tasks     | 7 files |
 | Phase 25 P04 | 10 min | 2 tasks     | 3 files |
+| Phase 25 P05 | 4 min  | 2 tasks     | 2 files |
 
 ## Accumulated Context
 
@@ -71,6 +72,8 @@ Recent decisions affecting v1.2:
 - [Phase 25]: Compare only timing-affecting fields in the shared compatibility helper and return an explicit legacy fallback when saved artifacts predate timingContract. — Packaging-only changes should stay recomposite-safe, and legacy artifacts need an explicit non-guessing path for later CLI enforcement.
 - [Phase 25]: Validate recomposite requests against saved timingContract metadata before compose() runs. — Composite should preserve recorded pacing by default and fail before packaging work when timing intent drifts.
 - [Phase 25]: Treat explicit legacy fps, captureFps, or deliveryProfile requests as timing changes that require a fresh record. — Legacy timelines do not encode enough timing metadata to safely adopt new pacing settings during recomposition.
+- [Phase 25]: Use saved timingContract-backed fixtures in compositor tests so packaging-only recomposition is proven outside the CLI path. — This closes the verification gap at the core compose boundary without moving timing enforcement into compose().
+- [Phase 25]: Lock the legacy helper message and allow-packaging-only fallback semantics in core tests while treating captureFps drift as a timing mismatch. — CLI and future diagnostics need one conservative shared timing contract for legacy artifacts and capture cadence changes.
 
 ### Pending Todos
 
@@ -83,6 +86,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-08T18:05:39.635Z
-Stopped at: Completed 25-04-PLAN.md
+Last session: 2026-03-08T18:44:32.254Z
+Stopped at: Completed 25-05-PLAN.md
 Resume file: None
