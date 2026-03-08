@@ -1,267 +1,107 @@
-# Stack Research: Tuireel v1.1 -- New Additions
+# Stack Research
 
-**Domain:** Scripted TUI demo recorder -- docs, CI, release automation, branding, profiling
-**Researched:** 2025-07-21
+**Domain:** human-feeling terminal demo recording for an existing PTY-based recorder
+**Researched:** 2026-03-08
 **Confidence:** HIGH
 
-This document covers ONLY the new stack additions for v1.1. The existing v1.0 stack (TypeScript, Bun, pnpm+turbo, tuistory, ghostty-opentui, ffmpeg, Sharp, zod, commander, tsup, vitest) is unchanged and not repeated here.
+This file covers only v1.2 additions and approach changes. The existing TypeScript monorepo, `@tuireel/core` + CLI split, `tuistory`, ffmpeg, Sharp, JSONC config, and current overlay/composite pipeline stay in place.
 
----
+## Recommended Stack
 
-## 1. New Stack Additions
+### Core Technologies
 
-### Documentation (Mintlify)
+| Technology                               | Version                  | Purpose                                                           | Why Recommended                                                                                                                                                                                                                                                                                                                                 |
+| ---------------------------------------- | ------------------------ | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| In-house timing model in `@tuireel/core` | no new package           | Human typing cadence, pauses, idle holds, per-step timing presets | This should stay deterministic and recorder-native. Tuireel already has `type.speed`, `pause`, `fps`, and `captureFps`; the missing piece is a richer timing model, not a new dependency. Add token-aware delays, punctuation/whitespace holds, first-key delay, post-command settle pauses, and seeded jitter so re-renders stay reproducible. |
+| `tuistory`                               | 0.0.16 (latest on npm)   | PTY automation and terminal state capture                         | Keep the current PTY backend. The right integration is to emit more precise timestamps around typed characters and step boundaries, not to swap recorders. This keeps human-feel work aligned with the existing session/executor flow.                                                                                                          |
+| ffmpeg                                   | existing external binary | Decouple capture cadence from delivery FPS and keep CFR output    | Use ffmpeg as the final timing normalizer, not as the source of fake smoothness. Record raw terminal changes at higher cadence than final delivery, then encode CFR output at the chosen presentation FPS. This fits Tuireel's current raw-video plus composite architecture.                                                                   |
+| `sharp`                                  | 0.34.5 (latest on npm)   | 1080p readability policy for scaling, padding, and preview parity | Keep Sharp for overlay compositing and sizing policy. The new work is integer-scale-first layout math for terminal content so 1080p renders stay crisp, with padding/background handled before final ffmpeg encode. No separate raster stack is needed.                                                                                         |
 
-| Tool | Version | Purpose | Integration Point |
-|------|---------|---------|-------------------|
-| **mint** (CLI) | 4.2.x | Local preview of Mintlify docs site | `pnpm add -g mint` or `npx mint dev` -- NOT a repo devDependency |
-| **docs.json** | n/a (Mintlify config) | Mintlify site configuration file | Lives at `docs/docs.json` with `$schema` reference |
+### Supporting Libraries
 
-**Rationale:** Mintlify is a hosted docs platform. The `mint` CLI (npm package name: `mint`) provides local preview via `mint dev`. No build step or bundler is needed in the monorepo -- Mintlify builds and hosts the site on push to the connected GitHub repo. The config file is now `docs.json` (not the legacy `mint.json`). Requires Node.js v20.17.0+.
+| Library                  | Version | Purpose                                                                           | When to Use                                                                                                                                                              |
+| ------------------------ | ------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `zod`                    | 4.1.12  | Extend config/schema for `typing`, `pause`, `captureFps`, and readability presets | Use for new config surface such as `typing.mode`, `typing.seed`, `pause.afterCommandMs`, `pause.afterScrollMs`, and explicit `outputSize` presets like `1080p-readable`. |
+| `vitest`                 | 3.2.4   | Lock timing and scaling behavior with deterministic tests                         | Use for seeded timing snapshots, timeline expansion tests, and golden checks that 1080p preset math does not regress.                                                    |
+| no extra runtime library | n/a     | Preserve a small dependency surface                                               | Do not add generic typing-animation packages, browser recorders, or a second compositor unless a real gap appears that current code cannot cover.                        |
 
-**What goes in `docs/`:** `docs.json`, `.mdx` pages, static assets (logo, favicon). This folder is NOT a pnpm workspace package -- it has no `package.json`.
+### Development Tools
 
-### Linting and Formatting
+| Tool                                       | Purpose                                                         | Notes                                                                                                   |
+| ------------------------------------------ | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `ffprobe` from the existing ffmpeg bundle  | Verify output FPS, CFR behavior, duration, and 1920x1080 sizing | Add tests/assertions around actual encoded output instead of trusting config intent.                    |
+| existing preview/record/composite fixtures | Validate human-feel visually against current pipeline           | Add a small fixture set: fast command entry, long idle read, scroll-heavy output, and 1080p dense text. |
 
-| Tool | Version | Purpose | Integration Point |
-|------|---------|---------|-------------------|
-| **eslint** | ^10.0.2 | Linting TypeScript | Root devDependency |
-| **@eslint/js** | ^10.0.1 | ESLint recommended rules base | Root devDependency |
-| **typescript-eslint** | ^8.56.1 | TypeScript-specific ESLint rules | Root devDependency |
-| **eslint-config-prettier** | ^10.1.8 | Disables ESLint rules that conflict with Prettier | Root devDependency |
-| **prettier** | ^3.8.1 | Code formatting | Root devDependency |
-| **husky** | ^9.1.7 | Git hooks (pre-commit) | Root devDependency, `prepare` script |
-| **lint-staged** | ^16.3.2 | Run linters on staged files only | Root devDependency, config in root `package.json` |
+## Installation
 
-**Rationale:** Matches webreel's exact setup. ESLint 10 flat config with typescript-eslint and prettier integration. Husky + lint-staged ensures formatting on every commit. The ESLint config goes in `eslint.config.js` at repo root (flat config format, no `.eslintrc`).
+```bash
+# Recommended default: no new runtime dependencies
+# Keep using the current stack and extend @tuireel/core behavior.
 
-**Config pattern (from webreel):**
-```js
-// eslint.config.js
-import eslint from "@eslint/js";
-import tseslint from "typescript-eslint";
-import prettierConfig from "eslint-config-prettier";
+# Optional: refresh latest patch-level deps already in use
+pnpm --filter @tuireel/core up tuistory@^0.0.16 sharp@^0.34.5
 
-export default tseslint.config(
-  { ignores: ["**/dist/", "**/node_modules/", "**/.turbo/"] },
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
-  prettierConfig,
-);
+# No new supporting packages recommended
 ```
 
-### Release Automation (Changesets)
+## Integration Points in the Current Pipeline
 
-| Tool | Version | Purpose | Integration Point |
-|------|---------|---------|-------------------|
-| **@changesets/cli** | ^2.30.0 | Version management + CHANGELOG generation for pnpm monorepo | Root devDependency |
-| **changesets/action** | v1 | GitHub Action for automated version PRs and npm publish | `.github/workflows/release.yml` |
+- `packages/core/src/executor/steps/type.ts`: replace single-character fixed jitter with a preset-based humanizer that understands bursts, punctuation, whitespace, and end-of-command dwell.
+- `packages/core/src/executor/timing.ts`: make timing deterministic from config seed + step index so preview, record, and composite all agree.
+- `packages/core/src/recorder.ts`: keep `captureFps` separate from presentation FPS and record timestamp-rich step events at capture cadence.
+- `packages/core/src/timeline/interaction-timeline.ts`: prefer time-based expansion over frame-count assumptions when capture FPS exceeds output FPS.
+- `packages/core/src/compositor.ts`: continue mapping terminal source frames separately from overlay motion, but make output-frame selection explicitly timestamp-driven when possible.
+- `packages/core/src/config/schema.ts`: add high-level presets rather than many low-level knobs; good defaults matter more than unlimited tuning.
 
-**Rationale:** Changesets is the standard for pnpm monorepo versioning. Webreel uses it identically. Provides:
-- `pnpm changeset` to create changeset files describing changes
-- `changeset version` to bump versions and generate per-package CHANGELOG.md
-- `changeset publish` to publish to npm with `workspace:*` resolution
-- GitHub Action opens a "Version Packages" PR automatically
+## Alternatives Considered
 
-**Changeset config (`.changeset/config.json`):**
-```json
-{
-  "$schema": "https://unpkg.com/@changesets/config@3.1.3/schema.json",
-  "changelog": "@changesets/cli/changelog",
-  "commit": false,
-  "fixed": [["@tuireel/core", "tuireel"]],
-  "linked": [],
-  "access": "public",
-  "baseBranch": "main",
-  "updateInternalDependencies": "patch",
-  "privatePackages": { "version": true, "tag": false }
-}
-```
+| Recommended                                                 | Alternative                                    | When to Use Alternative                                                                                                                                  |
+| ----------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Recorder-native humanizer in `@tuireel/core`                | Generic typing animation libraries             | Use a typing-animation library only for browser DOM demos. Tuireel writes to a PTY, so DOM-oriented typing packages do not fit the execution path.       |
+| Higher `captureFps` plus explicit output FPS                | ffmpeg `minterpolate` / optical-flow smoothing | Use optical-flow interpolation for live-action video, not terminal text. For terminal glyphs it can invent in-between frames and make text shimmer.      |
+| Integer-scale terminal framing with existing Sharp + ffmpeg | Full browser/screen-capture pipeline           | Use browser capture only for browser products. Tuireel already has direct terminal frames, so screen recording adds blur and timing noise for no upside. |
 
-The `"fixed"` array keeps `@tuireel/core` and `tuireel` on the same version number (like webreel). CHANGELOG.md is generated per-package automatically by changesets.
+## What NOT to Use
 
-### GitHub Actions CI
+| Avoid                                                                            | Why                                                                                                                                                                               | Use Instead                                                       |
+| -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `minterpolate` as default smoothing                                              | Official ffmpeg docs describe it as motion interpolation; that is the wrong abstraction for terminal glyph changes and cursor snaps. It risks ghosting and synthetic text motion. | Capture more real frames, then encode CFR output at 30 or 60 fps. |
+| Browser-recorder stacks (`playwright` video, Remotion, Puppeteer screen capture) | They solve rendered-web capture, not PTY-native terminal state. They add browser dependencies and degrade terminal crispness.                                                     | Stay on `tuistory` + current compositor.                          |
+| Extra ffmpeg downloader packages like `ffmpeg-static`                            | Tuireel already manages ffmpeg resolution and caching. A second binary source complicates release and support.                                                                    | Keep the existing ffmpeg downloader/cache path.                   |
+| Generic typing-effect packages                                                   | Most target DOM text, not PTY writes, and they make determinism harder.                                                                                                           | Keep timing logic inside `packages/core/src/executor/timing.ts`.  |
 
-| Tool | Version | Purpose | Integration Point |
-|------|---------|---------|-------------------|
-| **actions/checkout** | v4 | Checkout repository | `.github/workflows/ci.yml` |
-| **pnpm/action-setup** | v4 | Install pnpm (reads `packageManager` from `package.json`) | `.github/workflows/ci.yml` |
-| **actions/setup-node** | v4 | Install Node.js + cache pnpm store | `.github/workflows/ci.yml` |
-| **FedericoCarboni/setup-ffmpeg** | v3 | Install ffmpeg for video output regression tests | `.github/workflows/ci.yml` |
-| **actions/upload-artifact** | v4 | Upload test video output as CI artifact for manual inspection | `.github/workflows/ci.yml` |
+## Stack Patterns by Variant
 
-**Rationale:**
-- `pnpm/action-setup@v4` reads the `packageManager` field from `package.json` (already set to `pnpm@10.28.2`), so no version input is needed.
-- `FedericoCarboni/setup-ffmpeg@v3` is the most maintained ffmpeg action (137 stars, supports Linux/macOS/Windows, caches binary). This enables video output regression tests in CI.
-- `actions/upload-artifact@v4` stores test output videos as downloadable artifacts for visual regression inspection.
+**If the goal is the default polished MP4/WebM demo:**
 
-**CI workflow structure:**
-```yaml
-# .github/workflows/ci.yml
-jobs:
-  ci:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-      - run: pnpm format:check
-      - run: pnpm build
-      - run: pnpm test
-  video-regression:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
-      - uses: FedericoCarboni/setup-ffmpeg@v3
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-      - run: pnpm test:video  # runs video output tests
-      - uses: actions/upload-artifact@v4
-        with: { name: video-outputs, path: test-outputs/ }
-```
+- Capture terminal frames at 45-60 fps, keep output at 30 fps by default.
+- Hold real idle frames for readability, but never synthesize motion with interpolation.
 
-### Performance Profiling
+**If the goal is ultra-readable 1080p product marketing output:**
 
-| Tool | Version | Purpose | Integration Point |
-|------|---------|---------|-------------------|
-| **Node.js built-in profiler** | n/a | `node --prof` + `node --prof-process` for V8 CPU profiling | Scripts in `scripts/` |
-| **hyperfine** | system binary | CLI benchmarking (wall-clock timing of full pipeline runs) | Installed via system package manager, not npm |
-| **Bun built-in profiler** | n/a | `bun --inspect` for Bun-specific profiling | Dev-only |
+- Use a named readability preset that chooses cols/rows, font scale, padding, and output size together.
+- Favor integer-ish scaling and larger text over trying to fit a dense 80x24 frame into 1080p unchanged.
 
-**Rationale:**
-- `node --prof` is the most reliable profiler for Node.js video pipelines. It captures V8 CPU ticks for Sharp operations, Buffer handling, and child process orchestration. No npm package needed.
-- `hyperfine` (Rust-based CLI benchmarker) is the gold standard for wall-clock benchmarking of CLI tools. Install via `apt install hyperfine` or `brew install hyperfine`. Used to benchmark full `tuireel record` runs with statistical analysis (warmup, min/max/mean).
-- For Bun-specific profiling, use `bun --inspect` which connects to Chrome DevTools.
-- No npm profiling package is needed. Clinic.js and 0x are Node.js-specific and add complexity without value for this use case (we need simple CPU profiling + wall-clock timing, not async tracing).
+## Version Compatibility
 
-### Branding / Logo Assets
-
-| Tool | Version | Purpose | Integration Point |
-|------|---------|---------|-------------------|
-| **Sharp** (already in stack) | 0.34.5+ | SVG-to-PNG conversion for logo variants | Build script in `scripts/` |
-| **favicons** | ^7.2.0 | Generate favicon set (ICO, multiple PNG sizes, manifest) from source SVG/PNG | One-time script, devDependency optional |
-
-**Rationale:**
-- Sharp already handles SVG-to-PNG conversion natively (`sharp('logo.svg').png().toFile(...)`). No additional SVG library needed for generating logo size variants.
-- The `favicons` package generates the full favicon set (favicon.ico, apple-touch-icon, manifest.json, multiple PNG sizes) from a single source image. This is needed for the Mintlify docs site and future website. Run once via a script, not a build-time dependency.
-- The logo SVG itself is hand-crafted or designed externally. No programmatic SVG generation library is needed.
-
----
-
-## 2. Existing Stack (Unchanged) -- Reference Only
-
-These are already validated and in use. Not re-researched.
-
-| Category | Tools |
-|----------|-------|
-| Runtime | Bun 1.2+, TypeScript 5.8+, Node.js >=18 compat |
-| Terminal | tuistory ^0.0.16, ghostty-opentui ^1.4.5 |
-| Video | ffmpeg (auto-downloaded), Sharp ^0.34.5 |
-| CLI/Config | commander ^14.0, jsonc-parser ^3.3, zod ^4.1, zod-to-json-schema, chokidar ^5.0 |
-| Build | tsup ^8.5, turbo ^2.5, pnpm 10.28 |
-| Test | vitest ^3.2 |
-
----
-
-## 3. What NOT to Add
-
-| Tool | Why NOT | Use Instead |
-|------|---------|-------------|
-| **Docusaurus / Nextra / VitePress** | Mintlify is hosted -- no local SSG framework needed. Adding a docs framework to the monorepo adds build complexity for no benefit. | Mintlify (hosted) + `mint` CLI for preview |
-| **@changesets/changelog-github** | Adds GitHub PR links to changelogs. Nice but adds a dependency + requires `GITHUB_TOKEN` in changeset config. The default `@changesets/cli/changelog` is sufficient for v1.1. | Default changelog generator |
-| **semantic-release** | Designed for single packages, poor pnpm workspace support, opinionated commit convention. Changesets is the standard for pnpm monorepos. | @changesets/cli |
-| **Clinic.js / 0x** | Node.js-specific async tracing tools. Overkill for profiling Sharp + ffmpeg pipelines. Don't work with Bun. | `node --prof` + hyperfine |
-| **svgo** (npm) | SVG optimization. Only needed if shipping SVGs in the npm package. Logo SVGs are static assets for docs/website only. | Hand-optimize if needed |
-| **sharp-cli** (npm) | CLI wrapper for Sharp. We already have Sharp as a library dependency and can write simple scripts. | Sharp API directly in scripts |
-| **tsx** | TS script runner. Bun runs TS natively, so tsx is redundant. | `bun run scripts/foo.ts` |
-| **Biome** | All-in-one linter/formatter. Promising but webreel uses ESLint+Prettier and the ecosystem is more mature. Switching would diverge from reference project. | ESLint + Prettier |
-| **commitlint** | Enforce conventional commits. Overkill for a 1-2 person project. Changesets handle the release narrative. | Changesets for release notes |
-| **pixelmatch / looks-same** | Pixel-level image comparison for video regression. Fragile with video encoding (codec artifacts, color space). | File-size + metadata assertions, manual artifact inspection |
-
----
-
-## 4. Integration Notes
-
-### How new tools connect to existing monorepo
-
-**Root `package.json` additions (devDependencies):**
-```json
-{
-  "@changesets/cli": "^2.30.0",
-  "@eslint/js": "^10.0.1",
-  "eslint": "^10.0.2",
-  "eslint-config-prettier": "^10.1.8",
-  "husky": "^9.1.7",
-  "lint-staged": "^16.3.2",
-  "prettier": "^3.8.1",
-  "typescript-eslint": "^8.56.1"
-}
-```
-
-**Root `package.json` script additions:**
-```json
-{
-  "lint": "eslint .",
-  "format": "prettier --write .",
-  "format:check": "prettier --check .",
-  "changeset": "changeset",
-  "ci:version": "changeset version && pnpm install --no-frozen-lockfile",
-  "ci:publish": "pnpm build && changeset publish",
-  "prepare": "husky"
-}
-```
-
-**`turbo.json` additions:**
-```json
-{
-  "lint": { "cache": true },
-  "type-check": { "cache": true }
-}
-```
-
-**New files to create:**
-- `eslint.config.js` -- flat config (see pattern above)
-- `.prettierrc` -- formatting rules
-- `.changeset/config.json` -- changeset configuration
-- `.changeset/README.md` -- explanation for contributors
-- `.github/workflows/ci.yml` -- lint/build/test
-- `.github/workflows/release.yml` -- changesets version/publish
-- `docs/docs.json` -- Mintlify configuration
-- `docs/index.mdx` -- docs landing page
-- `scripts/generate-favicons.ts` -- one-time favicon generation
-
-**Mintlify docs (`docs/`) is NOT a workspace package.** It contains only `docs.json`, `.mdx` files, and static assets. It is deployed by Mintlify's GitHub App on push, not by turbo. Add `docs/` to pnpm-workspace.yaml's exclusions if needed (though it won't match since it has no `package.json`).
-
-**Video regression in CI:** The `FedericoCarboni/setup-ffmpeg@v3` action installs ffmpeg system-wide. Tests that produce video output should write to a `test-outputs/` directory which gets uploaded as a CI artifact. These tests run in a separate job to avoid slowing down the lint/build/test pipeline.
-
-### Version compatibility
-
-| Package A | Compatible With | Notes |
-|-----------|-----------------|-------|
-| eslint@10 | typescript-eslint@8 | Flat config required (eslint.config.js) |
-| prettier@3.8 | eslint-config-prettier@10 | Disables conflicting rules |
-| @changesets/cli@2.30 | pnpm@10 | Native workspace protocol support |
-| mint CLI@4.2 | Node.js v20.17+ | Not compatible with older Node versions |
-| FedericoCarboni/setup-ffmpeg@v3 | ubuntu-latest (24.04) | Caches binary, supports Linux/macOS/Windows |
-| husky@9 | git 2.x+ | Uses `core.hooksPath` approach |
-
----
+| Package A                      | Compatible With                          | Notes                                                                                                          |
+| ------------------------------ | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `tuistory@0.0.16`              | current `@tuireel/core` PTY/session flow | Latest npm release matches the version already in the repo, so no PTY backend change is required.              |
+| `sharp@0.34.5`                 | current compositor and resize pipeline   | Latest npm release already matches the repo; use it for sizing policy, not a new image stack.                  |
+| ffmpeg filters `fps` + `scale` | current encode/composite pipeline        | ffmpeg docs support CFR conversion and high-quality scaling directly; this is enough for terminal output work. |
 
 ## Sources
 
-- Mintlify official docs (mintlify.com/docs/quickstart, /installation, /settings) -- verified `docs.json` config format, `mint` CLI package name, Node.js v20.17+ requirement
-- webreel reference project (opensrc) -- verified ESLint flat config pattern, changesets config with fixed versioning, CI workflow structure, husky+lint-staged setup
-- npm registry (verified 2025-07-21) -- @changesets/cli@2.30.0, eslint@10.0.2, prettier@3.8.1, typescript-eslint@8.56.1, husky@9.1.7, lint-staged@16.3.2, eslint-config-prettier@10.1.8, favicons@7.2.0
-- GitHub repos -- pnpm/action-setup@v4.2.0, changesets/action@v1.7.0, FedericoCarboni/setup-ffmpeg@v3.1 (137 stars, last release Feb 2024)
-- Node.js docs -- `--prof` flag for V8 CPU profiling
-- hyperfine (github.com/sharkdp/hyperfine) -- system binary, not npm package
+- Local repo: `packages/core/src/executor/steps/type.ts`, `packages/core/src/executor/timing.ts`, `packages/core/src/recorder.ts`, `packages/core/src/timeline/interaction-timeline.ts`, `packages/core/src/compositor.ts`, `packages/core/src/config/schema.ts` — verified existing integration points.
+- npm registry: `https://registry.npmjs.org/tuistory/latest` — verified latest `tuistory` is `0.0.16`.
+- npm registry: `https://registry.npmjs.org/sharp/latest` — verified latest `sharp` is `0.34.5`.
+- npm registry: `https://registry.npmjs.org/ghostty-opentui/latest` — verified latest `ghostty-opentui` is `1.4.7`; useful context, but not required for this milestone.
+- FFmpeg filter docs: `https://ffmpeg.org/ffmpeg-filters.html` — verified `fps`, `scale`/`lanczos`, and `minterpolate` capabilities and tradeoffs.
+- Sharp resize docs: `https://sharp.pixelplumbing.com/api-resize/` — verified `lanczos3`, `fit`, and `withoutEnlargement` behavior for readability-focused scaling.
+- Terminalizer README: `https://raw.githubusercontent.com/faressoft/terminalizer/master/README.md` — verified prior-art concepts like frame delay and max idle time. MEDIUM confidence for ecosystem patterning.
+- t-rec README: `https://raw.githubusercontent.com/sassman/t-rec-rs/main/README.md` — verified prior-art concepts like start/end pause, idle pause, and configurable capture FPS. MEDIUM confidence for ecosystem patterning.
 
 ---
-*Stack research for: Tuireel v1.1 new additions*
-*Researched: 2025-07-21*
+
+_Stack research for: Tuireel v1.2 human-feeling demo recording_
+_Researched: 2026-03-08_
