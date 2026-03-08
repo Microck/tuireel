@@ -116,7 +116,13 @@ Plans:
 2. Authors can inspect one run's pacing stats, including raw frame count, durations, and output metadata, without digging through source code.
 3. Authors can dump raw rendered frames from a recording and compare them with final output when diagnosing fidelity issues.
 
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+
+- [ ] `29-01-PLAN.md` — Core diagnostics module (probe-video, inspect, frame-dumper) with unit tests.
+- [ ] `29-02-PLAN.md` — CLI commands (tuireel inspect + tuireel dump-frames) wired to Commander.
+- [ ] `29-03-PLAN.md` — Acceptance fixture tests proving pacing, readability, and smooth output.
 
 ## Archived Milestones
 
