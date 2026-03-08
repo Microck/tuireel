@@ -63,7 +63,12 @@ Plans:
 2. Startup, settle, read, and idle moments appear as intentional beats instead of flat uniform pauses.
 3. Author can override timing for specific `type` and `pause` steps while the rest of the recording still follows the selected pacing model.
 
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+
+- [ ] `26-01-PLAN.md` — Cadence profile data model, profile-aware charDelay, and pacing config schema.
+- [ ] `26-02-PLAN.md` — Beat injection in step executor and profile-aware typeStep with per-step overrides.
 
 ### Phase 27: Readable 1080p Defaults
 
