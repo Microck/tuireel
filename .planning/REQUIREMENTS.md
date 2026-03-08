@@ -8,7 +8,7 @@
 
 ### Human Timing
 
-- [ ] **PACE-01**: Author can apply a deterministic cadence profile so typed text follows human-feeling timing without per-script hand tuning
+- [x] **PACE-01**: Author can apply a deterministic cadence profile so typed text follows human-feeling timing without per-script hand tuning
 - [ ] **PACE-02**: Author can apply intentional pause behavior for startup, settle, read, and idle moments
 - [ ] **PACE-03**: Author can override timing behavior for specific `type` and `pause` steps without breaking the milestone pacing model
 
@@ -55,7 +55,7 @@
 
 | Requirement | Phase    | Status  |
 | ----------- | -------- | ------- |
-| PACE-01     | Phase 26 | Pending |
+| PACE-01     | Phase 26 | Complete |
 | PACE-02     | Phase 26 | Pending |
 | PACE-03     | Phase 26 | Pending |
 | CAP-01      | Phase 25 | Complete |

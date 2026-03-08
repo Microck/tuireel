@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Human Demo Feel
-status: completed
-stopped_at: Completed 25-05-PLAN.md
-last_updated: "2026-03-08T20:36:05.801Z"
-last_activity: 2026-03-08 - Completed 25-05 core timing verification gap closure
+status: in_progress
+stopped_at: Completed 26-01-PLAN.md
+last_updated: "2026-03-08T20:51:03.585Z"
+last_activity: 2026-03-08 - Completed 26-01 cadence profiles and pacing schema
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 13
-  completed_plans: 5
-  percent: 90
+  completed_plans: 6
+  percent: 91
 ---
 
 # Project State: Tuireel
@@ -20,24 +20,24 @@ progress:
 
 See: `.planning/PROJECT.md` (updated 2026-03-08)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script, without manual screen recording, editing, or post-production.
-**Current focus:** Phase 25 complete - ready for Phase 26 Human Pacing Engine
+**Current focus:** Phase 26 Human Pacing Engine in progress
 
 ## Current Position
 
-Phase: 25 of 29 (Timing Contract and Profiles)
-Plan: 5 of 5
-Status: Complete
-Last activity: 2026-03-08 - Completed 25-05 core timing verification gap closure
+Phase: 26 of 29 (Human Pacing Engine)
+Plan: 1 of 2
+Status: In Progress
+Last activity: 2026-03-08 - Completed 26-01 cadence profiles and pacing schema
 
-Progress: [█████████░] 90%
+Progress: [█████████░] 91%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 72
-- Current milestone plans completed: 5
-- Total execution time: 37 min
+- Total plans completed: 73
+- Current milestone plans completed: 6
+- Total execution time: 41 min
 
 **By Milestone:**
 
@@ -46,11 +46,12 @@ Progress: [█████████░] 90%
 | v1.0         | 23/23  | Complete    |
 | v1.1         | 38/38  | Complete    |
 | v1.15        | 5/5    | Complete    |
-| v1.2         | 5/12   | In progress |
+| v1.2         | 6/12   | In progress |
 | Phase 25 P02 | 4 min  | 3 tasks     | 8 files |
 | Phase 25 P03 | 10 min | 2 tasks     | 7 files |
 | Phase 25 P04 | 10 min | 2 tasks     | 3 files |
 | Phase 25 P05 | 4 min  | 2 tasks     | 2 files |
+| Phase 26 P01 | 4 min  | 2 tasks     | 7 files |
 
 ## Accumulated Context
 
@@ -74,6 +75,8 @@ Recent decisions affecting v1.2:
 - [Phase 25]: Treat explicit legacy fps, captureFps, or deliveryProfile requests as timing changes that require a fresh record. — Legacy timelines do not encode enough timing metadata to safely adopt new pacing settings during recomposition.
 - [Phase 25]: Use saved timingContract-backed fixtures in compositor tests so packaging-only recomposition is proven outside the CLI path. — This closes the verification gap at the core compose boundary without moving timing enforcement into compose().
 - [Phase 25]: Lock the legacy helper message and allow-packaging-only fallback semantics in core tests while treating captureFps drift as a timing mismatch. — CLI and future diagnostics need one conservative shared timing contract for legacy artifacts and capture cadence changes.
+- [Phase 26]: Support both named pacing profiles and inline pacing objects in the config schema.
+- [Phase 26]: Keep charDelay backward compatible by preserving the legacy constants whenever no pacing profile is provided.
 
 ### Pending Todos
 
@@ -86,6 +89,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-08T18:44:32.254Z
-Stopped at: Completed 25-05-PLAN.md
+Last session: 2026-03-08T20:51:03.580Z
+Stopped at: Completed 26-01-PLAN.md
 Resume file: None
