@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
+import { executeSteps } from "../../src/executor/step-executor.js";
 import type { Step } from "../../src/executor/step-executor.js";
 import { resolveBeatType } from "../../src/executor/pacing/beats.js";
+import type { CadenceProfile } from "../../src/executor/pacing/profiles.js";
 
 function step<T extends Step["type"]>(type: T): Extract<Step, { type: T }> {
   switch (type) {
@@ -26,6 +28,39 @@ function step<T extends Step["type"]>(type: T): Extract<Step, { type: T }> {
     case "set-env":
       return { type, key: "TUIREEL_TEST", value: "1" } as Extract<Step, { type: T }>;
   }
+}
+
+class FakeSession {
+  readonly pressed: unknown[] = [];
+  idleCalls = 0;
+
+  async press(key: unknown): Promise<void> {
+    this.pressed.push(key);
+  }
+
+  async waitIdle(): Promise<void> {
+    this.idleCalls += 1;
+  }
+}
+
+const testProfile: CadenceProfile = {
+  baseSpeedMs: 1,
+  firstCharExtra: 0,
+  punctuationExtra: 0,
+  whitespaceExtra: 0,
+  pathSepExtra: 0,
+  beats: {
+    startup: 40,
+    settle: 20,
+    read: 15,
+    idle: 10,
+  },
+};
+
+async function elapsedMs(run: () => Promise<void>): Promise<number> {
+  const startedAt = performance.now();
+  await run();
+  return performance.now() - startedAt;
 }
 
 describe("resolveBeatType", () => {
@@ -60,5 +95,44 @@ describe("resolveBeatType", () => {
   it("keeps launch transitions on startup for non-pause steps", () => {
     expect(resolveBeatType(step("launch"), step("press"))).toBe("startup");
     expect(resolveBeatType(step("launch"), step("wait"))).toBe("startup");
+  });
+});
+
+describe("executeSteps pacing beats", () => {
+  it("injects the startup beat after launch when pacing is configured", async () => {
+    const session = new FakeSession();
+
+    const elapsed = await elapsedMs(async () => {
+      await executeSteps(session as never, [step("launch"), step("press")], {
+        pacing: testProfile,
+      });
+    });
+
+    expect(elapsed).toBeGreaterThanOrEqual(testProfile.beats.startup - 5);
+    expect(session.pressed).toEqual(["enter"]);
+  });
+
+  it("keeps legacy behavior when pacing is not configured", async () => {
+    const session = new FakeSession();
+
+    const elapsed = await elapsedMs(async () => {
+      await executeSteps(session as never, [step("launch"), step("press")]);
+    });
+
+    expect(elapsed).toBeLessThan(testProfile.beats.startup - 5);
+    expect(session.pressed).toEqual(["enter"]);
+  });
+
+  it("does not add beats next to authored pause steps", async () => {
+    const session = new FakeSession();
+
+    const elapsed = await elapsedMs(async () => {
+      await executeSteps(session as never, [step("launch"), step("pause"), step("press")], {
+        pacing: testProfile,
+      });
+    });
+
+    expect(elapsed).toBeGreaterThanOrEqual(15);
+    expect(elapsed).toBeLessThan(testProfile.beats.startup + 10);
   });
 });
