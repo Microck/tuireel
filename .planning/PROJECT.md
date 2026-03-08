@@ -13,19 +13,20 @@ TUI tool authors can produce polished demo videos from a declarative script, wit
 - **Shipped milestones:**
   - `v1.0` MVP (phases 1-6)
   - `v1.1` Branding, Docs & Hardening + gap closure (phases 7-19)
-- **Current quality posture:** core milestone scope shipped; remaining tech debt is mostly human-runtime verification and lint cleanup recorded in milestone archives.
-- **Execution posture:** no active milestone in progress; next work should start with fresh requirements definition.
+  - `v1.15` Brand Refresh & Docs Hosting (phases 20-24)
+- **Current quality posture:** core recording, compositing, docs, and branding milestones are shipped; the next product gap is demo feel and capture fidelity for human-looking terminal recordings.
+- **Execution posture:** milestone v1.2 kickoff in progress; requirements and roadmap are being defined.
 
-## Current Milestone: v1.15 Brand Refresh & Docs Hosting
+## Current Milestone: v1.2 Human Demo Feel
 
-**Goal:** Refresh Tuireel's public-facing identity (logo + palette + assets) and move the Mintlify docs to `tuireel.micr.dev`, with a README refresh aligned to Webreel's style.
+**Goal:** Make Tuireel demos feel human by improving typing cadence, pause behavior, capture fidelity, and final-motion quality for polished 1080p terminal recordings.
 
 **Target features:**
 
-- New logo asset set integrated (provided by maintainer)
-- New color palette applied across repo + docs + social assets
-- Mintlify docs hosted on `tuireel.micr.dev` (canonical links updated)
-- README reworked to resemble Webreel's README structure (Tuireel content kept accurate)
+- Human-looking typing speed and cadence in recorded demos
+- Natural pauses and timing beats between actions and states
+- Readable, properly scaled 1080p terminal output
+- Smooth final motion without sacrificing terminal-specific capture correctness
 
 ## Requirements
 
@@ -44,8 +45,9 @@ TUI tool authors can produce polished demo videos from a declarative script, wit
 
 ### Active
 
-- [ ] Define v1.15 milestone scope and requirements (branding refresh + docs hosting + README revamp)
-- [ ] Execute v1.15 phases and ship updated public-facing identity
+- [ ] Define v1.2 milestone scope and requirements for human-feeling demos and capture fidelity
+- [ ] Improve typing, pause timing, and pacing so terminal demos stop feeling robotic
+- [ ] Improve capture fidelity so 1080p demos stay readable, properly scaled, and smooth in motion
 
 ### Out of Scope
 
@@ -75,9 +77,9 @@ TUI tool authors can produce polished demo videos from a declarative script, wit
 
 ## Next Milestone Goals
 
-1. Refresh the Tuireel brand system (logo + palette) and apply it consistently across repo and docs.
-2. Move Mintlify docs hosting to `tuireel.micr.dev` and update canonical links.
-3. Rework the README to resemble Webreel's structure while keeping Tuireel usage accurate.
+1. Make typing and pauses feel intentional and human in real demo artifacts.
+2. Preserve readable, properly framed terminal output at 1080p during capture and compositing.
+3. Improve final motion quality without turning Tuireel into a browser-recorder clone.
 
 <details>
 <summary>Historical project narrative (pre-v1.1 completion)</summary>
@@ -94,4 +96,4 @@ Historical roadmap, requirements, and audit details are archived in:
 
 ---
 
-_Last updated: 2026-03-05 after v1.15 milestone kickoff_
+_Last updated: 2026-03-08 after v1.2 milestone kickoff_

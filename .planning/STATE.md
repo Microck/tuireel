@@ -4,16 +4,16 @@
 
 See: `.planning/PROJECT.md`
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script.
-**Current focus:** v1.15 milestone complete. All 3 milestones shipped.
+**Current focus:** v1.2 Human Demo Feel - defining requirements and roadmap.
 
 ## Current Position
 
-Phase: 24 - README Refresh + Link Hygiene (complete)
-Plan: 24-01 complete (1/1); All phases done
-Status: v1.15 milestone shipped
-Last activity: 2026-03-08 - Completed quick task 015: Analyze how WebReel demos are produced
+Phase: Not started (defining requirements)
+Plan: -
+Status: Defining requirements
+Last activity: 2026-03-08 - Milestone v1.2 started
 
-Progress: v1.15 complete (Phase 20: 2/2, Phase 21: 1/1, Phase 22: 1/1, Phase 23: 1/1, Phase 24: 1/1)
+Progress: v1.2 planning in progress (requirements + roadmap)
 
 ## Milestone Progress
 
@@ -22,6 +22,7 @@ Progress: v1.15 complete (Phase 20: 2/2, Phase 21: 1/1, Phase 22: 1/1, Phase 23:
 | v1.0 MVP                           | 1-6    | 23/23 | Complete | 2026-03-03 |
 | v1.1 Branding, Docs & Hardening    | 7-19   | 38/38 | Complete | 2026-03-05 |
 | v1.15 Brand Refresh & Docs Hosting | 20-24  | 5/5   | Complete | 2026-03-05 |
+| v1.2 Human Demo Feel               | TBD    | TBD   | Defining | -          |
 
 ## Performance Metrics
 
@@ -92,5 +93,5 @@ Recent decisions:
 ## Session Continuity
 
 - Last session: 2026-03-08
-- Stopped at: v1.15 milestone shipped - all phases complete; quick task 015 finished
-- Resume file: Use `/gsd-new-milestone` to define the next milestone
+- Stopped at: v1.2 milestone kickoff - requirements and roadmap pending
+- Resume file: Continue this milestone with requirements and roadmap work
