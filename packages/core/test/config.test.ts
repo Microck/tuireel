@@ -369,6 +369,31 @@ describe("config parser", () => {
     expect(config.rows).toBe(24);
   });
 
+  it("accepts a named pacing profile", () => {
+    const config = validateConfig(`{
+      "pacing": "relaxed",
+      "steps": [{ "type": "launch", "command": "echo paced" }]
+    }`);
+
+    expect(config.pacing).toBe("relaxed");
+  });
+
+  it("rejects an unknown pacing profile name", () => {
+    const error = captureValidationError(`{
+      "pacing": "invalid-name",
+      "steps": [{ "type": "launch", "command": "echo paced" }]
+    }`);
+
+    expect(error.message).toMatch(/pacing/i);
+    expect(error.message).toMatch(/relaxed/i);
+  });
+
+  it("accepts configs that omit pacing", () => {
+    const config = validateConfig(VALID_MINIMAL_CONFIG);
+
+    expect(config).not.toHaveProperty("pacing");
+  });
+
   it("accepts explicit output format", () => {
     const config = validateConfig(`{
       "format": "webm",
@@ -460,6 +485,7 @@ describe("config parser", () => {
         deliveryProfile: expect.any(Object),
         format: expect.any(Object),
         output: expect.any(Object),
+        pacing: expect.any(Object),
         theme: expect.any(Object),
         fps: expect.any(Object),
         cols: expect.any(Object),
@@ -481,6 +507,7 @@ describe("config parser", () => {
     expect(defaultsProperties).toEqual(
       expect.objectContaining({
         deliveryProfile: expect.any(Object),
+        pacing: expect.any(Object),
         fps: expect.any(Object),
         captureFps: expect.any(Object),
       }),
@@ -491,6 +518,7 @@ describe("config parser", () => {
     expect(videoProperties).toEqual(
       expect.objectContaining({
         deliveryProfile: expect.any(Object),
+        pacing: expect.any(Object),
         fps: expect.any(Object),
         captureFps: expect.any(Object),
       }),
