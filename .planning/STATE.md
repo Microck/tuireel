@@ -5,16 +5,16 @@ milestone_name: Human Demo Feel
 current_phase: 30
 current_phase_name: pacing provenance and acceptance
 current_plan: 3
-status: executing
-stopped_at: Completed 30-02-PLAN.md
-last_updated: "2026-03-09T03:22:43.496Z"
+status: verifying
+stopped_at: Completed 30-03-PLAN.md
+last_updated: "2026-03-09T03:55:58.777Z"
 last_activity: 2026-03-09
 progress:
   total_phases: 8
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 19
-  completed_plans: 18
-  percent: 99
+  completed_plans: 19
+  percent: 100
 ---
 
 # Project State: Tuireel
@@ -32,11 +32,11 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 **Total Phases:** 32
 **Current Plan:** 3
 **Total Plans in Phase:** 3
-**Status:** Ready to execute
+**Status:** Phase complete — ready for verification
 **Last Activity:** 2026-03-09
 **Last Activity Description:** Completed 30-01-PLAN.md
 
-**Progress:** [██████████] 99%
+**Progress:** [██████████] 100%
 
 ## Performance Metrics
 
@@ -70,6 +70,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 | Phase 29 P05 | 29 min | 1 tasks  | 1 files |
 | Phase 30 P01 | 6 min  | 2 tasks  | 6 files |
 | Phase 30 P02 | 13 min | 2 tasks | 4 files |
+| Phase 30 P03 | 23 min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -117,6 +118,8 @@ Recent decisions affecting v1.2:
 - [Phase 30]: Persist both pacing source metadata and the resolved cadence snapshot used at record time so config drift cannot erase artifact truth.
 - [Phase 30]: Keep timingContract.pacing as the canonical saved pacing JSON surface instead of adding a second top-level pacing field.
 - [Phase 30]: Keep Selected as current config context, while the Timing Contract section reports artifact-backed pacing provenance separately.
+- [Phase 30]: Keep pacing acceptance artifact-backed inside the existing acceptance file. — This closes the milestone through the shipped config -> record -> inspect path without inventing a test-only harness.
+- [Phase 30]: Assert beat evidence with tolerant artifact-backed ranges and paired fixture comparisons. — Real recordings blend beat delays with shell execution time, so exact millisecond snapshots are brittle while ranged artifact evidence stays representative.
 
 ### Pending Todos
 
@@ -128,6 +131,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T03:22:43.484Z
-Stopped at: Completed 30-02-PLAN.md
+Last session: 2026-03-09T03:55:42.373Z
+Stopped at: Completed 30-03-PLAN.md
 Resume file: None

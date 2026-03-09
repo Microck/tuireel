@@ -30,7 +30,7 @@ v1.2 originally shipped with five delivery boundaries, but the latest milestone 
 - [x] **Phase 27: Readable 1080p Defaults** - Make 1080p terminal output legible and naturally framed by default. (completed 2026-03-08)
 - [x] **Phase 28: Capture Fidelity and Final Motion** - Capture more real terminal states and package them into smooth playback without changing authored timing. (completed 2026-03-08)
 - [x] **Phase 29: Diagnostics and Acceptance Gates** - Expose pacing/fidelity inspection tools and fixture-backed milestone verification. (completed 2026-03-09)
-- [ ] **Phase 30: Pacing Provenance and Acceptance (GAP CLOSURE)** - Preserve full pacing provenance and prove paced flows end to end.
+- [x] **Phase 30: Pacing Provenance and Acceptance (GAP CLOSURE)** - Preserve full pacing provenance and prove paced flows end to end. (completed 2026-03-09)
 - [ ] **Phase 31: Readable 1080p Acceptance Proof (GAP CLOSURE)** - Prove readable-1080p output on exported artifacts, not just structural proxies.
 - [ ] **Phase 32: Final Output Continuity Gate (GAP CLOSURE)** - Re-close the milestone acceptance surface by proving smoothness on final output artifacts.
 
@@ -232,6 +232,6 @@ Archive:
 | 27. Readable 1080p Defaults           | 1/1            | Complete    | 2026-03-08 |
 | 28. Capture Fidelity and Final Motion | 2/2            | Complete    | 2026-03-08 |
 | 29. Diagnostics and Acceptance Gates  | 5/5            | Complete    | 2026-03-09 |
-| 30. Pacing Provenance and Acceptance  | 2/3 | In Progress|  |
+| 30. Pacing Provenance and Acceptance  | 3/3 | Complete   | 2026-03-09 |
 | 31. Readable 1080p Acceptance Proof   | 0/0            | Planned     | -          |
 | 32. Final Output Continuity Gate      | 0/0            | Planned     | -          |
