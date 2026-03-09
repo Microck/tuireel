@@ -36,7 +36,7 @@ v1.2 shipped its requirement scope and passed milestone audit coverage, then sur
 - [x] **Phase 32: Final Output Continuity Gate (GAP CLOSURE)** - Re-close the milestone acceptance surface by proving smoothness on final output artifacts. (completed 2026-03-09)
 - [x] **Phase 33: Combined Acceptance Stability Gate (GAP CLOSURE)** - Re-stabilize the shipped pacing/readability/smoothness acceptance trio as one reliable milestone gate. (completed 2026-03-09)
 - [x] **Phase 34: Capture Fidelity Debt Cleanup** - Replace the weak Phase 28 capture-policy proof and remove or rewire stale capture helper surface. (completed 2026-03-09)
-- [ ] **Phase 35: Acceptance Stability Automation** - Turn the repeated-run Phase 33 proof into an automated gate instead of verification-only evidence. (planned)
+- [x] **Phase 35: Acceptance Stability Automation** - Turn the repeated-run Phase 33 proof into an automated gate instead of verification-only evidence. (completed 2026-03-09)
 - [ ] **Phase 36: Nyquist Backfill for Feature Phases** - Normalize missing and partial validation coverage for Phases 25-28. (planned)
 - [ ] **Phase 37: Nyquist Backfill for Acceptance Phases** - Normalize missing and partial validation coverage for Phases 29-31 and 33. (planned)
 
@@ -232,7 +232,11 @@ Plans:
 **Requirements**: DIAG-04
 **Gap Closure**: Closes the Phase 33 repeated-run automation gap from `.planning/v1.2-MILESTONE-AUDIT.md`
 
-**Plans**: Pending planning
+**Plans**: 1 plan
+
+Plans:
+
+- [x] `35-01-PLAN.md` - Add a thin repeated-run acceptance wrapper and dedicated CI gate for the existing DIAG-04 trio. (completed 2026-03-09)
 
 ### Phase 36: Nyquist Backfill for Feature Phases
 
@@ -308,7 +312,7 @@ Archive:
 | 31. Readable 1080p Acceptance Proof        | 1/1            | Complete | 2026-03-09 |
 | 32. Final Output Continuity Gate           | 1/1            | Complete | 2026-03-09 |
 | 33. Combined Acceptance Stability Gate     | 1/1            | Complete | 2026-03-09 |
-| 34. Capture Fidelity Debt Cleanup          | 1/1            | Complete    | 2026-03-09 |
-| 35. Acceptance Stability Automation        | 0/TBD          | Planned  | -          |
+| 34. Capture Fidelity Debt Cleanup          | 1/1            | Complete | 2026-03-09 |
+| 35. Acceptance Stability Automation        | 1/1            | Complete | 2026-03-09 |
 | 36. Nyquist Backfill for Feature Phases    | 0/TBD          | Planned  | -          |
 | 37. Nyquist Backfill for Acceptance Phases | 0/TBD          | Planned  | -          |

@@ -4,16 +4,16 @@ milestone: v1.2
 milestone_name: Human Demo Feel
 current_phase: 35
 current_phase_name: acceptance stability automation
-current_plan: Not started
-status: planning
-stopped_at: Completed 34-01-PLAN.md
-last_updated: "2026-03-09T17:53:52.053Z"
+current_plan: 01
+status: complete
+stopped_at: Completed 35-01-PLAN.md
+last_updated: "2026-03-09T20:21:17.560Z"
 last_activity: 2026-03-09
 progress:
   total_phases: 13
-  completed_phases: 10
-  total_plans: 23
-  completed_plans: 23
+  completed_phases: 11
+  total_plans: 24
+  completed_plans: 24
   percent: 100
 ---
 
@@ -23,18 +23,18 @@ progress:
 
 See: `.planning/PROJECT.md` (updated 2026-03-08)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script, without manual screen recording, editing, or post-production.
-**Current focus:** post-audit cleanup continues with acceptance stability automation after the Phase 34 capture-fidelity debt cleanup landed.
+**Current focus:** acceptance stability automation is complete; the next follow-up work is Nyquist backfill after DIAG-04 enforcement moved into code and CI.
 
 ## Current Position
 
 **Current Phase:** 35
 **Current Phase Name:** acceptance stability automation
 **Total Phases:** 37
-**Current Plan:** Not started
+**Current Plan:** 01
 **Total Plans in Phase:** 1
-**Status:** Ready to plan
+**Status:** Complete
 **Last Activity:** 2026-03-09
-**Last Activity Description:** Phase 34 complete, transitioned to Phase 35
+**Last Activity Description:** Phase 35 complete, repeated-run DIAG-04 enforcement now runs through the root gate and main CI
 
 **Progress:** [██████████] 100%
 
@@ -74,6 +74,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 | Phase 31 P01 | 7 min  | 2 tasks  | 1 files |
 | Phase 32 P01 | 4 min  | 2 tasks  | 1 files |
 | Phase 34 P01 | 22 min | 2 tasks  | 2 files |
+| Phase 35 P01 | 20 min | 2 tasks  | 4 files |
 
 ## Accumulated Context
 
@@ -130,6 +131,9 @@ Recent decisions affecting v1.2:
 - [Phase 34]: Keep CAP-02 proof at the real record() boundary with captureFps set to 1 so missing captureNow hooks become observable.
 - [Phase 34]: Use paired baseline fixtures for type, press/wait, and scroll assertions instead of exact frame counts.
 - [Phase 34]: Remove shouldCaptureTypedCharacter from recorder.ts because runtime no longer depends on a helper-level capture policy surface.
+- [Phase 35]: Keep the repeated-run orchestration as a thin root TypeScript wrapper around the three shipped acceptance files instead of widening packages/core.
+- [Phase 35]: Expose the gate through pnpm acceptance:stability so local verification and CI use the same entrypoint.
+- [Phase 35]: Stabilize the pacing acceptance command-scale gap tolerance once repeated serial reruns exposed a flaky lower bound in the existing proof.
 
 ### Pending Todos
 
@@ -141,6 +145,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T17:45:42.829Z
-Stopped at: Completed 34-01-PLAN.md
+Last session: 2026-03-09T20:21:17.551Z
+Stopped at: Completed 35-01-PLAN.md
 Resume file: None
