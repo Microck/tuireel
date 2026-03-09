@@ -6,6 +6,7 @@ import sharp from "sharp";
 
 import type { TuireelConfig, TuireelStep } from "./config/schema.js";
 import { compose } from "./compositor.js";
+import { resolveProfile } from "./executor/pacing/profiles.js";
 import { executeSteps } from "./executor/step-executor.js";
 import { ensureFfmpeg } from "./ffmpeg/downloader.js";
 import { createLogger, type Logger } from "./logger.js";
@@ -80,6 +81,28 @@ function recordingNameFromOutput(outputPath: string): string {
   const normalized = baseName.replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/^-+|-+$/g, "");
 
   return normalized.length > 0 ? normalized : "recording";
+}
+
+function buildRecordedPacing(
+  pacing: TuireelConfig["pacing"],
+): ReturnType<typeof buildTimingContract>["pacing"] {
+  const resolved = resolveProfile(pacing);
+  if (!resolved) {
+    return undefined;
+  }
+
+  if (typeof pacing === "string") {
+    return {
+      source: "named",
+      selectedName: pacing,
+      resolved,
+    };
+  }
+
+  return {
+    source: "inline",
+    resolved,
+  };
 }
 
 function resolveRecordingArtifacts(recordingName: string): {
@@ -466,6 +489,7 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
         outputFrameCount: timeline.getFrameCount(),
         terminalFrameCount: timeline.getTerminalFrames().length,
         deliveryProfile: config.deliveryProfile,
+        pacing: buildRecordedPacing(config.pacing),
       }),
     );
 
