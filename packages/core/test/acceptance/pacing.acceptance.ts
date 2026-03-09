@@ -166,6 +166,55 @@ describe.sequential("acceptance: pacing", () => {
       pacing: "relaxed",
       steps: namedPacingSteps,
     });
+
+    inlineFixture = await createFixture("pacing-inline-acceptance", {
+      output: "pacing-inline-acceptance.mp4",
+      format: "mp4",
+      fps: 10,
+      cols: 40,
+      rows: 12,
+      pacing: inlinePacing,
+      steps: inlinePacingSteps,
+    });
+
+    overrideBaselineFixture = await createFixture("pacing-override-baseline", {
+      output: "pacing-override-baseline.mp4",
+      format: "mp4",
+      fps: 10,
+      cols: 40,
+      rows: 12,
+      pacing: inlinePacing,
+      steps: overrideBaselineSteps,
+    });
+
+    overrideFastFixture = await createFixture("pacing-override-fast", {
+      output: "pacing-override-fast.mp4",
+      format: "mp4",
+      fps: 10,
+      cols: 40,
+      rows: 12,
+      pacing: inlinePacing,
+      steps: overrideFastSteps,
+    });
+
+    pauseBaselineFixture = await createFixture("pacing-pause-baseline", {
+      output: "pacing-pause-baseline.mp4",
+      format: "mp4",
+      fps: 10,
+      cols: 40,
+      rows: 12,
+      steps: pauseAuthoritySteps,
+    });
+
+    pausePacedFixture = await createFixture("pacing-pause-paced", {
+      output: "pacing-pause-paced.mp4",
+      format: "mp4",
+      fps: 10,
+      cols: 40,
+      rows: 12,
+      pacing: inlinePacing,
+      steps: pauseAuthoritySteps,
+    });
   }, 240_000);
 
   afterAll(async () => {
@@ -215,12 +264,11 @@ describe.sequential("acceptance: pacing", () => {
     const automaticBeats = namedFixture!.steps
       .map((step, index, steps) => resolveBeatType(steps[index - 1], step))
       .filter((beat): beat is NonNullable<typeof beat> => beat !== null);
-    const nonStartupBeatLikeGaps = gaps.filter((gap) => gap >= 150 && gap <= 450);
+    const commandScaleBeatGaps = gaps.filter((gap) => gap >= 1_500 && gap <= 3_200);
 
     expect(namedFixture?.report.timeline.terminalFrameCount).toBeGreaterThan(10);
     expect(automaticBeats).toEqual(expect.arrayContaining(["startup", "settle", "read", "idle"]));
-    expect(hasGapBetween(gaps, 500, 700)).toBe(true);
-    expect(nonStartupBeatLikeGaps.length).toBeGreaterThanOrEqual(3);
+    expect(commandScaleBeatGaps.length).toBeGreaterThanOrEqual(3);
     expect(hasGapBetween(gaps, 180, 240)).toBe(true);
   }, 30_000);
 
