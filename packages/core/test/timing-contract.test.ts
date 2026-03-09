@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { assessTimingCompatibility, type TimingContract } from "../src/timeline/timing-contract.js";
+import {
+  assessTimingCompatibility,
+  buildTimingContract,
+  type TimingContract,
+} from "../src/timeline/timing-contract.js";
 import type { TimelineData } from "../src/timeline/types.js";
 
 function createTimelineData(overrides: Partial<TimelineData> = {}): TimelineData {
@@ -31,6 +35,97 @@ function createTimelineData(overrides: Partial<TimelineData> = {}): TimelineData
 }
 
 describe("timing contract compatibility", () => {
+  it("builds named pacing provenance with selected name and resolved cadence values", () => {
+    const timingContract = buildTimingContract({
+      outputFps: 30,
+      captureFps: 12,
+      wallClockDurationMs: 14_000,
+      rawFrameCount: 168,
+      outputFrameCount: 420,
+      terminalFrameCount: 4,
+      pacing: {
+        source: "named",
+        selectedName: "relaxed",
+        resolved: {
+          baseSpeedMs: 65,
+          firstCharExtra: 0.3,
+          punctuationExtra: 0.25,
+          whitespaceExtra: 0.32,
+          pathSepExtra: 0.08,
+          beats: {
+            startup: 800,
+            settle: 500,
+            read: 400,
+            idle: 250,
+          },
+        },
+      },
+    });
+
+    expect(timingContract.pacing).toEqual({
+      source: "named",
+      selectedName: "relaxed",
+      resolved: {
+        baseSpeedMs: 65,
+        firstCharExtra: 0.3,
+        punctuationExtra: 0.25,
+        whitespaceExtra: 0.32,
+        pathSepExtra: 0.08,
+        beats: {
+          startup: 800,
+          settle: 500,
+          read: 400,
+          idle: 250,
+        },
+      },
+    });
+  });
+
+  it("builds inline pacing provenance without inventing a selected profile name", () => {
+    const timingContract = buildTimingContract({
+      outputFps: 24,
+      captureFps: 24,
+      wallClockDurationMs: 9_000,
+      rawFrameCount: 216,
+      outputFrameCount: 216,
+      terminalFrameCount: 12,
+      pacing: {
+        source: "inline",
+        resolved: {
+          baseSpeedMs: 52,
+          firstCharExtra: 0.18,
+          punctuationExtra: 0.22,
+          whitespaceExtra: 0.3,
+          pathSepExtra: 0.04,
+          beats: {
+            startup: 620,
+            settle: 360,
+            read: 280,
+            idle: 150,
+          },
+        },
+      },
+    });
+
+    expect(timingContract.pacing).toEqual({
+      source: "inline",
+      resolved: {
+        baseSpeedMs: 52,
+        firstCharExtra: 0.18,
+        punctuationExtra: 0.22,
+        whitespaceExtra: 0.3,
+        pathSepExtra: 0.04,
+        beats: {
+          startup: 620,
+          settle: 360,
+          read: 280,
+          idle: 150,
+        },
+      },
+    });
+    expect(timingContract.pacing).not.toHaveProperty("selectedName");
+  });
+
   it("treats packaging-only changes as compatible when timing fields match", () => {
     const timingContract: TimingContract = {
       version: 1,
@@ -50,6 +145,22 @@ describe("timing contract compatibility", () => {
         fps: 30,
         captureFps: 12,
         deliveryProfile: "social-quick-share",
+        pacing: {
+          source: "inline",
+          resolved: {
+            baseSpeedMs: 48,
+            firstCharExtra: 0.2,
+            punctuationExtra: 0.2,
+            whitespaceExtra: 0.2,
+            pathSepExtra: 0.1,
+            beats: {
+              startup: 500,
+              settle: 300,
+              read: 200,
+              idle: 100,
+            },
+          },
+        },
         format: "gif",
         sound: false,
         outputSize: {

@@ -74,6 +74,23 @@ describe("InteractionTimeline", () => {
         outputFrameCount: 2,
         terminalFrameCount: 2,
         deliveryProfile: "readable-1080p",
+        pacing: {
+          source: "named",
+          selectedName: "relaxed",
+          resolved: {
+            baseSpeedMs: 65,
+            firstCharExtra: 0.3,
+            punctuationExtra: 0.25,
+            whitespaceExtra: 0.32,
+            pathSepExtra: 0.08,
+            beats: {
+              startup: 800,
+              settle: 500,
+              read: 400,
+              idle: 250,
+            },
+          },
+        },
       };
 
       timeline.showHud(["A"]);
@@ -134,5 +151,39 @@ describe("InteractionTimeline", () => {
     expect(timeline.getFrameCount()).toBe(3);
     expect(timeline.toJSON().frames).toHaveLength(1);
     expect(timeline.getFrames()).toHaveLength(3);
+  });
+
+  it("deep-clones nested pacing provenance when saving timing contracts", () => {
+    const timeline = new InteractionTimeline(1280, 720, { fps: 30 });
+    const timingContract: TimingContract = {
+      version: 1,
+      outputFps: 30,
+      captureFps: 12,
+      wallClockDurationMs: 3_000,
+      rawFrameCount: 36,
+      outputFrameCount: 90,
+      terminalFrameCount: 5,
+      pacing: {
+        source: "inline",
+        resolved: {
+          baseSpeedMs: 52,
+          firstCharExtra: 0.2,
+          punctuationExtra: 0.18,
+          whitespaceExtra: 0.22,
+          pathSepExtra: 0.05,
+          beats: {
+            startup: 400,
+            settle: 250,
+            read: 200,
+            idle: 120,
+          },
+        },
+      },
+    };
+
+    timeline.setTimingContract(timingContract);
+    timingContract.pacing.resolved.beats.startup = 999;
+
+    expect(timeline.toJSON().timingContract?.pacing?.resolved.beats.startup).toBe(400);
   });
 });
