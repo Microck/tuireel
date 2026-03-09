@@ -56,6 +56,7 @@ type FrameAnalysis = {
 
 type ReadabilityFixture = {
   analysis: FrameAnalysis;
+  lateAnalysis: FrameAnalysis;
   configSource: ReadabilityConfigSource;
   outputPath: string;
   probe: ProbeResult;
@@ -241,11 +242,11 @@ async function analyzeFrameContent(framePath: string): Promise<FrameAnalysis> {
 async function extractSettledFrame(
   ffmpegPath: string,
   outputPath: string,
-  durationSeconds: number,
+  sampleTimeSeconds: number,
   workDirectory: string,
+  label: string,
 ): Promise<string> {
-  const sampleTimeSeconds = Math.max(0.2, durationSeconds * 0.75);
-  const framePath = join(workDirectory, "readability-export-frame.png");
+  const framePath = join(workDirectory, `readability-export-${label}.png`);
 
   await runFfmpeg(ffmpegPath, [
     "-y",
@@ -316,13 +317,23 @@ async function createFixture(): Promise<ReadabilityFixture> {
   const framePath = await extractSettledFrame(
     ffmpegPath,
     outputPath,
-    durationSeconds,
+    Math.max(0.2, durationSeconds * 0.75),
     workDirectory,
+    "primary",
+  );
+  const lateFramePath = await extractSettledFrame(
+    ffmpegPath,
+    outputPath,
+    Math.max(0.2, durationSeconds * 0.9),
+    workDirectory,
+    "late",
   );
   const analysis = await analyzeFrameContent(framePath);
+  const lateAnalysis = await analyzeFrameContent(lateFramePath);
 
   return {
     analysis,
+    lateAnalysis,
     configSource,
     outputPath,
     probe,
@@ -378,6 +389,27 @@ describe.sequential("acceptance: readability", () => {
       expect(metrics.coverage).toBeGreaterThanOrEqual(0.4);
       expect(metrics.coverage).toBeLessThanOrEqual(0.75);
       expect(metrics.marginRatio).toBeLessThanOrEqual(2);
+    } catch (error) {
+      shouldRetainWorkDirectory = true;
+      throw buildEvidenceMessage(fixture, error);
+    }
+  }, 30_000);
+
+  it("keeps readable-1080p geometry stable across settled export frames", () => {
+    try {
+      const primaryMetrics = computeFrameMetrics(fixture.profile, fixture.analysis.bounds);
+      const lateMetrics = computeFrameMetrics(fixture.profile, fixture.lateAnalysis.bounds);
+
+      expect(
+        Math.abs(primaryMetrics.effectiveFontSize - lateMetrics.effectiveFontSize),
+      ).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(primaryMetrics.coverage - lateMetrics.coverage)).toBeLessThanOrEqual(0.02);
+      expect(
+        Math.abs(fixture.analysis.bounds.left - fixture.lateAnalysis.bounds.left),
+      ).toBeLessThanOrEqual(6);
+      expect(
+        Math.abs(fixture.analysis.bounds.top - fixture.lateAnalysis.bounds.top),
+      ).toBeLessThanOrEqual(6);
     } catch (error) {
       shouldRetainWorkDirectory = true;
       throw buildEvidenceMessage(fixture, error);
