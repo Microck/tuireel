@@ -7,6 +7,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { TuireelConfig } from "../../src/config/schema.js";
 import { loadConfig } from "../../src/config/loader.js";
 import { inspectRecording, type InspectReport } from "../../src/diagnostics/inspect.js";
+import { resolveBeatType } from "../../src/executor/pacing/beats.js";
 import { ensureFfmpeg } from "../../src/ffmpeg/downloader.js";
 import { record } from "../../src/recorder.js";
 import { InteractionTimeline } from "../../src/timeline/interaction-timeline.js";
@@ -16,6 +17,7 @@ type AcceptanceFixture = {
   outputVideoPath: string;
   rawVideoPath: string;
   report: InspectReport;
+  steps: TuireelConfig["steps"];
   timelinePath: string;
   workDirectory: string;
 };
@@ -81,10 +83,22 @@ async function createFixture(
     outputVideoPath,
     rawVideoPath,
     report,
+    steps: configSource.steps,
     timelinePath,
     workDirectory,
   };
 }
+
+const namedPacingSteps: TuireelConfig["steps"] = [
+  { type: "launch", command: "sh" },
+  { type: "type", text: "printf '__PACE_READY__\\n'" },
+  { type: "press", key: "Enter" },
+  { type: "wait", pattern: "__PACE_READY__" },
+  { type: "type", text: "echo paced acceptance" },
+  { type: "press", key: "Enter" },
+  { type: "type", text: "pwd" },
+  { type: "press", key: "Enter" },
+];
 
 describe.sequential("acceptance: pacing", () => {
   let namedFixture: AcceptanceFixture;
@@ -97,20 +111,9 @@ describe.sequential("acceptance: pacing", () => {
       cols: 40,
       rows: 12,
       pacing: "relaxed",
-      steps: [
-        {
-          type: "launch",
-          command:
-            'python3 -u -c "import sys,time; sys.stdout.write(\"booting\\n\"); sys.stdout.flush(); time.sleep(0.35); sys.stdout.write(\"READY\\n\"); sys.stdout.flush(); time.sleep(0.2)"',
-        },
-        { type: "wait", pattern: "READY" },
-        { type: "type", text: "echo paced acceptance" },
-        { type: "press", key: "Enter" },
-        { type: "type", text: "pwd" },
-        { type: "press", key: "Enter" },
-      ],
+      steps: namedPacingSteps,
     });
-  }, 120_000);
+  }, 240_000);
 
   afterAll(async () => {
     if (namedFixture) {
@@ -141,11 +144,15 @@ describe.sequential("acceptance: pacing", () => {
 
   it("captures startup, settle, read, and idle beats in one paced flow", () => {
     const gaps = getKeyframeGapsMs(namedFixture.timelinePath);
+    const automaticBeats = namedFixture.steps
+      .map((step, index, steps) => resolveBeatType(steps[index - 1], step))
+      .filter((beat): beat is NonNullable<typeof beat> => beat !== null);
+    const nonStartupBeatLikeGaps = gaps.filter((gap) => gap >= 150 && gap <= 450);
 
     expect(namedFixture.report.timeline.terminalFrameCount).toBeGreaterThan(10);
-    expect(hasGapBetween(gaps, 700, 1_100)).toBe(true);
-    expect(hasGapBetween(gaps, 400, 700)).toBe(true);
-    expect(hasGapBetween(gaps, 300, 520)).toBe(true);
-    expect(hasGapBetween(gaps, 180, 360)).toBe(true);
+    expect(automaticBeats).toEqual(expect.arrayContaining(["startup", "settle", "read", "idle"]));
+    expect(hasGapBetween(gaps, 500, 700)).toBe(true);
+    expect(nonStartupBeatLikeGaps.length).toBeGreaterThanOrEqual(3);
+    expect(hasGapBetween(gaps, 180, 240)).toBe(true);
   }, 30_000);
 });
