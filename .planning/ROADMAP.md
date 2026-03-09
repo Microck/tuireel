@@ -241,5 +241,5 @@ Archive:
 | 28. Capture Fidelity and Final Motion | 2/2            | Complete | 2026-03-08 |
 | 29. Diagnostics and Acceptance Gates  | 5/5            | Complete | 2026-03-09 |
 | 30. Pacing Provenance and Acceptance  | 3/3            | Complete | 2026-03-09 |
-| 31. Readable 1080p Acceptance Proof   | 1/1 | Complete   | 2026-03-09 |
+| 31. Readable 1080p Acceptance Proof   | 1/1 | Complete    | 2026-03-09 |
 | 32. Final Output Continuity Gate      | 0/1            | Planned  | -          |
