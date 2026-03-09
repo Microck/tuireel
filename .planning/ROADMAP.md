@@ -313,6 +313,6 @@ Archive:
 | 32. Final Output Continuity Gate           | 1/1            | Complete | 2026-03-09 |
 | 33. Combined Acceptance Stability Gate     | 1/1            | Complete | 2026-03-09 |
 | 34. Capture Fidelity Debt Cleanup          | 1/1            | Complete | 2026-03-09 |
-| 35. Acceptance Stability Automation        | 1/1            | Complete | 2026-03-09 |
+| 35. Acceptance Stability Automation        | 1/1            | Complete    | 2026-03-09 |
 | 36. Nyquist Backfill for Feature Phases    | 0/TBD          | Planned  | -          |
 | 37. Nyquist Backfill for Acceptance Phases | 0/TBD          | Planned  | -          |

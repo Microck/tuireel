@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Human Demo Feel
-current_phase: 35
-current_phase_name: acceptance stability automation
-current_plan: 01
-status: complete
+current_phase: 36
+current_phase_name: nyquist backfill for feature phases
+current_plan: Not started
+status: planning
 stopped_at: Completed 35-01-PLAN.md
-last_updated: "2026-03-09T20:21:17.560Z"
+last_updated: "2026-03-09T20:30:44.910Z"
 last_activity: 2026-03-09
 progress:
   total_phases: 13
@@ -27,14 +27,14 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 
 ## Current Position
 
-**Current Phase:** 35
-**Current Phase Name:** acceptance stability automation
+**Current Phase:** 36
+**Current Phase Name:** nyquist backfill for feature phases
 **Total Phases:** 37
-**Current Plan:** 01
+**Current Plan:** Not started
 **Total Plans in Phase:** 1
-**Status:** Complete
+**Status:** Ready to plan
 **Last Activity:** 2026-03-09
-**Last Activity Description:** Phase 35 complete, repeated-run DIAG-04 enforcement now runs through the root gate and main CI
+**Last Activity Description:** Phase 35 complete, transitioned to Phase 36
 
 **Progress:** [██████████] 100%
 
