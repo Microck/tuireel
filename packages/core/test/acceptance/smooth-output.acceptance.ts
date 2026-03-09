@@ -239,7 +239,7 @@ describe.sequential("acceptance: smooth-output", () => {
     expect(report.outputVideo?.durationSeconds).toBeGreaterThan(0);
   }, 30_000);
 
-  it("dumped raw frames stay visually continuous through the typed transition", async () => {
+  it("final output stays visually continuous through the typed transition", async () => {
     const report = await inspectRecording({
       timelinePath: fixture.timelinePath,
       rawVideoPath: fixture.rawVideoPath,
@@ -248,12 +248,22 @@ describe.sequential("acceptance: smooth-output", () => {
     });
     const timeline = InteractionTimeline.fromFile(fixture.timelinePath).toJSON();
 
-    const rawResult = await dumpFrames({
-      rawVideoPath: fixture.rawVideoPath,
-      outputDirectory: fixture.rawFrameDumpDirectory,
-      ffmpegPath: fixture.ffmpegPath,
-    });
+    const [outputResult, rawResult] = await Promise.all([
+      dumpFrames({
+        rawVideoPath: fixture.outputVideoPath,
+        outputDirectory: fixture.outputFrameDumpDirectory,
+        ffmpegPath: fixture.ffmpegPath,
+      }),
+      dumpFrames({
+        rawVideoPath: fixture.rawVideoPath,
+        outputDirectory: fixture.rawFrameDumpDirectory,
+        ffmpegPath: fixture.ffmpegPath,
+      }),
+    ]);
 
+    const outputFrameFiles = (await readdir(fixture.outputFrameDumpDirectory))
+      .filter((name) => name.endsWith(".png"))
+      .sort((left, right) => left.localeCompare(right));
     const rawFrameFiles = (await readdir(fixture.rawFrameDumpDirectory))
       .filter((name) => name.endsWith(".png"))
       .sort((left, right) => left.localeCompare(right));
@@ -261,21 +271,27 @@ describe.sequential("acceptance: smooth-output", () => {
       .filter((event) => event.type === "key")
       .map((event) => event.frameIndex);
     const pairIndexes = selectTransitionPairIndexes(
-      rawFrameFiles.length,
+      outputFrameFiles.length,
       keyEventFrames,
       timeline.terminalFrames ?? [],
     );
 
     try {
       expect(report.timeline.terminalFrameCount).toBeGreaterThan(1);
+      expect(report.rawVideo.streamFrameCount).toBeGreaterThan(0);
+      expect(report.outputVideo?.streamFrameCount).toBeGreaterThan(0);
+      expect(outputResult.frameCount).toBeGreaterThan(0);
       expect(rawResult.frameCount).toBeGreaterThan(0);
+      expect(outputFrameFiles.length).toBeGreaterThan(3);
       expect(rawFrameFiles.length).toBeGreaterThan(3);
+      expect(outputFrameFiles.length).toBe(outputResult.frameCount);
       expect(rawFrameFiles.length).toBe(rawResult.frameCount);
+      expect(outputFrameFiles.every((name) => name.endsWith(".png"))).toBe(true);
       expect(rawFrameFiles.every((name) => name.endsWith(".png"))).toBe(true);
       expect(pairIndexes.length).toBeGreaterThan(0);
 
       const metadata = await sharp(
-        join(fixture.rawFrameDumpDirectory, rawFrameFiles[0] ?? ""),
+        join(fixture.outputFrameDumpDirectory, outputFrameFiles[0] ?? ""),
       ).metadata();
 
       expect(metadata.format).toBe("png");
@@ -285,8 +301,8 @@ describe.sequential("acceptance: smooth-output", () => {
       const continuityScores = await Promise.all(
         pairIndexes.map((pairIndex) =>
           scoreAdjacentFrames(
-            join(fixture.rawFrameDumpDirectory, rawFrameFiles[pairIndex] ?? ""),
-            join(fixture.rawFrameDumpDirectory, rawFrameFiles[pairIndex + 1] ?? ""),
+            join(fixture.outputFrameDumpDirectory, outputFrameFiles[pairIndex] ?? ""),
+            join(fixture.outputFrameDumpDirectory, outputFrameFiles[pairIndex + 1] ?? ""),
           ),
         ),
       );
@@ -306,9 +322,12 @@ describe.sequential("acceptance: smooth-output", () => {
       shouldRetainFrameDump = true;
 
       const evidenceMessage = [
-        "Smooth-output continuity gate failed.",
+        "Smooth-output final-output continuity gate failed.",
+        `Retained output frame dump: ${fixture.outputFrameDumpDirectory}`,
         `Retained raw frame dump: ${fixture.rawFrameDumpDirectory}`,
+        `Output artifact: ${fixture.outputVideoPath}`,
         `Raw artifact: ${fixture.rawVideoPath}`,
+        `Inspect output video frames: ${report.outputVideo?.streamFrameCount ?? "unknown"}`,
         `Inspect report terminal frames: ${report.timeline.terminalFrameCount}`,
         `Inspect report frame count: ${report.timeline.frameCount}`,
         `Key event frames: ${keyEventFrames.join(", ") || "none"}`,
