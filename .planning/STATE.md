@@ -1,80 +1,59 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.2
-milestone_name: Human Demo Feel
-current_phase: 36
-current_phase_name: nyquist backfill for feature phases
-current_plan: Not started
-status: planning
-stopped_at: Completed 35-01-PLAN.md
-last_updated: "2026-03-09T20:30:44.910Z"
+milestone: none
+milestone_name: none
+current_phase: none
+current_phase_name: no active phase
+current_plan: none
+status: ready_for_next_milestone
+stopped_at: Archived v1.2 milestone
+last_updated: "2026-03-09T22:15:48Z"
 last_activity: 2026-03-09
 progress:
-  total_phases: 13
-  completed_phases: 11
-  total_plans: 24
-  completed_plans: 24
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State: Tuireel
 
 ## Project Reference
 
-See: `.planning/PROJECT.md` (updated 2026-03-08)
+See: `.planning/PROJECT.md` (updated 2026-03-09)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script, without manual screen recording, editing, or post-production.
-**Current focus:** acceptance stability automation is complete; the next follow-up work is Nyquist backfill after DIAG-04 enforcement moved into code and CI.
+**Current focus:** no active milestone is open; the next step is choosing the next product gap and deciding whether phases 36-37 should be pulled in as carry-over cleanup.
 
 ## Current Position
 
-**Current Phase:** 36
-**Current Phase Name:** nyquist backfill for feature phases
-**Total Phases:** 37
-**Current Plan:** Not started
-**Total Plans in Phase:** 1
-**Status:** Ready to plan
+**Current Phase:** None
+**Current Phase Name:** No active phase
+**Total Phases:** 37 overall (35 shipped, 2 carry-over backlog)
+**Current Plan:** None
+**Total Plans in Phase:** 0
+**Status:** Ready for next milestone definition
 **Last Activity:** 2026-03-09
-**Last Activity Description:** Phase 35 complete, transitioned to Phase 36
+**Last Activity Description:** v1.2 archived with phases 25-35 shipped; phases 36-37 left as backlog cleanup
 
-**Progress:** [██████████] 100%
+**Progress:** [----------] 0% (no active milestone)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 84
-- Current milestone plans completed: 16
+- Total plans completed: 90
+- Current milestone plans completed: N/A
 - Total execution time: 90 min
 
 **By Milestone:**
 
-| Milestone    | Plans  | Status   |
-| ------------ | ------ | -------- | ------- |
-| v1.0         | 23/23  | Complete |
-| v1.1         | 38/38  | Complete |
-| v1.15        | 5/5    | Complete |
-| v1.2         | 12/12  | Complete |
-| Phase 25 P02 | 4 min  | 3 tasks  | 8 files |
-| Phase 25 P03 | 10 min | 2 tasks  | 7 files |
-| Phase 25 P04 | 10 min | 2 tasks  | 3 files |
-| Phase 25 P05 | 4 min  | 2 tasks  | 2 files |
-| Phase 26 P01 | 4 min  | 2 tasks  | 7 files |
-| Phase 26 P02 | 5 min  | 2 tasks  | 6 files |
-| Phase 27 P01 | 7 min  | 2 tasks  | 9 files |
-| Phase 28 P01 | 4 min  | 2 tasks  | 2 files |
-| Phase 28 P02 | 4 min  | 2 tasks  | 2 files |
-| Phase 29 P01 | 5 min  | 1 tasks  | 7 files |
-| Phase 29 P02 | 12 min | 2 tasks  | 3 files |
-| Phase 29 P03 | 7 min  | 2 tasks  | 4 files |
-| Phase 29 P04 | 7 min  | 2 tasks  | 3 files |
-| Phase 29 P05 | 29 min | 1 tasks  | 1 files |
-| Phase 30 P01 | 6 min  | 2 tasks  | 6 files |
-| Phase 30 P02 | 13 min | 2 tasks  | 4 files |
-| Phase 30 P03 | 23 min | 2 tasks  | 1 files |
-| Phase 31 P01 | 7 min  | 2 tasks  | 1 files |
-| Phase 32 P01 | 4 min  | 2 tasks  | 1 files |
-| Phase 34 P01 | 22 min | 2 tasks  | 2 files |
-| Phase 35 P01 | 20 min | 2 tasks  | 4 files |
+| Milestone | Plans | Status   |
+| --------- | ----- | -------- |
+| v1.0      | 23/23 | Complete |
+| v1.1      | 38/38 | Complete |
+| v1.15     | 5/5   | Complete |
+| v1.2      | 24/24 | Complete |
 
 ## Accumulated Context
 
