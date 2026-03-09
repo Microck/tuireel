@@ -31,7 +31,7 @@ v1.2 originally shipped with five delivery boundaries, but the latest milestone 
 - [x] **Phase 28: Capture Fidelity and Final Motion** - Capture more real terminal states and package them into smooth playback without changing authored timing. (completed 2026-03-08)
 - [x] **Phase 29: Diagnostics and Acceptance Gates** - Expose pacing/fidelity inspection tools and fixture-backed milestone verification. (completed 2026-03-09)
 - [x] **Phase 30: Pacing Provenance and Acceptance (GAP CLOSURE)** - Preserve full pacing provenance and prove paced flows end to end. (completed 2026-03-09)
-- [ ] **Phase 31: Readable 1080p Acceptance Proof (GAP CLOSURE)** - Prove readable-1080p output on exported artifacts, not just structural proxies.
+- [x] **Phase 31: Readable 1080p Acceptance Proof (GAP CLOSURE)** - Prove readable-1080p output on exported artifacts, not just structural proxies. (completed 2026-03-09)
 - [ ] **Phase 32: Final Output Continuity Gate (GAP CLOSURE)** - Re-close the milestone acceptance surface by proving smoothness on final output artifacts.
 
 ## Phase Details
@@ -164,7 +164,11 @@ Plans:
 2. Acceptance assertions verify legibility and framing on the exported artifact, not only timeline dimensions and output size.
 3. The readable-1080p record/composite/acceptance flow no longer breaks at milestone verification depth.
 
-**Plans**: To be planned
+**Plans**: 1 plan
+
+Plans:
+
+- [ ] `31-01-PLAN.md` - Upgrade readable-1080p acceptance to prove legibility and inset framing on exported artifacts.
 
 ### Phase 32: Final Output Continuity Gate (GAP CLOSURE)
 
@@ -178,7 +182,11 @@ Plans:
 2. The capture-to-output evidence chain stays debuggable by keeping raw-frame evidence while asserting final-output continuity.
 3. The milestone acceptance surface now fully proves pacing, readability, and smoothness together, so DIAG-04 can be re-closed.
 
-**Plans**: To be planned
+**Plans**: 1 plan
+
+Plans:
+
+- [ ] `32-01-PLAN.md` - Move the smooth-output continuity gate to final output artifacts while preserving raw-frame debugging evidence.
 
 ## Archived Milestones
 
@@ -225,13 +233,13 @@ Archive:
 **Execution Order:**
 25 -> 26 -> 27 -> 28 -> 29 -> (30, 31) -> 32
 
-| Phase                                 | Plans Complete | Status      | Completed  |
-| ------------------------------------- | -------------- | ----------- | ---------- |
-| 25. Timing Contract and Profiles      | 5/5            | Complete    | 2026-03-08 |
-| 26. Human Pacing Engine               | 3/3            | Complete    | 2026-03-08 |
-| 27. Readable 1080p Defaults           | 1/1            | Complete    | 2026-03-08 |
-| 28. Capture Fidelity and Final Motion | 2/2            | Complete    | 2026-03-08 |
-| 29. Diagnostics and Acceptance Gates  | 5/5            | Complete    | 2026-03-09 |
-| 30. Pacing Provenance and Acceptance  | 3/3 | Complete    | 2026-03-09 |
-| 31. Readable 1080p Acceptance Proof   | 0/0            | Planned     | -          |
-| 32. Final Output Continuity Gate      | 0/0            | Planned     | -          |
+| Phase                                 | Plans Complete | Status   | Completed  |
+| ------------------------------------- | -------------- | -------- | ---------- |
+| 25. Timing Contract and Profiles      | 5/5            | Complete | 2026-03-08 |
+| 26. Human Pacing Engine               | 3/3            | Complete | 2026-03-08 |
+| 27. Readable 1080p Defaults           | 1/1            | Complete | 2026-03-08 |
+| 28. Capture Fidelity and Final Motion | 2/2            | Complete | 2026-03-08 |
+| 29. Diagnostics and Acceptance Gates  | 5/5            | Complete | 2026-03-09 |
+| 30. Pacing Provenance and Acceptance  | 3/3            | Complete | 2026-03-09 |
+| 31. Readable 1080p Acceptance Proof   | 1/1 | Complete   | 2026-03-09 |
+| 32. Final Output Continuity Gate      | 0/1            | Planned  | -          |

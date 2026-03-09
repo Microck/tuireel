@@ -4,17 +4,17 @@ milestone: v1.2
 milestone_name: Human Demo Feel
 current_phase: 31
 current_phase_name: readable 1080p acceptance proof
-current_plan: Not started
-status: planning
-stopped_at: Completed 30-03-PLAN.md
-last_updated: "2026-03-09T04:01:46.764Z"
+current_plan: 1
+status: verifying
+stopped_at: Completed 31-01-PLAN.md
+last_updated: "2026-03-09T04:47:54.378Z"
 last_activity: 2026-03-09
 progress:
   total_phases: 8
-  completed_phases: 6
-  total_plans: 19
-  completed_plans: 19
-  percent: 100
+  completed_phases: 7
+  total_plans: 21
+  completed_plans: 20
+  percent: 99
 ---
 
 # Project State: Tuireel
@@ -23,20 +23,20 @@ progress:
 
 See: `.planning/PROJECT.md` (updated 2026-03-08)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script, without manual screen recording, editing, or post-production.
-**Current focus:** Phase 30 pacing provenance and acceptance is in progress; saved artifact truth now carries pacing provenance and the remaining gap-closure work moves to inspect plus paced acceptance evidence
+**Current focus:** Phase 31 readability acceptance proof is complete; final milestone gap closure now moves to final-output continuity evidence.
 
 ## Current Position
 
 **Current Phase:** 31
 **Current Phase Name:** readable 1080p acceptance proof
 **Total Phases:** 32
-**Current Plan:** Not started
-**Total Plans in Phase:** 3
-**Status:** Ready to plan
+**Current Plan:** 1
+**Total Plans in Phase:** 1
+**Status:** Phase complete — ready for verification
 **Last Activity:** 2026-03-09
-**Last Activity Description:** Phase 30 complete, transitioned to Phase 31
+**Last Activity Description:** Phase 31 plan 01 executed and recorded
 
-**Progress:** [██████████] 100%
+**Progress:** [██████████] 99%
 
 ## Performance Metrics
 
@@ -69,8 +69,9 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 | Phase 29 P04 | 7 min  | 2 tasks  | 3 files |
 | Phase 29 P05 | 29 min | 1 tasks  | 1 files |
 | Phase 30 P01 | 6 min  | 2 tasks  | 6 files |
-| Phase 30 P02 | 13 min | 2 tasks | 4 files |
-| Phase 30 P03 | 23 min | 2 tasks | 1 files |
+| Phase 30 P02 | 13 min | 2 tasks  | 4 files |
+| Phase 30 P03 | 23 min | 2 tasks  | 1 files |
+| Phase 31 P01 | 7 min  | 2 tasks  | 1 files |
 
 ## Accumulated Context
 
@@ -120,6 +121,8 @@ Recent decisions affecting v1.2:
 - [Phase 30]: Keep Selected as current config context, while the Timing Contract section reports artifact-backed pacing provenance separately.
 - [Phase 30]: Keep pacing acceptance artifact-backed inside the existing acceptance file. — This closes the milestone through the shipped config -> record -> inspect path without inventing a test-only harness.
 - [Phase 30]: Assert beat evidence with tolerant artifact-backed ranges and paired fixture comparisons. — Real recordings blend beat delays with shell execution time, so exact millisecond snapshots are brittle while ranged artifact evidence stays representative.
+- [Phase 31]: Keep readable-1080p acceptance local to one file and derive artifact geometry from decoded exported frames instead of adding a shared helper. — This closes the gap without widening the shared diagnostics surface and keeps the acceptance proof scoped to the single readability artifact path.
+- [Phase 31]: Render a dense deterministic terminal frame so final-output legibility can be measured from real artifact geometry without OCR. — The exported-video proof only needs stable geometry, so deterministic dense content keeps the measurement robust without adding OCR dependencies or brittle text parsing.
 
 ### Pending Todos
 
@@ -131,6 +134,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T03:55:42.373Z
-Stopped at: Completed 30-03-PLAN.md
+Last session: 2026-03-09T04:47:54.371Z
+Stopped at: Completed 31-01-PLAN.md
 Resume file: None

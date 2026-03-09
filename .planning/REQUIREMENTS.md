@@ -22,8 +22,8 @@
 
 ### Readability
 
-- [ ] **READ-01**: Author can use a readable 1080p render preset that keeps terminal text legible in final output
-- [ ] **READ-02**: Author can use framing defaults that keep the terminal window naturally sized within a 1080p canvas
+- [x] **READ-01**: Author can use a readable 1080p render preset that keeps terminal text legible in final output
+- [x] **READ-02**: Author can use framing defaults that keep the terminal window naturally sized within a 1080p canvas
 - [x] **READ-03**: Author can choose named output presets for common delivery targets without losing readability guarantees
 
 ### Diagnostics
@@ -63,8 +63,8 @@
 | CAP-02      | Phase 28 | Complete |
 | CAP-03      | Phase 28 | Complete |
 | CAP-04      | Phase 25 | Complete |
-| READ-01     | Phase 31 | Pending  |
-| READ-02     | Phase 31 | Pending  |
+| READ-01     | Phase 31 | Complete |
+| READ-02     | Phase 31 | Complete |
 | READ-03     | Phase 25 | Complete |
 | DIAG-04     | Phase 32 | Pending  |
 | DIAG-05     | Phase 29 | Complete |
