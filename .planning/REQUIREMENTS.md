@@ -2,7 +2,7 @@
 
 **Milestone:** v1.2 Human Demo Feel
 **Defined:** 2026-03-08
-**Status:** GAP CLOSURE REOPENED 2026-03-09
+**Status:** VERIFIED; post-audit cleanup phases planned 2026-03-09
 **Core Value:** TUI tool authors can produce polished demo videos from a declarative script, without manual screen recording, editing, or post-production.
 
 ## v1.2 Requirements
@@ -28,7 +28,7 @@
 
 ### Diagnostics
 
-- [ ] **DIAG-04**: Author can run acceptance fixtures that verify typing cadence, pause behavior, readability, and smooth output on representative demos
+- [x] **DIAG-04**: Author can run acceptance fixtures that verify typing cadence, pause behavior, readability, and smooth output on representative demos
 - [x] **DIAG-05**: Author can inspect pacing stats for one run, including raw frame count, durations, and output metadata
 - [x] **DIAG-06**: Author can dump raw rendered frames for a recording when diagnosing fidelity issues
 
@@ -66,18 +66,21 @@
 | READ-01     | Phase 31 | Complete |
 | READ-02     | Phase 31 | Complete |
 | READ-03     | Phase 25 | Complete |
-| DIAG-04     | Phase 33 | Pending  |
+| DIAG-04     | Phase 33 | Complete |
 | DIAG-05     | Phase 29 | Complete |
 | DIAG-06     | Phase 29 | Complete |
+
+Post-audit cleanup note: phases 34-37 target tech-debt and Nyquist normalization from `.planning/v1.2-MILESTONE-AUDIT.md`. The audit still marked all 13 v1.2 requirements satisfied, so requirement ownership stays mapped to the original shipping/gap-closure phases above.
 
 **Coverage:**
 
 - v1.2 requirements: 13 total
 - Mapped to phases: 13
-- Pending gap closure: 1
+- Pending gap closure: 0
+- Post-audit cleanup phases planned: 4
 - Unmapped: 0
 
 ---
 
 _Requirements defined: 2026-03-08_
-_Last updated: 2026-03-09 after v1.2 milestone audit reopened DIAG-04 gap closure_
+_Last updated: 2026-03-09 after post-audit cleanup phases 34-37 were added_

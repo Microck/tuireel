@@ -5,17 +5,17 @@
 - ✅ **v1.0 MVP** - Phases 1-6 (shipped 2026-03-03)
 - ✅ **v1.1 Branding, Docs & Hardening** - Phases 7-19 (shipped 2026-03-05)
 - ✅ **v1.15 Brand Refresh & Docs Hosting** - Phases 20-24 (shipped 2026-03-05)
-- 🟡 **v1.2 Human Demo Feel** - Phases 25-33 (gap closure active after 2026-03-09 audit)
+- 🟡 **v1.2 Human Demo Feel** - Phases 25-37 (post-audit cleanup planned 2026-03-09)
 
 ## Current Milestone
 
-### 🟡 v1.2 Human Demo Feel (Phases 25-33)
+### v1.2 Human Demo Feel (Phases 25-37)
 
 **Milestone Goal:** Make Tuireel demos feel human by improving pacing, pause behavior, capture fidelity, and 1080p readability without faking terminal motion.
 
 ## Overview
 
-v1.2 originally shipped with eight phases, but the latest milestone audit reopened the combined pacing/readability/smoothness acceptance surface. Phases 30-33 keep the milestone scope the same while closing the remaining proof-surface instability that still blocks a clean milestone closeout.
+v1.2 shipped its requirement scope and passed milestone audit coverage, then surfaced a small set of post-audit cleanup items. Phases 30-33 re-closed the milestone acceptance surface; phases 34-37 are planned follow-up work for capture-fidelity debt and Nyquist normalization without changing the shipped milestone scope.
 
 ## Phases
 
@@ -23,7 +23,8 @@ v1.2 originally shipped with eight phases, but the latest milestone audit reopen
 
 - Integer phases (25, 26, 27): Planned milestone work
 - Decimal phases (25.1, 25.2): Urgent insertions if needed later
-- Phase 30+ entries: Post-audit gap-closure work for the same milestone
+- Phase 30-33 entries: Gap-closure work that re-closed the milestone acceptance surface
+- Phase 34+ entries: Post-audit cleanup and Nyquist normalization for the same milestone
 
 - [x] **Phase 25: Timing Contract and Profiles** - Separate capture/output semantics, named delivery presets, and recomposite-safe timing metadata. (completed 2026-03-08)
 - [x] **Phase 26: Human Pacing Engine** - Deliver deterministic cadence, pause beats, scoped timing overrides, and runtime pacing handoff in preview/record flows. (completed 2026-03-08)
@@ -33,7 +34,11 @@ v1.2 originally shipped with eight phases, but the latest milestone audit reopen
 - [x] **Phase 30: Pacing Provenance and Acceptance (GAP CLOSURE)** - Preserve full pacing provenance and prove paced flows end to end. (completed 2026-03-09)
 - [x] **Phase 31: Readable 1080p Acceptance Proof (GAP CLOSURE)** - Prove readable-1080p output on exported artifacts, not just structural proxies. (completed 2026-03-09)
 - [x] **Phase 32: Final Output Continuity Gate (GAP CLOSURE)** - Re-close the milestone acceptance surface by proving smoothness on final output artifacts. (completed 2026-03-09)
-- [ ] **Phase 33: Combined Acceptance Stability Gate (GAP CLOSURE)** - Re-stabilize the shipped pacing/readability/smoothness acceptance trio as one reliable milestone gate.
+- [x] **Phase 33: Combined Acceptance Stability Gate (GAP CLOSURE)** - Re-stabilize the shipped pacing/readability/smoothness acceptance trio as one reliable milestone gate. (completed 2026-03-09)
+- [ ] **Phase 34: Capture Fidelity Debt Cleanup** - Replace the weak Phase 28 capture-policy proof and remove or rewire stale capture helper surface. (planned)
+- [ ] **Phase 35: Acceptance Stability Automation** - Turn the repeated-run Phase 33 proof into an automated gate instead of verification-only evidence. (planned)
+- [ ] **Phase 36: Nyquist Backfill for Feature Phases** - Normalize missing and partial validation coverage for Phases 25-28. (planned)
+- [ ] **Phase 37: Nyquist Backfill for Acceptance Phases** - Normalize missing and partial validation coverage for Phases 29-31 and 33. (planned)
 
 ## Phase Details
 
@@ -201,11 +206,47 @@ Plans:
 2. The shared acceptance path keeps real artifact-backed proof for cadence, readability, and smoothness instead of weakening any signal into an isolated proxy.
 3. The milestone acceptance trio can serve as one stable closeout gate for v1.2 without shared-state, setup, or timing flakiness.
 
-**Plans**: 0 plans
+**Plans**: 1 plan
 
 Plans:
 
-- [ ] To be planned
+- [x] `33-01-PLAN.md` - Re-verify the combined milestone acceptance surface, record stability evidence, and re-close DIAG-04 in planning docs. (completed 2026-03-09)
+
+### Phase 34: Capture Fidelity Debt Cleanup
+
+**Goal**: Capture-fidelity behavior is proven by meaningful runtime-facing tests and no longer carries stale recorder helper surface.
+**Depends on**: Phases 28, 33
+**Requirements**: CAP-02
+**Gap Closure**: Closes the Phase 28 tech-debt findings from `.planning/v1.2-MILESTONE-AUDIT.md`
+
+**Plans**: Pending planning
+
+### Phase 35: Acceptance Stability Automation
+
+**Goal**: The combined pacing/readability/smoothness acceptance trio is enforced by automation instead of living only in one verification document.
+**Depends on**: Phases 33, 34
+**Requirements**: DIAG-04
+**Gap Closure**: Closes the Phase 33 repeated-run automation gap from `.planning/v1.2-MILESTONE-AUDIT.md`
+
+**Plans**: Pending planning
+
+### Phase 36: Nyquist Backfill for Feature Phases
+
+**Goal**: Feature-building phases 25-28 have current Nyquist validation artifacts with accurate Wave 0, per-task status, and approval state.
+**Depends on**: Phases 25, 26, 27, 28, 34
+**Requirements**: None (Nyquist coverage only)
+**Gap Closure**: Closes the missing/partial Nyquist findings for Phases 25-28 from `.planning/v1.2-MILESTONE-AUDIT.md`
+
+**Plans**: Pending planning
+
+### Phase 37: Nyquist Backfill for Acceptance Phases
+
+**Goal**: Acceptance-oriented phases 29-31 and 33 have current Nyquist validation artifacts with accurate status and missing files restored.
+**Depends on**: Phases 29, 30, 31, 33, 35
+**Requirements**: None (Nyquist coverage only)
+**Gap Closure**: Closes the missing/partial Nyquist findings for Phases 29-31 and 33 from `.planning/v1.2-MILESTONE-AUDIT.md`
+
+**Plans**: Pending planning
 
 ## Archived Milestones
 
@@ -250,16 +291,20 @@ Archive:
 ## Progress
 
 **Execution Order:**
-25 -> 26 -> 27 -> 28 -> 29 -> (30, 31) -> 32 -> 33
+25 -> 26 -> 27 -> 28 -> 29 -> (30, 31) -> 32 -> 33 -> 34 -> 35 -> (36, 37)
 
-| Phase                                  | Plans Complete | Status   | Completed  |
-| -------------------------------------- | -------------- | -------- | ---------- |
-| 25. Timing Contract and Profiles       | 5/5            | Complete | 2026-03-08 |
-| 26. Human Pacing Engine                | 3/3            | Complete | 2026-03-08 |
-| 27. Readable 1080p Defaults            | 1/1            | Complete | 2026-03-08 |
-| 28. Capture Fidelity and Final Motion  | 2/2            | Complete | 2026-03-08 |
-| 29. Diagnostics and Acceptance Gates   | 5/5            | Complete | 2026-03-09 |
-| 30. Pacing Provenance and Acceptance   | 3/3            | Complete | 2026-03-09 |
-| 31. Readable 1080p Acceptance Proof    | 1/1            | Complete | 2026-03-09 |
-| 32. Final Output Continuity Gate       | 1/1            | Complete | 2026-03-09 |
-| 33. Combined Acceptance Stability Gate | 0/0            | Planned  | -          |
+| Phase                                      | Plans Complete | Status   | Completed  |
+| ------------------------------------------ | -------------- | -------- | ---------- |
+| 25. Timing Contract and Profiles           | 5/5            | Complete | 2026-03-08 |
+| 26. Human Pacing Engine                    | 3/3            | Complete | 2026-03-08 |
+| 27. Readable 1080p Defaults                | 1/1            | Complete | 2026-03-08 |
+| 28. Capture Fidelity and Final Motion      | 2/2            | Complete | 2026-03-08 |
+| 29. Diagnostics and Acceptance Gates       | 5/5            | Complete | 2026-03-09 |
+| 30. Pacing Provenance and Acceptance       | 3/3            | Complete | 2026-03-09 |
+| 31. Readable 1080p Acceptance Proof        | 1/1            | Complete | 2026-03-09 |
+| 32. Final Output Continuity Gate           | 1/1            | Complete | 2026-03-09 |
+| 33. Combined Acceptance Stability Gate     | 1/1            | Complete | 2026-03-09 |
+| 34. Capture Fidelity Debt Cleanup          | 0/TBD          | Planned  | -          |
+| 35. Acceptance Stability Automation        | 0/TBD          | Planned  | -          |
+| 36. Nyquist Backfill for Feature Phases    | 0/TBD          | Planned  | -          |
+| 37. Nyquist Backfill for Acceptance Phases | 0/TBD          | Planned  | -          |
