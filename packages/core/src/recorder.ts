@@ -6,6 +6,7 @@ import sharp from "sharp";
 
 import type { TuireelConfig, TuireelStep } from "./config/schema.js";
 import { compose } from "./compositor.js";
+import { buildExecuteStepsOptions } from "./executor/execute-options.js";
 import { resolveProfile } from "./executor/pacing/profiles.js";
 import { executeSteps } from "./executor/step-executor.js";
 import { ensureFfmpeg } from "./ffmpeg/downloader.js";
@@ -180,23 +181,6 @@ function resolveCursorTarget(
   return { x, y };
 }
 
-function shouldCaptureTypedCharacter(charIndex: number, textLength: number): boolean {
-  if (textLength <= 2) {
-    return true;
-  }
-
-  const midpointIndex = Math.floor((textLength - 1) / 2);
-  if (textLength <= 5) {
-    return charIndex === midpointIndex;
-  }
-
-  if (charIndex === textLength - 1 || charIndex === midpointIndex) {
-    return true;
-  }
-
-  return textLength > 8 && charIndex > 0 && charIndex % 4 === 0;
-}
-
 async function resolveFrameDimensions(
   initialFrame: Buffer,
   fallbackCols: number,
@@ -325,6 +309,8 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
       cols: config.cols,
       rows: config.rows,
       theme: resolvedTheme,
+      fontSize: config.fontSize,
+      lineHeight: config.lineHeight,
     });
     log.timing("session create", Date.now() - sessionStart);
     throwIfInterrupted();
@@ -382,70 +368,76 @@ export async function record(config: TuireelConfig, options: RecordOptions = {})
 
     const runSteps = (async () => {
       capturer.start();
-      await executeSteps(session, config.steps, {
-        defaultWaitTimeout: config.defaultWaitTimeout,
-        onStepStart: (step, index) => {
-          timeline.advanceToTimeMs(Date.now() - recordingStart);
-          stepTimings[index] = Date.now();
-          log.step(step.type, step.type === "launch" ? `"${launchCommand}"` : undefined);
+      await executeSteps(
+        session,
+        config.steps,
+        buildExecuteStepsOptions(config, {
+          onStepStart: (step, index) => {
+            timeline.advanceToTimeMs(Date.now() - recordingStart);
+            stepTimings[index] = Date.now();
+            log.step(step.type, step.type === "launch" ? `"${launchCommand}"` : undefined);
 
-          if (step.type === "type") {
-            capturer?.pause();
-          }
-
-          if (step.type !== "launch") {
-            const target = resolveCursorTarget(
-              step,
-              index,
-              frameDimensions.width,
-              frameDimensions.height,
-            );
-            timeline.setCursorPath(
-              computeCursorPath(currentCursor.x, currentCursor.y, target.x, target.y, fps),
-            );
-            currentCursor = target;
-          }
-
-          const hudVisible = config.hud?.visible ?? true;
-          const labels = hudLabelsForStep(step);
-          if (labels.length > 0) {
-            if (hudVisible) {
-              timeline.showHud(labels);
+            if (step.type === "type") {
+              capturer?.pause();
             }
-            if (step.type === "press") {
-              timeline.addEvent("key");
+
+            if (step.type !== "launch") {
+              const target = resolveCursorTarget(
+                step,
+                index,
+                frameDimensions.width,
+                frameDimensions.height,
+              );
+              timeline.setCursorPath(
+                computeCursorPath(currentCursor.x, currentCursor.y, target.x, target.y, fps),
+              );
+              currentCursor = target;
             }
-          } else if (hudVisible) {
-            timeline.hideHud();
-          }
-        },
-        onStepComplete: (step, index) => {
-          timeline.advanceToTimeMs(Date.now() - recordingStart);
-          const startTime = stepTimings[index];
-          if (startTime !== undefined) {
-            log.timing(`step ${index + 1}`, Date.now() - startTime);
-          }
 
-          if (step.type === "type") {
-            capturer?.resume();
-          }
+            const hudVisible = config.hud?.visible ?? true;
+            const labels = hudLabelsForStep(step);
+            if (labels.length > 0) {
+              if (hudVisible) {
+                timeline.showHud(labels);
+              }
+              if (step.type === "press") {
+                timeline.addEvent("key");
+              }
+            } else if (hudVisible) {
+              timeline.hideHud();
+            }
+          },
+          onStepComplete: async (step, index) => {
+            timeline.advanceToTimeMs(Date.now() - recordingStart);
+            const startTime = stepTimings[index];
+            if (startTime !== undefined) {
+              log.timing(`step ${index + 1}`, Date.now() - startTime);
+            }
 
-          if (step.type === "type" || step.type === "press") {
-            timeline.hideHud();
-          }
-        },
-        onTypeCharacter: async ({ charIndex, step }) => {
-          timeline.advanceToTimeMs(Date.now() - recordingStart);
-          timeline.addEvent("key");
+            if (step.type === "type") {
+              await capturer?.waitForIdle();
+              await capturer?.captureNow();
+              capturer?.resume();
+            }
 
-          if (!shouldCaptureTypedCharacter(charIndex, step.text.length)) {
-            return;
-          }
+            if (step.type === "press" || step.type === "scroll" || step.type === "wait") {
+              await capturer?.waitForIdle();
+              await capturer?.captureNow();
+            }
 
-          await capturer?.waitForIdle();
-          await capturer?.captureNow();
-        },
-      });
+            if (step.type === "type" || step.type === "press") {
+              timeline.hideHud();
+            }
+          },
+          onTypeCharacter: async () => {
+            timeline.advanceToTimeMs(Date.now() - recordingStart);
+            timeline.addEvent("key");
+
+            await capturer?.waitForIdle();
+            await capturer?.captureNow();
+          },
+        }),
+      );
     })();
 
     runSteps.catch(() => {

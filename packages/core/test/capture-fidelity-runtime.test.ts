@@ -85,6 +85,7 @@ describe.sequential("capture fidelity runtime", () => {
   });
 
   it("records multiple real terminal states for a short typed burst at 1fps capture", async () => {
+    const baselineFixture = await createRuntimeCaptureFixture("type-burst-baseline", []);
     const fixture = await createRuntimeCaptureFixture("type-burst", [
       { type: "type", text: "abc" },
     ]);
@@ -92,8 +93,12 @@ describe.sequential("capture fidelity runtime", () => {
 
     expect(fixture.report.timingContract?.captureFps).toBe(1);
     expect(keyEventCount).toBe(3);
-    expect(fixture.report.timeline.terminalFrameCount).toBeGreaterThanOrEqual(keyEventCount + 1);
-    expect(fixture.report.rawVideo.streamFrameCount ?? 0).toBeGreaterThanOrEqual(keyEventCount + 1);
+    expect(fixture.report.timeline.terminalFrameCount).toBeGreaterThan(
+      baselineFixture.report.timeline.terminalFrameCount,
+    );
+    expect(fixture.report.rawVideo.streamFrameCount ?? 0).toBeGreaterThan(
+      baselineFixture.report.rawVideo.streamFrameCount ?? 0,
+    );
   }, 120_000);
 
   it("captures settled press and wait states even when sparse polling cannot save them", async () => {
@@ -128,6 +133,7 @@ describe.sequential("capture fidelity runtime", () => {
       { type: "press", key: "enter" },
       { type: "wait", pattern: "40", timeout: 2_000 },
       { type: "scroll", direction: "up", amount: 10 },
+      { type: "scroll", direction: "down", amount: 10 },
     ]);
     const keyEventCount = fixture.timeline.events.filter((event) => event.type === "key").length;
 
