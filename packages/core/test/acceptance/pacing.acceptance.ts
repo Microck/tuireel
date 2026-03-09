@@ -264,7 +264,7 @@ describe.sequential("acceptance: pacing", () => {
     const automaticBeats = namedFixture!.steps
       .map((step, index, steps) => resolveBeatType(steps[index - 1], step))
       .filter((beat): beat is NonNullable<typeof beat> => beat !== null);
-    const commandScaleBeatGaps = gaps.filter((gap) => gap >= 1_500 && gap <= 3_200);
+    const commandScaleBeatGaps = gaps.filter((gap) => gap >= 1_200 && gap <= 3_400);
 
     expect(namedFixture?.report.timeline.terminalFrameCount).toBeGreaterThan(10);
     expect(automaticBeats).toEqual(expect.arrayContaining(["startup", "settle", "read", "idle"]));

@@ -9,6 +9,7 @@
     "clean": "turbo run clean",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "acceptance:stability": "tsx scripts/acceptance-stability.ts",
     "changeset": "changeset",
     "version": "changeset version",
     "release": "pnpm build && changeset publish",
