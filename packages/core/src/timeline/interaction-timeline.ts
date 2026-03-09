@@ -11,7 +11,7 @@ import type {
   TimelineTheme,
   TimelineThemeOverrides,
 } from "./types.js";
-import type { TimingContract } from "./timing-contract.js";
+import type { TimingContract, TimingContractPacing } from "./timing-contract.js";
 
 const DEFAULT_FPS = 30;
 
@@ -92,6 +92,19 @@ function cloneTimingContract(
 
   return {
     ...timingContract,
+    ...(timingContract.pacing ? { pacing: cloneTimingContractPacing(timingContract.pacing) } : {}),
+  };
+}
+
+function cloneTimingContractPacing(pacing: TimingContractPacing): TimingContractPacing {
+  return {
+    ...pacing,
+    resolved: {
+      ...pacing.resolved,
+      beats: {
+        ...pacing.resolved.beats,
+      },
+    },
   };
 }
 

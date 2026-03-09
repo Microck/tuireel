@@ -1,4 +1,16 @@
+import type { CadenceProfile, CadenceProfileName } from "../executor/pacing/profiles.js";
 import type { TimelineData } from "./types.js";
+
+export type TimingContractPacing =
+  | {
+      source: "named";
+      selectedName: CadenceProfileName;
+      resolved: CadenceProfile;
+    }
+  | {
+      source: "inline";
+      resolved: CadenceProfile;
+    };
 
 export interface TimingContract {
   version: 1;
@@ -9,6 +21,7 @@ export interface TimingContract {
   outputFrameCount: number;
   terminalFrameCount: number;
   deliveryProfile?: string;
+  pacing?: TimingContractPacing;
 }
 
 export interface BuildTimingContractInput {
@@ -19,6 +32,7 @@ export interface BuildTimingContractInput {
   outputFrameCount: number;
   terminalFrameCount: number;
   deliveryProfile?: string;
+  pacing?: TimingContractPacing;
 }
 
 export interface TimingCompatibilityCandidate {
@@ -61,6 +75,7 @@ export function buildTimingContract(input: BuildTimingContractInput): TimingCont
     outputFrameCount: input.outputFrameCount,
     terminalFrameCount: input.terminalFrameCount,
     ...(input.deliveryProfile ? { deliveryProfile: input.deliveryProfile } : {}),
+    ...(input.pacing ? { pacing: input.pacing } : {}),
   };
 }
 
