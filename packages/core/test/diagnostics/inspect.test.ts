@@ -237,12 +237,75 @@ describe.sequential("inspectRecording", () => {
     });
   });
 
+  it("reports saved named pacing provenance from the timeline artifact", async () => {
+    const report = await inspectRecording({
+      timelinePath: namedPacingFixture.timelinePath,
+      rawVideoPath: namedPacingFixture.rawVideoPath,
+      outputVideoPath: namedPacingFixture.outputVideoPath,
+      ffmpegPath: namedPacingFixture.ffmpegPath,
+      selected: {
+        pacing: null,
+        deliveryProfile: null,
+      },
+    });
+
+    expect(report.selected.pacing).toBeNull();
+    expect(report.timingContract?.pacing).toEqual({
+      source: "named",
+      selectedName: "relaxed",
+      resolved: {
+        baseSpeedMs: 65,
+        firstCharExtra: 0.3,
+        punctuationExtra: 0.25,
+        whitespaceExtra: 0.32,
+        pathSepExtra: 0.08,
+        beats: {
+          startup: 800,
+          settle: 500,
+          read: 400,
+          idle: 250,
+        },
+      },
+    });
+  });
+
   it("persists inline pacing provenance in the saved timeline artifact", async () => {
     const rawTimeline = JSON.parse(
       await readFile(inlinePacingFixture.timelinePath, "utf8"),
     ) as RawTimelineArtifact;
 
     expect(rawTimeline.timingContract?.pacing).toEqual({
+      source: "inline",
+      resolved: {
+        baseSpeedMs: 52,
+        firstCharExtra: 0.18,
+        punctuationExtra: 0.22,
+        whitespaceExtra: 0.3,
+        pathSepExtra: 0.04,
+        beats: {
+          startup: 620,
+          settle: 360,
+          read: 280,
+          idle: 150,
+        },
+      },
+    });
+  });
+
+  it("reports saved inline pacing provenance from the timeline artifact", async () => {
+    const report = await inspectRecording({
+      timelinePath: inlinePacingFixture.timelinePath,
+      rawVideoPath: inlinePacingFixture.rawVideoPath,
+      outputVideoPath: inlinePacingFixture.outputVideoPath,
+      ffmpegPath: inlinePacingFixture.ffmpegPath,
+      selected: {
+        pacing: null,
+        deliveryProfile: null,
+      },
+    });
+
+    expect(report.selected.pacing).toBeNull();
+    expect(report.timingContract?.pacing).toEqual({
       source: "inline",
       resolved: {
         baseSpeedMs: 52,
