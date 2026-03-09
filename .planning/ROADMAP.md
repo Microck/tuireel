@@ -5,17 +5,17 @@
 - ✅ **v1.0 MVP** - Phases 1-6 (shipped 2026-03-03)
 - ✅ **v1.1 Branding, Docs & Hardening** - Phases 7-19 (shipped 2026-03-05)
 - ✅ **v1.15 Brand Refresh & Docs Hosting** - Phases 20-24 (shipped 2026-03-05)
-- 🟡 **v1.2 Human Demo Feel** - Phases 25-32 (gap closure active after 2026-03-09 audit)
+- 🟡 **v1.2 Human Demo Feel** - Phases 25-33 (gap closure active after 2026-03-09 audit)
 
 ## Current Milestone
 
-### 🟡 v1.2 Human Demo Feel (Phases 25-32)
+### 🟡 v1.2 Human Demo Feel (Phases 25-33)
 
 **Milestone Goal:** Make Tuireel demos feel human by improving pacing, pause behavior, capture fidelity, and 1080p readability without faking terminal motion.
 
 ## Overview
 
-v1.2 originally shipped with five delivery boundaries, but the latest milestone audit reopened acceptance and provenance gaps in the proof surface. Phases 30-32 keep the milestone scope the same while closing the remaining pacing, readability, and final-output evidence breaks that still block a clean milestone closeout.
+v1.2 originally shipped with eight phases, but the latest milestone audit reopened the combined pacing/readability/smoothness acceptance surface. Phases 30-33 keep the milestone scope the same while closing the remaining proof-surface instability that still blocks a clean milestone closeout.
 
 ## Phases
 
@@ -33,6 +33,7 @@ v1.2 originally shipped with five delivery boundaries, but the latest milestone 
 - [x] **Phase 30: Pacing Provenance and Acceptance (GAP CLOSURE)** - Preserve full pacing provenance and prove paced flows end to end. (completed 2026-03-09)
 - [x] **Phase 31: Readable 1080p Acceptance Proof (GAP CLOSURE)** - Prove readable-1080p output on exported artifacts, not just structural proxies. (completed 2026-03-09)
 - [x] **Phase 32: Final Output Continuity Gate (GAP CLOSURE)** - Re-close the milestone acceptance surface by proving smoothness on final output artifacts. (completed 2026-03-09)
+- [ ] **Phase 33: Combined Acceptance Stability Gate (GAP CLOSURE)** - Re-stabilize the shipped pacing/readability/smoothness acceptance trio as one reliable milestone gate.
 
 ## Phase Details
 
@@ -188,6 +189,24 @@ Plans:
 
 - [ ] `32-01-PLAN.md` - Move the smooth-output continuity gate to final output artifacts while preserving raw-frame debugging evidence.
 
+### Phase 33: Combined Acceptance Stability Gate (GAP CLOSURE)
+
+**Goal**: The combined pacing, readability, and smoothness acceptance surface passes reliably as one shipped milestone gate.
+**Depends on**: Phases 30, 31, 32
+**Requirements**: DIAG-04
+**Gap Closure**: Closes the combined milestone acceptance instability from `.planning/v1.2-MILESTONE-AUDIT.md`
+**Success Criteria** (what must be TRUE):
+
+1. Running the pacing, readability, and smooth-output acceptance files together passes reliably in the normal shared workspace run.
+2. The shared acceptance path keeps real artifact-backed proof for cadence, readability, and smoothness instead of weakening any signal into an isolated proxy.
+3. The milestone acceptance trio can serve as one stable closeout gate for v1.2 without shared-state, setup, or timing flakiness.
+
+**Plans**: 0 plans
+
+Plans:
+
+- [ ] To be planned
+
 ## Archived Milestones
 
 <details>
@@ -231,15 +250,16 @@ Archive:
 ## Progress
 
 **Execution Order:**
-25 -> 26 -> 27 -> 28 -> 29 -> (30, 31) -> 32
+25 -> 26 -> 27 -> 28 -> 29 -> (30, 31) -> 32 -> 33
 
-| Phase                                 | Plans Complete | Status   | Completed  |
-| ------------------------------------- | -------------- | -------- | ---------- |
-| 25. Timing Contract and Profiles      | 5/5            | Complete | 2026-03-08 |
-| 26. Human Pacing Engine               | 3/3            | Complete | 2026-03-08 |
-| 27. Readable 1080p Defaults           | 1/1            | Complete | 2026-03-08 |
-| 28. Capture Fidelity and Final Motion | 2/2            | Complete | 2026-03-08 |
-| 29. Diagnostics and Acceptance Gates  | 5/5            | Complete | 2026-03-09 |
-| 30. Pacing Provenance and Acceptance  | 3/3            | Complete | 2026-03-09 |
-| 31. Readable 1080p Acceptance Proof   | 1/1 | Complete    | 2026-03-09 |
-| 32. Final Output Continuity Gate      | 1/1 | Complete    | 2026-03-09 |
+| Phase                                  | Plans Complete | Status   | Completed  |
+| -------------------------------------- | -------------- | -------- | ---------- |
+| 25. Timing Contract and Profiles       | 5/5            | Complete | 2026-03-08 |
+| 26. Human Pacing Engine                | 3/3            | Complete | 2026-03-08 |
+| 27. Readable 1080p Defaults            | 1/1            | Complete | 2026-03-08 |
+| 28. Capture Fidelity and Final Motion  | 2/2            | Complete | 2026-03-08 |
+| 29. Diagnostics and Acceptance Gates   | 5/5            | Complete | 2026-03-09 |
+| 30. Pacing Provenance and Acceptance   | 3/3            | Complete | 2026-03-09 |
+| 31. Readable 1080p Acceptance Proof    | 1/1            | Complete | 2026-03-09 |
+| 32. Final Output Continuity Gate       | 1/1            | Complete | 2026-03-09 |
+| 33. Combined Acceptance Stability Gate | 0/0            | Planned  | -          |
