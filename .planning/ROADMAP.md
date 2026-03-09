@@ -32,7 +32,7 @@ v1.2 originally shipped with five delivery boundaries, but the latest milestone 
 - [x] **Phase 29: Diagnostics and Acceptance Gates** - Expose pacing/fidelity inspection tools and fixture-backed milestone verification. (completed 2026-03-09)
 - [x] **Phase 30: Pacing Provenance and Acceptance (GAP CLOSURE)** - Preserve full pacing provenance and prove paced flows end to end. (completed 2026-03-09)
 - [x] **Phase 31: Readable 1080p Acceptance Proof (GAP CLOSURE)** - Prove readable-1080p output on exported artifacts, not just structural proxies. (completed 2026-03-09)
-- [ ] **Phase 32: Final Output Continuity Gate (GAP CLOSURE)** - Re-close the milestone acceptance surface by proving smoothness on final output artifacts.
+- [x] **Phase 32: Final Output Continuity Gate (GAP CLOSURE)** - Re-close the milestone acceptance surface by proving smoothness on final output artifacts. (completed 2026-03-09)
 
 ## Phase Details
 
@@ -242,4 +242,4 @@ Archive:
 | 29. Diagnostics and Acceptance Gates  | 5/5            | Complete | 2026-03-09 |
 | 30. Pacing Provenance and Acceptance  | 3/3            | Complete | 2026-03-09 |
 | 31. Readable 1080p Acceptance Proof   | 1/1 | Complete    | 2026-03-09 |
-| 32. Final Output Continuity Gate      | 0/1            | Planned  | -          |
+| 32. Final Output Continuity Gate      | 1/1 | Complete   | 2026-03-09 |

@@ -28,7 +28,7 @@
 
 ### Diagnostics
 
-- [ ] **DIAG-04**: Author can run acceptance fixtures that verify typing cadence, pause behavior, readability, and smooth output on representative demos
+- [x] **DIAG-04**: Author can run acceptance fixtures that verify typing cadence, pause behavior, readability, and smooth output on representative demos
 - [x] **DIAG-05**: Author can inspect pacing stats for one run, including raw frame count, durations, and output metadata
 - [x] **DIAG-06**: Author can dump raw rendered frames for a recording when diagnosing fidelity issues
 
@@ -66,7 +66,7 @@
 | READ-01     | Phase 31 | Complete |
 | READ-02     | Phase 31 | Complete |
 | READ-03     | Phase 25 | Complete |
-| DIAG-04     | Phase 32 | Pending  |
+| DIAG-04     | Phase 32 | Complete |
 | DIAG-05     | Phase 29 | Complete |
 | DIAG-06     | Phase 29 | Complete |
 

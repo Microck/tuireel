@@ -4,17 +4,17 @@ milestone: v1.2
 milestone_name: Human Demo Feel
 current_phase: 32
 current_phase_name: final output continuity gate
-current_plan: Not started
-status: planning
-stopped_at: Completed 31-01-PLAN.md
-last_updated: "2026-03-09T04:51:41.794Z"
+current_plan: 1
+status: complete
+stopped_at: Completed 32-01-PLAN.md
+last_updated: "2026-03-09T05:02:42.409Z"
 last_activity: 2026-03-09
 progress:
   total_phases: 8
-  completed_phases: 7
+  completed_phases: 8
   total_plans: 21
-  completed_plans: 20
-  percent: 99
+  completed_plans: 21
+  percent: 100
 ---
 
 # Project State: Tuireel
@@ -23,28 +23,28 @@ progress:
 
 See: `.planning/PROJECT.md` (updated 2026-03-08)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script, without manual screen recording, editing, or post-production.
-**Current focus:** Phase 31 readability acceptance proof is complete; final milestone gap closure now moves to final-output continuity evidence.
+**Current focus:** v1.2 gap closure is complete; the next product gap still needs to be chosen.
 
 ## Current Position
 
 **Current Phase:** 32
 **Current Phase Name:** final output continuity gate
 **Total Phases:** 32
-**Current Plan:** Not started
+**Current Plan:** 1 of 1
 **Total Plans in Phase:** 1
-**Status:** Ready to plan
+**Status:** Complete
 **Last Activity:** 2026-03-09
-**Last Activity Description:** Phase 31 complete, transitioned to Phase 32
+**Last Activity Description:** Phase 32 complete, re-closed DIAG-04 on final output artifacts
 
-**Progress:** [██████████] 99%
+**Progress:** [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 83
-- Current milestone plans completed: 15
-- Total execution time: 86 min
+- Total plans completed: 84
+- Current milestone plans completed: 16
+- Total execution time: 90 min
 
 **By Milestone:**
 
@@ -72,6 +72,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 | Phase 30 P02 | 13 min | 2 tasks  | 4 files |
 | Phase 30 P03 | 23 min | 2 tasks  | 1 files |
 | Phase 31 P01 | 7 min  | 2 tasks  | 1 files |
+| Phase 32 P01 | 4 min  | 2 tasks  | 1 files |
 
 ## Accumulated Context
 
@@ -123,6 +124,8 @@ Recent decisions affecting v1.2:
 - [Phase 30]: Assert beat evidence with tolerant artifact-backed ranges and paired fixture comparisons. — Real recordings blend beat delays with shell execution time, so exact millisecond snapshots are brittle while ranged artifact evidence stays representative.
 - [Phase 31]: Keep readable-1080p acceptance local to one file and derive artifact geometry from decoded exported frames instead of adding a shared helper. — This closes the gap without widening the shared diagnostics surface and keeps the acceptance proof scoped to the single readability artifact path.
 - [Phase 31]: Render a dense deterministic terminal frame so final-output legibility can be measured from real artifact geometry without OCR. — The exported-video proof only needs stable geometry, so deterministic dense content keeps the measurement robust without adding OCR dependencies or brittle text parsing.
+- [Phase 32]: Keep dumpFrames unchanged and pass the composed output path through the existing rawVideoPath option inside the acceptance file. — Phase 32 only needed to rearrange evidence inside one acceptance file, so reusing the existing diagnostics helper avoided widening shared APIs for a single gap-closure proof.
+- [Phase 32]: Make final-output frames the blocking gate while retaining raw-frame dumps for failure debugging evidence. — DIAG-04 required proof on the shipped composed artifact, but milestone debugging still depends on comparing raw capture evidence against the final output when continuity fails.
 
 ### Pending Todos
 
@@ -134,6 +137,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T04:47:54.371Z
-Stopped at: Completed 31-01-PLAN.md
+Last session: 2026-03-09T05:02:11.968Z
+Stopped at: Completed 32-01-PLAN.md
 Resume file: None
