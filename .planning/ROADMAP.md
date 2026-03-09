@@ -232,6 +232,6 @@ Archive:
 | 27. Readable 1080p Defaults           | 1/1            | Complete    | 2026-03-08 |
 | 28. Capture Fidelity and Final Motion | 2/2            | Complete    | 2026-03-08 |
 | 29. Diagnostics and Acceptance Gates  | 5/5            | Complete    | 2026-03-09 |
-| 30. Pacing Provenance and Acceptance  | 1/3            | In Progress |            |
+| 30. Pacing Provenance and Acceptance  | 2/3 | In Progress|  |
 | 31. Readable 1080p Acceptance Proof   | 0/0            | Planned     | -          |
 | 32. Final Output Continuity Gate      | 0/0            | Planned     | -          |

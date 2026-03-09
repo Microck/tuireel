@@ -4,17 +4,17 @@ milestone: v1.2
 milestone_name: Human Demo Feel
 current_phase: 30
 current_phase_name: pacing provenance and acceptance
-current_plan: 02
-status: in_progress
-stopped_at: Completed 30-01-PLAN.md
-last_updated: "2026-03-09T03:06:47.493Z"
+current_plan: 3
+status: executing
+stopped_at: Completed 30-02-PLAN.md
+last_updated: "2026-03-09T03:22:43.496Z"
 last_activity: 2026-03-09
 progress:
   total_phases: 8
   completed_phases: 5
   total_plans: 19
-  completed_plans: 17
-  percent: 98
+  completed_plans: 18
+  percent: 99
 ---
 
 # Project State: Tuireel
@@ -30,13 +30,13 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 **Current Phase:** 30
 **Current Phase Name:** pacing provenance and acceptance
 **Total Phases:** 32
-**Current Plan:** 02
+**Current Plan:** 3
 **Total Plans in Phase:** 3
-**Status:** In Progress
+**Status:** Ready to execute
 **Last Activity:** 2026-03-09
 **Last Activity Description:** Completed 30-01-PLAN.md
 
-**Progress:** [██████████] 98%
+**Progress:** [██████████] 99%
 
 ## Performance Metrics
 
@@ -69,6 +69,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 | Phase 29 P04 | 7 min  | 2 tasks  | 3 files |
 | Phase 29 P05 | 29 min | 1 tasks  | 1 files |
 | Phase 30 P01 | 6 min  | 2 tasks  | 6 files |
+| Phase 30 P02 | 13 min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -114,6 +115,8 @@ Recent decisions affecting v1.2:
 - [Phase 29]: Use a deterministic slow-print fixture command so the continuity gate measures a real visible transition without depending on shell echo behavior.
 - [Phase 30]: Keep pacing provenance inside the existing timingContract instead of creating a parallel artifact store.
 - [Phase 30]: Persist both pacing source metadata and the resolved cadence snapshot used at record time so config drift cannot erase artifact truth.
+- [Phase 30]: Keep timingContract.pacing as the canonical saved pacing JSON surface instead of adding a second top-level pacing field.
+- [Phase 30]: Keep Selected as current config context, while the Timing Contract section reports artifact-backed pacing provenance separately.
 
 ### Pending Todos
 
@@ -125,6 +128,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T03:06:47.486Z
-Stopped at: Completed 30-01-PLAN.md
+Last session: 2026-03-09T03:22:43.484Z
+Stopped at: Completed 30-02-PLAN.md
 Resume file: None
