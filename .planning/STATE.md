@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Human Demo Feel
-current_phase: 32
-current_phase_name: final output continuity gate
+current_phase: 35
+current_phase_name: acceptance stability automation
 current_plan: Not started
-status: completed
-stopped_at: Completed 32-01-PLAN.md
-last_updated: "2026-03-09T05:08:17.013Z"
+status: active
+stopped_at: Completed 34-01-PLAN.md
+last_updated: "2026-03-09T17:45:42.840Z"
 last_activity: 2026-03-09
 progress:
-  total_phases: 8
-  completed_phases: 8
-  total_plans: 21
-  completed_plans: 21
+  total_phases: 13
+  completed_phases: 10
+  total_plans: 23
+  completed_plans: 23
   percent: 100
 ---
 
@@ -23,18 +23,18 @@ progress:
 
 See: `.planning/PROJECT.md` (updated 2026-03-08)
 **Core value:** TUI tool authors can produce polished demo videos from a declarative script, without manual screen recording, editing, or post-production.
-**Current focus:** v1.2 gap closure is complete; the next product gap still needs to be chosen.
+**Current focus:** post-audit cleanup continues with acceptance stability automation after the Phase 34 capture-fidelity debt cleanup landed.
 
 ## Current Position
 
-**Current Phase:** 32
-**Current Phase Name:** final output continuity gate
-**Total Phases:** 32
+**Current Phase:** 35
+**Current Phase Name:** acceptance stability automation
+**Total Phases:** 37
 **Current Plan:** Not started
 **Total Plans in Phase:** 1
-**Status:** Milestone complete
+**Status:** Ready for Phase 35
 **Last Activity:** 2026-03-09
-**Last Activity Description:** Phase 32 complete
+**Last Activity Description:** Phase 34 complete
 
 **Progress:** [██████████] 100%
 
@@ -73,6 +73,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-08)
 | Phase 30 P03 | 23 min | 2 tasks  | 1 files |
 | Phase 31 P01 | 7 min  | 2 tasks  | 1 files |
 | Phase 32 P01 | 4 min  | 2 tasks  | 1 files |
+| Phase 34 P01 | 22 min | 2 tasks  | 2 files |
 
 ## Accumulated Context
 
@@ -126,6 +127,9 @@ Recent decisions affecting v1.2:
 - [Phase 31]: Render a dense deterministic terminal frame so final-output legibility can be measured from real artifact geometry without OCR. — The exported-video proof only needs stable geometry, so deterministic dense content keeps the measurement robust without adding OCR dependencies or brittle text parsing.
 - [Phase 32]: Keep dumpFrames unchanged and pass the composed output path through the existing rawVideoPath option inside the acceptance file. — Phase 32 only needed to rearrange evidence inside one acceptance file, so reusing the existing diagnostics helper avoided widening shared APIs for a single gap-closure proof.
 - [Phase 32]: Make final-output frames the blocking gate while retaining raw-frame dumps for failure debugging evidence. — DIAG-04 required proof on the shipped composed artifact, but milestone debugging still depends on comparing raw capture evidence against the final output when continuity fails.
+- [Phase 34]: Keep CAP-02 proof at the real record() boundary with captureFps set to 1 so missing captureNow hooks become observable.
+- [Phase 34]: Use paired baseline fixtures for type, press/wait, and scroll assertions instead of exact frame counts.
+- [Phase 34]: Remove shouldCaptureTypedCharacter from recorder.ts because runtime no longer depends on a helper-level capture policy surface.
 
 ### Pending Todos
 
@@ -137,6 +141,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T05:02:11.968Z
-Stopped at: Completed 32-01-PLAN.md
+Last session: 2026-03-09T17:45:42.829Z
+Stopped at: Completed 34-01-PLAN.md
 Resume file: None
