@@ -2,28 +2,79 @@
   "$schema": "../../packages/core/schema.json",
   "preset": "demo",
   "output": "assets/demos/meta-demo.mp4",
-  "cols": 90,
-  "rows": 20,
+  "fps": 60,
+  "captureFps": 8,
+  "cols": 128,
+  "rows": 30,
+  "sound": {},
+  "cursor": {
+    "visible": false,
+  },
+  "trim": {
+    "leadingStatic": true,
+  },
+  "outputSize": {
+    "width": 1920,
+    "height": 1080,
+    "padding": 180,
+  },
+  "theme": {
+    "background": "#282a36",
+    "foreground": "#f8f8f2",
+    "fontSize": 15,
+    "lineHeight": 1.35,
+    "colors": {
+      "black": "#21222c",
+      "red": "#ff5555",
+      "green": "#50fa7b",
+      "yellow": "#f1fa8c",
+      "blue": "#bd93f9",
+      "magenta": "#ff79c6",
+      "cyan": "#8be9fd",
+      "white": "#f8f8f2",
+      "brightBlack": "#6272a4",
+      "brightRed": "#ff6e6e",
+      "brightGreen": "#69ff94",
+      "brightYellow": "#ffffa5",
+      "brightBlue": "#d6acff",
+      "brightMagenta": "#ff92df",
+      "brightCyan": "#a4ffff",
+      "brightWhite": "#ffffff",
+    },
+  },
   "steps": [
-    { "type": "launch", "command": "bash" },
-    { "type": "pause", "duration": 500 },
-    { "type": "type", "text": "echo '🤖 opencode ready'" },
-    { "type": "press", "key": "Enter" },
-    { "type": "pause", "duration": 800 },
-    { "type": "type", "text": "echo '# create a tuireel demo video'" },
-    { "type": "press", "key": "Enter" },
-    { "type": "pause", "duration": 1000 },
-    { "type": "type", "text": "echo '⚡ generating script...'" },
-    { "type": "press", "key": "Enter" },
-    { "type": "pause", "duration": 800 },
-    { "type": "type", "text": "echo '🎬 recording...'" },
-    { "type": "press", "key": "Enter" },
-    { "type": "pause", "duration": 1000 },
-    { "type": "type", "text": "echo '✅ created: meta-demo.mp4'" },
-    { "type": "press", "key": "Enter" },
-    { "type": "pause", "duration": 800 },
-    { "type": "type", "text": "echo '(you are watching what was just created)'" },
-    { "type": "press", "key": "Enter" },
+    // Launch OpenCode
+    {
+      "type": "launch",
+      "command": "/home/ubuntu/workspace/tuireel/scripts/opencode-demo-launch.sh",
+    },
+    // Wait for OpenCode to be ready
+    {
+      "type": "wait",
+      "pattern": "Ask anything",
+      "timeout": 20000,
+    },
+    // Brief settle before typing
     { "type": "pause", "duration": 1500 },
+    // Type the self-referential prompt
+    {
+      "type": "type",
+      "text": "Use the Tuireel skill to generate a demo video of this exact session",
+      "speed": 55,
+    },
+    // Beat before pressing Enter
+    { "type": "pause", "duration": 400 },
+    // Submit the prompt
+    { "type": "press", "key": "Enter" },
+    // Wait for AI to start responding (tool use indicator or thinking marker)
+    {
+      "type": "wait",
+      "pattern": { "regex": "Tool|Thinking|skill|tuireel|Searching|Reading", "flags": "i" },
+      "timeout": 10000,
+    },
+    // Cinematic hold — end while AI is visibly working (the recursive payoff)
+    { "type": "pause", "duration": 6000 },
+    // Capture thumbnail while AI is mid-thought
+    { "type": "screenshot", "output": "assets/demos/meta-demo-opencode-shot.png" },
   ],
 }
