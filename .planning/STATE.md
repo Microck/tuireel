@@ -8,7 +8,7 @@ current_plan: none
 status: ready_for_next_milestone
 stopped_at: Archived v1.2 milestone
 last_updated: "2026-03-09T22:15:48Z"
-last_activity: 2026-03-09
+last_activity: 2026-03-10
 progress:
   total_phases: 0
   completed_phases: 0
@@ -33,8 +33,8 @@ See: `.planning/PROJECT.md` (updated 2026-03-09)
 **Current Plan:** None
 **Total Plans in Phase:** 0
 **Status:** Ready for next milestone definition
-**Last Activity:** 2026-03-09
-**Last Activity Description:** v1.2 archived with phases 25-35 shipped; phases 36-37 left as backlog cleanup
+**Last Activity:** 2026-03-10
+**Last Activity Description:** Completed quick task 16: Create self-referential demo video for Tuireel
 
 **Progress:** [----------] 0% (no active milestone)
 
@@ -122,8 +122,14 @@ None yet.
 
 - Phase 28 likely needs fixture-driven capture budget validation before the policy is locked.
 
+### Quick Tasks Completed
+
+| #   | Description                                    | Date       | Commit  | Directory                                                                                           |
+| --- | ---------------------------------------------- | ---------- | ------- | --------------------------------------------------------------------------------------------------- |
+| 16  | Create self-referential demo video for Tuireel | 2026-03-10 | b5aec8f | [16-create-self-referential-demo-video-for-t](./quick/16-create-self-referential-demo-video-for-t/) |
+
 ## Session Continuity
 
-Last session: 2026-03-09T20:21:17.551Z
-Stopped at: Completed 35-01-PLAN.md
+Last session: 2026-03-10T18:34:29.064Z
+Stopped at: Completed quick task 16
 Resume file: None
